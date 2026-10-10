@@ -170,6 +170,7 @@ footer a{color:var(--muted)}
 .opts{display:grid;gap:6px}
 .code{font-size:15px;font-weight:700;letter-spacing:.1em;background:var(--tint);padding:2px 6px;border-radius:4px}
 .gm{margin:6px 0 4px 12px}
+.gm li.idle{color:var(--warn)}
 .feed{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .feed li{cursor:pointer;border-bottom:1px solid var(--line);padding-bottom:10px}
 .feed li:last-child{border-bottom:0}
@@ -183,6 +184,13 @@ footer a{color:var(--muted)}
 .modlist .mmeta{display:block;font-size:12.5px;color:var(--muted)}
 .modlist img{max-width:160px;max-height:120px;border-radius:4px;display:block;margin-top:4px}
 .modlist .acts{display:flex;gap:6px;flex-wrap:wrap}
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.calhead .h{margin:0}
+.cal span[data-day]{cursor:pointer;position:relative;min-height:2.6em;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2}
+.cal span i{font-style:normal;font-size:10.5px;color:var(--muted)}.cal span.on i{color:var(--accent-ink)}
+.cal span.future{opacity:.45;cursor:default}
+.cal span.sel{outline:2px solid var(--accent);outline-offset:1px}
+.dayinfo{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+.dayh{font-size:16px;margin-bottom:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -360,8 +368,9 @@ footer a{color:var(--muted)}
       <ul id="boardList" class="board"></ul>
     </div>
     <div class="card">
-      <h2 class="h" id="calTitle">이번 달 기도 달력</h2>
+      <div class="calhead"><button class="btn sm" type="button" id="calPrev" aria-label="이전 달">◀</button><h2 class="h" id="calTitle">이번 달 기도 달력</h2><button class="btn sm" type="button" id="calNext" aria-label="다음 달">▶</button></div>
       <div class="cal" id="prayCal"></div>
+      <div class="dayinfo" id="dayInfo"><p class="sm muted">날짜를 누르면 그날 누가 기도했는지와 기도 제목을 볼 수 있어요.</p></div>
     </div>
     <p class="sm muted" style="margin-top:14px" id="groupInfo"></p>
   </section>
@@ -544,6 +553,7 @@ function before(p){
   return null;
 }
 function ago(t){
+  if (!t || isNaN(new Date(t))) return "";
   const s = (Date.now() - new Date(t)) / 1000;
   if (s < 60) return "방금"; if (s < 3600) return Math.floor(s/60) + "분 전";
   if (s < 86400) return Math.floor(s/3600) + "시간 전"; if (s < 86400*7) return Math.floor(s/86400) + "일 전";
@@ -553,9 +563,12 @@ async function getBook(b){
   if (!bookCache[b]) bookCache[b] = fetch(`bible/${b}.json`).then(r => r.json());
   return bookCache[b];
 }
+async function ensureBooks(){ if (!BOOKS) BOOKS = await fetch("bible/index.json").then(r => r.json()); return BOOKS; }
+let writeReady = false;
 async function initWrite(){
-  if (!BOOKS) {
-    BOOKS = await fetch("bible/index.json").then(r => r.json());
+  if (!writeReady) {
+    writeReady = true;
+    await ensureBooks();
     $("#selBook").innerHTML = BOOKS.map((b,i) => `<option value="${i+1}">${b[0]}</option>`).join("");
     $("#selBook").onchange = () => openChapter(+$("#selBook").value, 1, null);
     $("#selCh").onchange = () => openChapter(cur.b, +$("#selCh").value, null);
@@ -687,7 +700,7 @@ async function saveVerse(){
   $("#typeBox").focus();
   refreshRelay();
 }
-document.addEventListener("visibilitychange", () => { if (!document.hidden && user && BOOKS && ["", "#write"].includes(location.hash) && !$("#typeBox").value) { refreshRelay(); openChapter(cur.b, cur.c, cur.v); } });
+document.addEventListener("visibilitychange", () => { if (!document.hidden && user && writeReady && ["", "#write"].includes(location.hash) && !$("#typeBox").value) { refreshRelay(); openChapter(cur.b, cur.c, cur.v); } });
 
 
 /* ---------- 손글씨 필사 사진 ---------- */
@@ -882,11 +895,9 @@ async function loadPray(){
   const monthCount = [...myDays].filter(d => d.slice(0, 7) === t.slice(0, 7)).length;
   $("#prayStreak").innerHTML = `<span class="fire">🔥 ${st}일 연속</span><span class="muted sm">이번 달 ${monthCount}일 기도 · 지금까지 ${myDays.size}일</span>`;
   // 달력
-  const [y, mo] = t.split("-").map(Number), first = new Date(Date.UTC(y, mo - 1, 1)), days = new Date(Date.UTC(y, mo, 0)).getUTCDate();
-  $("#calTitle").textContent = `${mo}월 기도 달력`;
-  let cal = ["월","화","수","목","금","토","일"].map(d => `<b>${d}</b>`).join("") + "<span></span>".repeat((first.getUTCDay() + 6) % 7);
-  for (let d = 1; d <= days; d++) { const k = `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`; cal += `<span class="${myDays.has(k) ? "on" : ""} ${k === t ? "now" : ""}">${myDays.has(k) ? "🙏" : d}</span>`; }
-  $("#prayCal").innerHTML = cal;
+  prayState.myDays = myDays;
+  if (!calMonth) calMonth = t.slice(0, 7);
+  renderCal();
   // 응원
   const nameOf = id => esc((members.find(m => m.id === id) || {}).nickname || "친구");
   const ins = cheersIn.data || [];
@@ -917,6 +928,34 @@ async function loadPray(){
   $("#partnerList").innerHTML = partners.map(id => `<div class="partner"><span>이번 주에는 <b>${nameOf(id)}</b>님을 위해 기도해 주세요.</span>
       <button class="btn ${sent.has(id + "|prayed_for") ? "" : "acc"} sm" type="button" data-pfor="${id}" ${sent.has(id + "|prayed_for") ? "disabled" : ""}>${sent.has(id + "|prayed_for") ? "오늘 기도했어요 ✓" : `${nameOf(id)}님을 위해 기도했어요 🙏`}</button></div>`).join("") + `<p class="sm muted" style="margin-top:6px">기도 짝은 매주 월요일에 새로 정해집니다.</p>`;
 }
+let calMonth = null;
+async function renderCal(){
+  const t = kstToday(), [y, mo] = calMonth.split("-").map(Number), first = new Date(Date.UTC(y, mo - 1, 1)), days = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  const gid = profile?.group_id, from = `${calMonth}-01`, to = `${calMonth}-${String(days).padStart(2, "0")}`;
+  const ids = (prayState.members || []).map(m => m.id);
+  const { data } = gid ? await sb.from("prayer_checks").select("user_id,day").in("user_id", ids).gte("day", from).lte("day", to).limit(1000) : { data: [] };
+  const cnt = new Map(); (data || []).forEach(r => cnt.set(r.day, (cnt.get(r.day) || 0) + 1));
+  const my = prayState.myDays || new Set();
+  $("#calTitle").textContent = `${y}년 ${mo}월 기도 달력`;
+  $("#calNext").disabled = calMonth >= t.slice(0, 7);
+  let cal = ["월","화","수","목","금","토","일"].map(d => `<b>${d}</b>`).join("") + "<span></span>".repeat((first.getUTCDay() + 6) % 7);
+  for (let d = 1; d <= days; d++) { const k = `${calMonth}-${String(d).padStart(2,"0")}`, n = cnt.get(k) || 0;
+    cal += `<span class="${my.has(k) ? "on" : ""} ${k === t ? "now" : ""} ${k > t ? "future" : ""}" data-day="${k}" role="button" tabindex="0" title="${n ? n + "명 기도" : ""}">${my.has(k) ? "🙏" : d}${gid && n ? `<i>${n}명</i>` : ""}</span>`; }
+  $("#prayCal").innerHTML = cal;
+}
+async function showDay(k){
+  const gid = profile?.group_id, ids = gid ? (prayState.members || []).map(m => m.id) : [user.id];
+  const { data } = await sb.from("prayer_checks").select("user_id,note,note_public").in("user_id", ids).eq("day", k);
+  const nameOf = id => esc(((prayState.members || []).find(m => m.id === id) || {}).nickname || (id === user.id ? profile?.nickname : "친구"));
+  const list = data || [];
+  const [, mm, dd] = k.split("-").map(Number);
+  $("#dayInfo").innerHTML = `<h3 class="dayh">${mm}월 ${dd}일 ${gid ? `· ${list.length}명 기도` : ""}</h3>` + (list.length ? `<ul class="plain">${list.map(r => `<li>🙏 <b>${nameOf(r.user_id)}</b>${r.note && (r.note_public || r.user_id === user.id) ? ` — “${esc(r.note)}”` : ""}</li>`).join("")}</ul>` : `<p class="sm muted">이날은 기도 기록이 없습니다.</p>`);
+}
+$("#prayCal").addEventListener("click", e => { const c = e.target.closest("[data-day]"); if (!c || c.classList.contains("future")) return; $("#prayCal").querySelectorAll(".sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel"); showDay(c.dataset.day); });
+$("#prayCal").addEventListener("keydown", e => { if (e.key === "Enter") e.target.click(); });
+const shiftMonth = n => { const [y, m] = calMonth.split("-").map(Number); const d = new Date(Date.UTC(y, m - 1 + n, 1)); calMonth = d.toISOString().slice(0, 7); renderCal(); $("#dayInfo").innerHTML = `<p class="sm muted">날짜를 누르면 그날 누가 기도했는지와 기도 제목을 볼 수 있어요.</p>`; };
+$("#calPrev").onclick = () => shiftMonth(-1);
+$("#calNext").onclick = () => shiftMonth(1);
 $("#prayBtn").onclick = async () => {
   $("#prayBtn").disabled = true;
   const { error } = await sb.from("prayer_checks").insert({ note: $("#prayNote").value.trim() || null, note_public: $("#prayNotePub").checked });
@@ -1000,9 +1039,18 @@ $("#grpList").addEventListener("click", async e => {
   if (b.dataset.gm) {
     const box = $("#gm" + b.dataset.gm); box.hidden = !box.hidden; if (box.hidden) return;
     const { data } = await sb.from("profiles").select("id,nickname").eq("group_id", +b.dataset.gm);
-    box.innerHTML = (data || []).map(p => `<li>${esc(p.nickname)} <button class="btn sm warn" type="button" data-out="${p.id}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
+    const ids = (data || []).map(p => p.id), t = kstToday();
+    const { data: ck } = ids.length ? await sb.from("prayer_checks").select("user_id,day").in("user_id", ids).gte("day", addDays(t, -60)).order("day", { ascending: false }).limit(1000) : { data: [] };
+    const last = new Map(), n30 = new Map();
+    (ck || []).forEach(r => { if (!last.has(r.user_id)) last.set(r.user_id, r.day); if (r.day >= addDays(t, -29)) n30.set(r.user_id, (n30.get(r.user_id) || 0) + 1); });
+    const gap = d => d ? Math.round((Date.parse(t) - Date.parse(d)) / 864e5) : null;
+    const rows = (data || []).map(p => ({ ...p, last: last.get(p.id), g: gap(last.get(p.id)), n: n30.get(p.id) || 0 })).sort((x, y) => (y.g ?? 999) - (x.g ?? 999));
+    box.innerHTML = rows.map(p => `<li class="${p.g === null || p.g >= 14 ? "idle" : ""}">${esc(p.nickname)} <span class="sm muted">· 최근 30일 ${p.n}일 기도 · ${p.g === null ? "60일 넘게 기록 없음" : p.g === 0 ? "오늘 기도" : `마지막 기도 ${p.g}일 전`}</span> <button class="btn sm warn" type="button" data-out="${p.id}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
   }
-  if (b.dataset.out) { await sb.rpc("admin_set_group", { uid: b.dataset.out, gid: null }); toast("모임에서 뺐습니다"); loadGroups(); }
+  if (b.dataset.out) {
+    if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "정말 뺄까요?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = "모임에서 빼기"; } }, 4000); return; }
+    await sb.rpc("admin_set_group", { uid: b.dataset.out, gid: null }); toast("모임에서 뺐습니다 (기도 기록은 남아 있습니다)"); loadGroups();
+  }
   if (b.dataset.gren) {
     const n = prompt("새 모임 이름", b.dataset.name); if (!n || !n.trim()) return;
     const { error } = await sb.rpc("admin_rename_group", { gid: +b.dataset.gren, new_name: n });
@@ -1021,6 +1069,7 @@ $("#grpList").addEventListener("click", async e => {
 let modType = "all", members = [];
 const clip = (t, n = 140) => { t = String(t || ""); return t.length > n ? t.slice(0, n) + "…" : t; };
 async function loadMod(){
+  await ensureBooks();
   const items = [];
   const want = k => modType === "all" || modType === k;
   const jobs = [];
@@ -1035,7 +1084,7 @@ async function loadMod(){
   await Promise.all(jobs);
   if (!members.length) await loadMembers(true);
   const nm = new Map(members.map(m => [m.id, m.nickname]));
-  items.sort((a, b) => b.t.localeCompare(a.t));
+  items.sort((a, b) => String(b.t || "").localeCompare(String(a.t || "")));
   const label = { relay: "필사", photo: "손글씨 사진", qt: "큐티", pray: "기도 제목" };
   $("#modList").innerHTML = items.slice(0, 40).map(i => `<li><div class="mtxt"><span class="mmeta"><span class="badge">${label[i.k]}</span><b>${esc(i.who || nm.get(i.uid) || "")}</b> · ${esc(i.ref)} · ${ago(i.t)}</span>${i.img ? `<a href="${esc(i.img)}" target="_blank" rel="noopener"><img src="${esc(i.img)}" alt="" loading="lazy"></a>` : esc(clip(i.text))}</div>
     <div class="acts">${i.k === "qt" ? `<button class="btn sm" type="button" data-mod="qthide" data-id="${i.key}" data-h="${i.hidden ? 0 : 1}">${i.hidden ? "다시 보이기" : "숨기기"}</button>` : ""}<button class="btn sm warn" type="button" data-mod="${i.k}" data-id="${esc(i.key)}" ${i.path ? `data-path="${esc(i.path)}"` : ""}>삭제</button></div></li>`).join("") || `<li class="muted sm">올라온 글이 없습니다.</li>`;
