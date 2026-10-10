@@ -145,6 +145,31 @@ footer a{color:var(--muted)}
 .ppreview{max-width:100%;max-height:320px;border-radius:6px;border:1px solid var(--line)}
 .donephoto{display:block;max-width:100%;max-height:420px;border-radius:6px;margin-top:10px;border:1px solid var(--line)}
 .grid button.photo{background:#7B6A9E;border-color:#7B6A9E;color:#fff}.key.photo{background:#7B6A9E;border-color:#7B6A9E}
+.h{font-size:16px;margin-bottom:8px}
+.praycard{text-align:center;padding:24px 20px;margin-bottom:16px}
+.praycard #prayForm{display:grid;gap:8px;max-width:420px;margin:10px auto 0;text-align:left}
+.praycard input[type=text]{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px;width:100%}
+.btn.big{font-size:18px;padding:14px 24px;min-height:56px;width:100%}
+.donebig{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--accent);margin:8px 0}
+.streak{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:14px}
+.fire{font-family:var(--serif);font-size:22px;font-weight:700}
+#partnerBox,#cheerBox,#boardBox,#joinBox{margin-bottom:16px}
+.partner{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.plain{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.board{list-style:none;margin:12px 0 0;padding:0}
+.board li{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.board li .nm{flex:1;min-width:8em}
+.board li.ok .nm b{color:var(--accent)}
+.pnote{flex-basis:100%;font-size:13.5px;color:var(--muted);padding-left:1.6em}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:13px}
+.cal b{font-weight:500;color:var(--muted);font-size:12px}
+.cal span{padding:6px 0;border-radius:6px;background:var(--tint);font-variant-numeric:tabular-nums}
+.cal span:empty{background:none}
+.cal span.on{background:var(--accent);color:var(--accent-ink)}
+.cal span.now{outline:2px solid var(--gold)}
+.opts{display:grid;gap:6px}
+.code{font-size:15px;font-weight:700;letter-spacing:.1em;background:var(--tint);padding:2px 6px;border-radius:4px}
+.gm{margin:6px 0 4px 12px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -160,6 +185,9 @@ footer a{color:var(--muted)}
       <li><a href="#write" data-p="write">성경 필사</a></li>
       <li><a href="#qt" data-p="qt">나의 큐티</a></li>
       <li><a href="#share" data-p="share">묵상 나눔</a></li>
+      <li><a href="#pray" data-p="pray">기도</a></li>
+      <li><a href="#public" data-p="public">성도 묵상</a></li>
+      <li><a href="#admin" data-p="admin" id="adminTab" hidden>관리</a></li>
       <li><a href="./" class="home">← 홈페이지</a></li>
     </ul></nav>
   </div>
@@ -262,7 +290,11 @@ footer a{color:var(--muted)}
         <textarea id="qApply" rows="3"></textarea></div>
       <div class="field"><label for="qPrayer">기도 제목 <span class="opt">(선택)</span></label>
         <textarea id="qPrayer" rows="2"></textarea></div>
-      <label class="toggle"><input type="checkbox" id="qShare"> 성도들과 나누기</label>
+      <div class="opts">
+        <label class="toggle"><input type="checkbox" id="qShare"> 성도들과 나누기 <span class="opt">(로그인한 성도에게 보임)</span></label>
+        <label class="toggle"><input type="checkbox" id="qPublic"> 홈페이지에 공개 <span class="opt">(로그인하지 않은 분도 ‘성도 묵상’에서 볼 수 있음)</span></label>
+        <label class="toggle"><input type="checkbox" id="qBook" checked> 교회 묵상집(책)에 실어도 좋아요</label>
+      </div>
       <p class="msg" id="qMsg"></p>
       <div class="row" style="margin-top:0">
         <button class="btn acc" type="submit" id="qSubmit">저장</button>
@@ -277,6 +309,76 @@ footer a{color:var(--muted)}
     <div class="phead"><h1>묵상 나눔</h1><p>성도님들이 나눠 주신 큐티 묵상입니다. 함께 읽고 서로를 위해 기도해 주세요.</p></div>
     <ul class="notes" id="shared"></ul>
     <div class="row"><button class="btn" type="button" id="moreShared" hidden>더 보기</button></div>
+  </section>
+
+  <!-- 기도 -->
+  <section class="page" data-page="pray">
+    <div class="phead"><h1>함께 기도해요</h1><p>매일 기도하고 “기도했어요”를 눌러 친구들과 서로 알려 주세요. 기도 짝을 위해서도 기도해 주세요.</p></div>
+    <div id="joinBox" class="card" hidden>
+      <h2 class="h">기도 모임에 들어가기</h2>
+      <p class="hint">선생님(목사님)께 받은 모임 코드 6자리를 넣어 주세요. 같은 모임 친구들끼리만 기도 현황이 보입니다.</p>
+      <div class="row"><input id="joinCode" type="text" maxlength="6" placeholder="예) A1B2C3" style="text-transform:uppercase;width:9em"><button class="btn acc" type="button" id="joinBtn">들어가기</button></div>
+      <p class="msg" id="joinMsg"></p>
+    </div>
+    <div class="card praycard">
+      <div class="today" id="prayToday"></div>
+      <div id="prayForm">
+        <label for="prayNote" class="sm muted">오늘의 기도 제목 한 줄 (선택)</label>
+        <input id="prayNote" type="text" maxlength="300" placeholder="예) 시험 앞둔 친구들을 위해">
+        <label class="toggle sm"><input type="checkbox" id="prayNotePub" checked> 모임 친구들에게 기도 제목 보여 주기</label>
+        <button class="btn acc big" type="button" id="prayBtn">🙏 오늘 기도했어요</button>
+      </div>
+      <div id="prayDone" hidden><p class="donebig">🙏 오늘 기도를 마쳤어요!</p><button class="btn sm" type="button" id="prayUndo">취소하기</button></div>
+      <div class="streak" id="prayStreak"></div>
+    </div>
+    <div class="card" id="partnerBox" hidden>
+      <h2 class="h">이번 주 나의 기도 짝</h2>
+      <div id="partnerList"></div>
+    </div>
+    <div class="card" id="cheerBox" hidden>
+      <h2 class="h">오늘 받은 응원</h2>
+      <ul id="cheerList" class="plain"></ul>
+    </div>
+    <div class="card" id="boardBox" hidden>
+      <h2 class="h" id="boardTitle">오늘의 기도 현황</h2>
+      <div class="bar"><i id="boardBar"></i></div>
+      <ul id="boardList" class="board"></ul>
+    </div>
+    <div class="card">
+      <h2 class="h" id="calTitle">이번 달 기도 달력</h2>
+      <div class="cal" id="prayCal"></div>
+    </div>
+    <p class="sm muted" style="margin-top:14px" id="groupInfo"></p>
+  </section>
+
+  <!-- 공개 묵상 -->
+  <section class="page" data-page="public">
+    <div class="phead"><h1>성도 묵상</h1><p>성도님들이 홈페이지에 공개해 주신 큐티 묵상입니다.</p></div>
+    <ul class="notes" id="publicList"></ul>
+    <div class="row"><button class="btn" type="button" id="morePublic" hidden>더 보기</button></div>
+  </section>
+
+  <!-- 관리 -->
+  <section class="page" data-page="admin">
+    <div class="phead"><h1>관리</h1><p>목사님·관리자만 보이는 화면입니다.</p></div>
+    <div class="card form">
+      <h2 class="h">큐티 묵상 엑셀로 내려받기</h2>
+      <p class="hint">성도님들이 ‘교회 묵상집에 실어도 좋아요’에 동의한 묵상을 엑셀(.xlsx)로 내려받습니다. 묵상집(책)을 만들 때 쓰세요.</p>
+      <div class="two">
+        <div><label for="exFrom">시작 날짜</label><input id="exFrom" type="date"></div>
+        <div><label for="exTo">끝 날짜</label><input id="exTo" type="date"></div>
+      </div>
+      <label class="toggle sm"><input type="checkbox" id="exAll"> 묵상집 동의하지 않은 글도 포함 (교회 내부 확인용)</label>
+      <div class="row"><button class="btn acc" type="button" id="exBtn">엑셀 내려받기</button></div>
+      <p class="msg" id="exMsg"></p>
+    </div>
+    <div class="card form" style="margin-top:16px">
+      <h2 class="h">기도 모임 관리</h2>
+      <p class="hint">모임을 만들면 6자리 코드가 생깁니다. 코드를 카톡방에 알려 주면 학생들이 ‘기도’ 화면에서 직접 들어옵니다.</p>
+      <div class="row"><input id="grpName" type="text" placeholder="예) 청소년부" style="width:12em"><button class="btn acc" type="button" id="grpAdd">모임 만들기</button></div>
+      <ul id="grpList" class="plain"></ul>
+      <p class="msg" id="grpMsg"></p>
+    </div>
   </section>
 
   <!-- 내 정보 -->
@@ -308,11 +410,15 @@ footer a{color:var(--muted)}
     <ul>
       <li>회원 식별과 로그인 유지</li>
       <li>성경 필사 진도 저장, 큐티 기록 보관, 묵상 나눔 게시 시 작성자 표시</li>
+      <li>‘교회 묵상집에 실어도 좋아요’에 동의한 묵상의 묵상집(책) 제작</li>
+      <li>기도 모임 안에서 기도 여부·연속 기록·응원 표시</li>
     </ul>
     <h2>3. 보유 기간</h2>
     <p>회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
-    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다.</p>
+    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다.</p>
+    <h2>4-1. 만 14세 미만 아동</h2>
+    <p>만 14세 미만 아동은 법정대리인(부모님)의 동의를 받은 뒤 이용할 수 있습니다. 동의 없이 가입한 사실을 알게 되면 해당 정보를 지체 없이 삭제합니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
     <p>교회는 회원 정보와 글을 안전하게 보관하기 위해 데이터 저장을 위탁합니다.</p>
     <ul>
@@ -346,7 +452,7 @@ const num = n => Number(n || 0).toLocaleString("ko-KR");
 function toast(t){ const el = document.createElement("div"); el.className = "toast"; el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2400); }
 
 let user = null, profile = null;
-const PUBLIC_PAGES = ["privacy"];
+const PUBLIC_PAGES = ["privacy", "public"];
 
 /* ---------- 로그인 ---------- */
 $("#loginBtn").addEventListener("click", async () => {
@@ -362,10 +468,11 @@ function renderWho(){
   $("#who").innerHTML = `${av}<b>${esc(profile?.nickname || "성도")}</b><span class="lbl">님</span>
     <a href="#me" class="btn sm">내 정보</a><button class="btn sm" type="button" id="logoutBtn">로그아웃</button>`;
   $("#logoutBtn").onclick = logout;
+  $("#adminTab").hidden = !profile?.is_admin;
 }
 
 async function loadProfile(){
-  const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin").eq("id", user.id).maybeSingle();
+  const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin,group_id").eq("id", user.id).maybeSingle();
   profile = data || { nickname: "성도" };
 }
 
@@ -378,11 +485,14 @@ function route(){
   $("#gate").hidden = !needLogin;
   document.querySelectorAll("section.page").forEach(s => s.classList.toggle("active", !needLogin && s.dataset.page === p));
   document.querySelectorAll("nav a[data-p]").forEach(a => a.classList.toggle("on", a.dataset.p === p));
+  if (p === "public") loadPublic(true);
   if (needLogin) return;
   if (p === "write") initWrite();
   if (p === "qt") loadMyNotes();
   if (p === "share") loadShared(true);
   if (p === "me") $("#nick").value = profile?.nickname || "";
+  if (p === "pray") loadPray();
+  if (p === "admin") { if (profile?.is_admin) initAdmin(); else location.hash = "#write"; }
   window.scrollTo(0,0);
 }
 addEventListener("hashchange", route);
@@ -627,7 +737,7 @@ $("#qCancel").onclick = resetQt;
 $("#qtForm").addEventListener("submit", async e => {
   e.preventDefault();
   const row = { qt_date: $("#qDate").value || today(), passage: $("#qPassage").value.trim(), content: $("#qBody").value.trim(),
-    question: $("#qQuestion").value.trim(), application: $("#qApply").value.trim(), prayer: $("#qPrayer").value.trim(), is_shared: $("#qShare").checked };
+    question: $("#qQuestion").value.trim(), application: $("#qApply").value.trim(), prayer: $("#qPrayer").value.trim(), is_shared: $("#qShare").checked || $("#qPublic").checked, is_public: $("#qPublic").checked, for_book: $("#qBook").checked };
   if (!row.passage) { $("#qMsg").textContent = "읽은 본문을 적어 주세요."; $("#qMsg").className = "msg err"; $("#qPassage").focus(); return; }
   if (!row.content) { $("#qMsg").textContent = "느낀 점을 적어 주세요."; $("#qMsg").className = "msg err"; $("#qBody").focus(); return; }
   $("#qSubmit").disabled = true;
@@ -644,7 +754,7 @@ async function loadMyNotes(){
   myNotes = data || [];
   $("#myNotes").innerHTML = error ? `<li class="msg err">불러오지 못했습니다.</li>` : myNotes.map(n => `<li>
       <div class="sm muted">${fmtDate(n.qt_date)}${n.passage ? " · " + esc(n.passage) : ""}</div>
-      <h3>${n.is_shared ? `<span class="badge">나눔</span>` : ""}${n.is_hidden ? `<span class="badge hid">관리자가 숨김</span>` : ""}${esc(n.title || n.passage || "큐티")}</h3>
+      <h3>${n.is_public ? `<span class="badge">홈페이지 공개</span>` : n.is_shared ? `<span class="badge">나눔</span>` : ""}${n.for_book === false ? `<span class="badge hid">묵상집 제외</span>` : ""}${n.is_hidden ? `<span class="badge hid">관리자가 숨김</span>` : ""}${esc(n.title || n.passage || "큐티")}</h3>
       ${qtBody(n)}
       <div class="acts"><button class="btn sm" data-edit="${n.id}" type="button">수정</button>
       <button class="btn sm" data-share="${n.id}" type="button">${n.is_shared ? "나눔 그만하기" : "성도들과 나누기"}</button>
@@ -654,12 +764,12 @@ $("#myNotes").addEventListener("click", async e => {
   const t = e.target.closest("button"); if (!t) return;
   if (t.dataset.edit) {
     const n = myNotes.find(x => x.id == t.dataset.edit); editingId = n.id;
-    $("#qDate").value = n.qt_date; $("#qPassage").value = n.passage || ""; $("#qBody").value = n.content; $("#qQuestion").value = n.question || ""; $("#qApply").value = n.application || ""; $("#qPrayer").value = n.prayer || ""; $("#qShare").checked = n.is_shared;
+    $("#qDate").value = n.qt_date; $("#qPassage").value = n.passage || ""; $("#qBody").value = n.content; $("#qQuestion").value = n.question || ""; $("#qApply").value = n.application || ""; $("#qPrayer").value = n.prayer || ""; $("#qShare").checked = n.is_shared; $("#qPublic").checked = !!n.is_public; $("#qBook").checked = n.for_book !== false;
     $("#qSubmit").textContent = "수정 저장"; $("#qCancel").hidden = false; $("#qtForm").scrollIntoView({ behavior: "smooth" });
   }
   if (t.dataset.share) {
     const n = myNotes.find(x => x.id == t.dataset.share);
-    await sb.from("qt_notes").update({ is_shared: !n.is_shared }).eq("id", n.id); loadMyNotes();
+    await sb.from("qt_notes").update(n.is_shared ? { is_shared: false, is_public: false } : { is_shared: true }).eq("id", n.id); loadMyNotes();
   }
   if (t.dataset.del) {
     if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 삭제"; setTimeout(() => { if (t.isConnected) { delete t.dataset.armed; t.textContent = "삭제"; } }, 3000); return; }
@@ -693,6 +803,166 @@ $("#shared").addEventListener("click", async e => {
     if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 삭제"; return; }
     await sb.from("qt_notes").delete().eq("id", t.dataset.adel); loadShared(true);
   }
+});
+
+/* ---------- 함께 기도해요 ---------- */
+const kstToday = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+const addDays = (s, n) => { const d = new Date(s + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+function streakOf(set, t){ let n = 0, d = set.has(t) ? t : addDays(t, -1); while (set.has(d)) { n++; d = addDays(d, -1); } return n; }
+function weekKey(t){ const d = new Date(t + "T00:00:00Z"); const dow = (d.getUTCDay() + 6) % 7; return addDays(t, -dow); }
+function seeded(str){ let h = 2166136261; for (const c of str) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return () => { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 100000) / 100000; }; }
+function partnersOf(ids, me, key){
+  const list = [...ids].sort(), rnd = seeded(key);
+  for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  const groups = []; for (let i = 0; i < list.length; i += 2) groups.push(list.slice(i, i + 2));
+  if (groups.length > 1 && groups[groups.length - 1].length === 1) groups[groups.length - 2].push(groups.pop()[0]);
+  const g = groups.find(x => x.includes(me)); return g ? g.filter(x => x !== me) : [];
+}
+let prayState = {};
+async function loadPray(){
+  const t = kstToday(), gid = profile?.group_id || null;
+  $("#joinBox").hidden = !!gid;
+  let members = [{ id: user.id, nickname: profile?.nickname || "나", avatar_url: profile?.avatar_url }], groupName = "";
+  if (gid) {
+    const [g, m] = await Promise.all([sb.from("prayer_groups").select("name").eq("id", gid).maybeSingle(), sb.from("profiles").select("id,nickname,avatar_url").eq("group_id", gid)]);
+    groupName = g.data?.name || ""; if (m.data && m.data.length) members = m.data;
+  }
+  const others = members.map(m => m.id);
+  const [mine, group, cheersIn, cheersOut] = await Promise.all([
+    sb.from("prayer_checks").select("day").eq("user_id", user.id).gte("day", addDays(t, -400)).order("day", { ascending: false }).limit(1000),
+    gid ? sb.from("prayer_checks").select("user_id,day,note,note_public").in("user_id", others).gte("day", addDays(t, -40)).limit(1000) : Promise.resolve({ data: [] }),
+    sb.from("prayer_cheers").select("from_user,kind").eq("to_user", user.id).eq("day", t),
+    sb.from("prayer_cheers").select("to_user,kind").eq("from_user", user.id).eq("day", t)
+  ]);
+  const myDays = new Set((mine.data || []).map(r => r.day));
+  const done = myDays.has(t);
+  prayState = { t, gid, members };
+  $("#prayToday").innerHTML = `<div class="sm muted">${fmtDate(t)} 오늘</div>`;
+  $("#prayForm").hidden = done; $("#prayDone").hidden = !done;
+  const st = streakOf(myDays, t);
+  const monthCount = [...myDays].filter(d => d.slice(0, 7) === t.slice(0, 7)).length;
+  $("#prayStreak").innerHTML = `<span class="fire">🔥 ${st}일 연속</span><span class="muted sm">이번 달 ${monthCount}일 기도 · 지금까지 ${myDays.size}일</span>`;
+  // 달력
+  const [y, mo] = t.split("-").map(Number), first = new Date(Date.UTC(y, mo - 1, 1)), days = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  $("#calTitle").textContent = `${mo}월 기도 달력`;
+  let cal = ["월","화","수","목","금","토","일"].map(d => `<b>${d}</b>`).join("") + "<span></span>".repeat((first.getUTCDay() + 6) % 7);
+  for (let d = 1; d <= days; d++) { const k = `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`; cal += `<span class="${myDays.has(k) ? "on" : ""} ${k === t ? "now" : ""}">${myDays.has(k) ? "🙏" : d}</span>`; }
+  $("#prayCal").innerHTML = cal;
+  // 응원
+  const nameOf = id => esc((members.find(m => m.id === id) || {}).nickname || "친구");
+  const ins = cheersIn.data || [];
+  $("#cheerBox").hidden = !ins.length;
+  $("#cheerList").innerHTML = ins.map(c => `<li>${c.kind === "prayed_for" ? `🙏 <b>${nameOf(c.from_user)}</b>님이 오늘 나를 위해 기도했어요` : `💛 <b>${nameOf(c.from_user)}</b>님이 “함께 기도할게”라고 응원했어요`}</li>`).join("");
+  const sent = new Set((cheersOut.data || []).map(c => c.to_user + "|" + c.kind));
+  $("#groupInfo").innerHTML = gid ? `기도 모임: <b>${esc(groupName)}</b> · ${members.length}명 <button class="btn sm" type="button" id="leaveGroup">모임 나가기</button>` : "아직 기도 모임에 들어가지 않았어요. 혼자서도 기도 기록과 달력은 쓸 수 있습니다.";
+  if ($("#leaveGroup")) $("#leaveGroup").onclick = async () => { if (!confirm("기도 모임에서 나갈까요?")) return; await sb.rpc("leave_group"); profile.group_id = null; loadPray(); };
+  if (!gid) { $("#boardBox").hidden = true; $("#partnerBox").hidden = true; return; }
+  // 현황판
+  const byUser = new Map(); (group.data || []).forEach(r => { if (!byUser.has(r.user_id)) byUser.set(r.user_id, []); byUser.get(r.user_id).push(r); });
+  const info = members.map(m => { const rs = byUser.get(m.id) || [], set = new Set(rs.map(r => r.day)), today = rs.find(r => r.day === t);
+    return { ...m, done: !!today, note: today && today.note_public ? today.note : "", streak: streakOf(set, t) }; })
+    .sort((a, b) => (b.done - a.done) || (b.streak - a.streak) || a.nickname.localeCompare(b.nickname));
+  const nDone = info.filter(x => x.done).length;
+  $("#boardBox").hidden = false;
+  $("#boardTitle").textContent = `오늘의 기도 현황 · ${members.length}명 중 ${nDone}명 기도 완료`;
+  $("#boardBar").style.width = (nDone / members.length * 100) + "%";
+  $("#boardList").innerHTML = info.map(m => `<li class="${m.done ? "ok" : ""}">
+      <span class="nm">${m.done ? "🙏" : "⬜"} <b>${esc(m.nickname)}</b>${m.id === user.id ? " (나)" : ""}</span>
+      <span class="sm muted">${m.streak ? `🔥${m.streak}일` : ""}</span>
+      ${m.note ? `<span class="pnote">“${esc(m.note)}”</span>` : ""}
+      ${m.id !== user.id ? `<button class="btn sm" type="button" data-cheer="${m.id}" ${sent.has(m.id + "|cheer") ? "disabled" : ""}>${sent.has(m.id + "|cheer") ? "응원했어요" : "함께 기도할게 💛"}</button>` : ""}
+    </li>`).join("");
+  // 기도 짝
+  const partners = partnersOf(members.map(m => m.id), user.id, gid + "-" + weekKey(t));
+  $("#partnerBox").hidden = !partners.length;
+  $("#partnerList").innerHTML = partners.map(id => `<div class="partner"><span>이번 주에는 <b>${nameOf(id)}</b>님을 위해 기도해 주세요.</span>
+      <button class="btn ${sent.has(id + "|prayed_for") ? "" : "acc"} sm" type="button" data-pfor="${id}" ${sent.has(id + "|prayed_for") ? "disabled" : ""}>${sent.has(id + "|prayed_for") ? "오늘 기도했어요 ✓" : `${nameOf(id)}님을 위해 기도했어요 🙏`}</button></div>`).join("") + `<p class="sm muted" style="margin-top:6px">기도 짝은 매주 월요일에 새로 정해집니다.</p>`;
+}
+$("#prayBtn").onclick = async () => {
+  $("#prayBtn").disabled = true;
+  const { error } = await sb.from("prayer_checks").insert({ note: $("#prayNote").value.trim() || null, note_public: $("#prayNotePub").checked });
+  $("#prayBtn").disabled = false;
+  if (error && error.code !== "23505") return toast("저장하지 못했습니다: " + error.message);
+  $("#prayNote").value = ""; toast("오늘 기도를 기록했어요. 🙏"); loadPray();
+};
+$("#prayUndo").onclick = async () => { await sb.from("prayer_checks").delete().eq("user_id", user.id).eq("day", kstToday()); loadPray(); };
+$("#joinBtn").onclick = async () => {
+  const { data, error } = await sb.rpc("join_group", { join_code: $("#joinCode").value });
+  if (error) { $("#joinMsg").textContent = "코드가 맞지 않습니다. 다시 확인해 주세요."; $("#joinMsg").className = "msg err"; return; }
+  toast(`‘${data}’ 모임에 들어왔어요!`); await loadProfile(); loadPray();
+};
+document.addEventListener("click", async e => {
+  const c = e.target.closest("[data-cheer],[data-pfor]"); if (!c) return;
+  const to = c.dataset.cheer || c.dataset.pfor, kind = c.dataset.cheer ? "cheer" : "prayed_for";
+  c.disabled = true;
+  const { error } = await sb.from("prayer_cheers").insert({ to_user: to, kind });
+  if (error && error.code !== "23505") { c.disabled = false; return toast("보내지 못했습니다: " + error.message); }
+  toast(kind === "cheer" ? "응원을 보냈어요 💛" : "기도했다고 알렸어요 🙏"); loadPray();
+});
+
+/* ---------- 공개 묵상 ---------- */
+let pubPage = 0;
+async function loadPublic(reset){
+  if (reset) { pubPage = 0; $("#publicList").innerHTML = ""; }
+  const from = pubPage * PAGE;
+  const { data, error } = await sb.from("public_qt").select("*").order("qt_date", { ascending: false }).order("created_at", { ascending: false }).range(from, from + PAGE - 1);
+  if (error) { $("#publicList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
+  const html = (data || []).map(n => `<li><div class="author"><span>${esc(n.nickname)}</span><span>· ${fmtDate(n.qt_date)}</span></div><h3>${esc(n.passage || "큐티")}</h3>${qtBody(n)}</li>`).join("");
+  if (reset && !html) $("#publicList").innerHTML = `<li class="muted">아직 공개된 묵상이 없습니다.</li>`;
+  else $("#publicList").insertAdjacentHTML("beforeend", html);
+  $("#morePublic").hidden = (data || []).length < PAGE;
+}
+$("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
+
+/* ---------- 관리 ---------- */
+function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+async function initAdmin(){
+  if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
+  loadGroups();
+}
+$("#exBtn").onclick = async () => {
+  const msg = (t, err) => { $("#exMsg").textContent = t; $("#exMsg").className = err ? "msg err" : "msg"; };
+  msg("묵상을 모으는 중입니다…");
+  try {
+    if (!window.XLSX) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    const from = $("#exFrom").value, to = $("#exTo").value, all = [];
+    for (let i = 0; ; i += 1000) {
+      let q = sb.from("qt_notes").select("user_id,qt_date,passage,content,question,application,prayer,is_shared,is_public,for_book,created_at").order("qt_date").order("created_at").range(i, i + 999);
+      if (from) q = q.gte("qt_date", from); if (to) q = q.lte("qt_date", to); if (!$("#exAll").checked) q = q.eq("for_book", true);
+      const { data, error } = await q; if (error) throw error;
+      all.push(...data); if (data.length < 1000) break;
+    }
+    if (!all.length) return msg("해당 기간에 묵상이 없습니다.", true);
+    const { data: ps } = await sb.from("profiles").select("id,nickname");
+    const nm = new Map((ps || []).map(p => [p.id, p.nickname]));
+    const rows = all.map(n => ({ "이름": nm.get(n.user_id) || "", "읽은 날짜": n.qt_date, "읽은 본문": n.passage || "", "느낀 점": n.content || "", "의문점": n.question || "", "적용 및 실천 계획": n.application || "", "기도 제목": n.prayer || "", "묵상집 동의": n.for_book ? "예" : "아니오", "공개": n.is_public ? "홈페이지" : n.is_shared ? "성도 나눔" : "비공개", "작성 시각": new Date(n.created_at).toLocaleString("ko-KR") }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws["!cols"] = [10, 12, 18, 60, 30, 40, 30, 10, 10, 20].map(w => ({ wch: w }));
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "묵상");
+    XLSX.writeFile(wb, `더행복한교회_묵상_${from || "처음"}_${to || "오늘"}.xlsx`);
+    msg(`${all.length}편의 묵상을 내려받았습니다.`);
+  } catch (err) { msg("내려받지 못했습니다: " + (err.message || err), true); }
+};
+async function loadGroups(){
+  const { data, error } = await sb.rpc("admin_groups");
+  if (error) { $("#grpList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
+  $("#grpList").innerHTML = (data || []).map(g => `<li><b>${esc(g.name)}</b> · 코드 <code class="code">${esc(g.code)}</code> · ${g.members}명 <button class="btn sm" type="button" data-copy="${esc(g.code)}">코드 복사</button> <button class="btn sm" type="button" data-gm="${g.id}">명단 보기</button><ul class="plain gm" id="gm${g.id}" hidden></ul></li>`).join("") || `<li class="muted">아직 만든 모임이 없습니다.</li>`;
+}
+$("#grpAdd").onclick = async () => {
+  const n = $("#grpName").value.trim(); if (!n) return;
+  const { error } = await sb.rpc("admin_create_group", { group_name: n });
+  if (error) { $("#grpMsg").textContent = "만들지 못했습니다: " + error.message; $("#grpMsg").className = "msg err"; return; }
+  $("#grpName").value = ""; toast("모임을 만들었습니다"); loadGroups();
+};
+$("#grpList").addEventListener("click", async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (b.dataset.copy) { try { await navigator.clipboard.writeText(b.dataset.copy); toast("코드를 복사했습니다"); } catch { toast("코드: " + b.dataset.copy); } }
+  if (b.dataset.gm) {
+    const box = $("#gm" + b.dataset.gm); box.hidden = !box.hidden; if (box.hidden) return;
+    const { data } = await sb.from("profiles").select("id,nickname").eq("group_id", +b.dataset.gm);
+    box.innerHTML = (data || []).map(p => `<li>${esc(p.nickname)} <button class="btn sm warn" type="button" data-out="${p.id}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
+  }
+  if (b.dataset.out) { await sb.rpc("admin_set_group", { uid: b.dataset.out, gid: null }); toast("모임에서 뺐습니다"); loadGroups(); }
 });
 
 /* ---------- 내 정보 ---------- */
