@@ -204,6 +204,15 @@ footer a{color:var(--muted)}
 .cal span.on{background:var(--accent);color:var(--accent-ink)}
 .cal span.now{outline:2px solid var(--gold)}
 .opts{display:grid;gap:6px}
+.reader{margin-bottom:16px}
+.plan{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
+.plan .pl{font-size:14px;font-weight:700;color:var(--accent);margin-right:4px}
+.plan .btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.reader .pick{margin-bottom:10px}
+.rtext{max-height:min(440px,55vh);overflow:auto;margin:0;padding:8px 4px;list-style:none;font-family:var(--serif);font-size:17px;line-height:1.85;border-block:1px solid var(--line)}
+.rtext li{padding:2px 8px;border-radius:4px;cursor:pointer}
+.rtext li b{font-family:var(--sans);font-size:12px;color:var(--accent);margin-right:6px}
+.rtext li.sel{background:var(--tint);box-shadow:inset 3px 0 0 var(--accent)}
 .code{font-size:15px;font-weight:700;letter-spacing:.1em;background:var(--tint);padding:2px 6px;border-radius:4px}
 .gm{margin:6px 0 4px 12px}
 .gm li.idle{color:var(--warn)}
@@ -353,6 +362,20 @@ footer a{color:var(--muted)}
   <!-- 나의 큐티 -->
   <section class="page" data-page="qt">
     <div class="phead"><h1>나의 큐티</h1><p>읽은 말씀과 느낀 점을 기록하세요. 별표(*) 두 칸만 쓰면 저장되고, 나머지는 쓰고 싶을 때만 채우시면 됩니다. '성도들과 나누기'를 켜면 묵상 나눔 게시판에 함께 올라갑니다.</p></div>
+    <div class="card reader" id="qtReader">
+      <h2 class="h">말씀 읽기</h2>
+      <div class="plan" id="qtPlan" hidden></div>
+      <div class="pick">
+        <select id="rBook" aria-label="책 선택"></select><select id="rCh" aria-label="장 선택"></select>
+        <button class="btn sm" type="button" id="rPrev">← 앞 장</button><button class="btn sm" type="button" id="rNext">다음 장 →</button>
+      </div>
+      <ol class="rtext" id="rText"><li class="muted">불러오는 중…</li></ol>
+      <p class="hint" style="margin-top:8px">마음에 닿는 구절을 누르면 표시됩니다. 처음 구절과 끝 구절을 차례로 누르고 ‘읽은 본문에 넣기’를 누르면 아래 칸에 자동으로 적힙니다.</p>
+      <div class="row" style="margin-top:4px">
+        <button class="btn acc sm" type="button" id="rUse">읽은 본문에 넣기</button>
+        <a class="btn sm" id="rStudy" href="#study">원어 · 해설 보기</a>
+      </div>
+    </div>
     <form class="card form" id="qtForm" novalidate>
       <div class="two">
         <div><label for="qDate">읽은 날짜</label><input id="qDate" type="date"></div>
@@ -583,7 +606,7 @@ function route(){
   if (p === "study") initStudy(sref);
   if (needLogin) return;
   if (p === "write") initWrite();
-  if (p === "qt") loadMyNotes();
+  if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") $("#nick").value = profile?.nickname || "";
   if (p === "pray") loadPray();
@@ -832,6 +855,59 @@ $("#photoForm").addEventListener("submit", async e => {
   } catch (err) { msg("올리지 못했습니다: " + (err.message || err), true); }
   $("#pSubmit").disabled = false;
 });
+
+/* 말씀 읽기 + 분기별 통독 범위 (교회 통독표가 바뀌면 여기를 고칩니다) */
+const READING_PLAN = {
+  "2026-3": ["3분기 (7–9월)", [2, 9, 10, 20]],
+  "2026-4": ["4분기 (10–12월)", [49, 62, 63, 64, 42, 37, 39]]
+};
+let rCur = { b: 1, c: 1 }, rSel = [], readerReady = false;
+function curPlan(){ const d = new Date(); return READING_PLAN[`${d.getFullYear()}-${Math.floor(d.getMonth() / 3) + 1}`]; }
+async function initReader(){
+  if (readerReady) return; readerReady = true;
+  await ensureBooks();
+  $("#rBook").innerHTML = BOOKS.map((b,i) => `<option value="${i+1}">${b[0]}</option>`).join("");
+  const plan = curPlan();
+  if (plan) {
+    $("#qtPlan").hidden = false;
+    $("#qtPlan").innerHTML = `<span class="pl">이번 분기 통독 · ${plan[0]}</span>` + plan[1].map(b => `<button class="btn sm" type="button" data-rb="${b}">${BOOKS[b-1][0]}</button>`).join("");
+  }
+  $("#qtPlan").onclick = e => { const x = e.target.closest("[data-rb]"); if (x) openReader(+x.dataset.rb, 1); };
+  $("#rBook").onchange = () => openReader(+$("#rBook").value, 1);
+  $("#rCh").onchange = () => openReader(rCur.b, +$("#rCh").value);
+  $("#rPrev").onclick = () => { const { b, c } = rCur; if (c > 1) openReader(b, c - 1); else if (b > 1) openReader(b - 1, BOOKS[b-2][1].length); };
+  $("#rNext").onclick = () => { const { b, c } = rCur; if (c < BOOKS[b-1][1].length) openReader(b, c + 1); else if (b < 66) openReader(b + 1, 1); };
+  $("#rText").onclick = e => {
+    const li = e.target.closest("li[data-v]"); if (!li) return;
+    const v = +li.dataset.v;
+    rSel = (rSel.length !== 1) ? [v] : [Math.min(rSel[0], v), Math.max(rSel[0], v)];
+    markSel();
+  };
+  $("#rUse").onclick = () => {
+    const name = BOOKS[rCur.b-1][0], [a, z] = rSel;
+    $("#qPassage").value = !a ? `${name} ${rCur.c}장` : `${name} ${rCur.c}:${a}${z && z !== a ? "-" + z : ""}`;
+    toast("읽은 본문에 넣었습니다"); $("#qBody").focus();
+  };
+  let last = null; try { last = JSON.parse(localStorage.getItem("thc-reader") || "null"); } catch {}
+  if (last && last.b >= 1 && last.b <= 66 && last.c >= 1 && last.c <= BOOKS[last.b-1][1].length) openReader(last.b, last.c);
+  else openReader(plan ? plan[1][0] : 1, 1);
+}
+function markSel(){
+  const [a, z] = rSel;
+  document.querySelectorAll("#rText li[data-v]").forEach(li => { const v = +li.dataset.v; li.classList.toggle("sel", !!a && v >= a && v <= (z || a)); });
+  $("#rStudy").href = `#study-${rCur.b}-${rCur.c}-${a || 1}`;
+}
+async function openReader(b, c){
+  rCur = { b, c }; rSel = [];
+  $("#rBook").value = b;
+  $("#rCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
+  $("#rCh").value = c;
+  document.querySelectorAll("#qtPlan [data-rb]").forEach(x => x.classList.toggle("on", +x.dataset.rb === b));
+  const book = await getBook(b);
+  $("#rText").innerHTML = book[c-1].map((t,i) => `<li data-v="${i+1}"><b>${i+1}</b>${esc(t)}</li>`).join("");
+  $("#rText").scrollTop = 0; markSel();
+  try { localStorage.setItem("thc-reader", JSON.stringify(rCur)); } catch {}
+}
 
 /* ---------- 나의 큐티 ---------- */
 function qtBody(n){
