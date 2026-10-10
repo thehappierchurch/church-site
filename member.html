@@ -170,6 +170,19 @@ footer a{color:var(--muted)}
 .opts{display:grid;gap:6px}
 .code{font-size:15px;font-weight:700;letter-spacing:.1em;background:var(--tint);padding:2px 6px;border-radius:4px}
 .gm{margin:6px 0 4px 12px}
+.feed{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.feed li{cursor:pointer;border-bottom:1px solid var(--line);padding-bottom:10px}
+.feed li:last-child{border-bottom:0}
+.fmeta{font-size:13px;color:var(--muted)}.fmeta b{color:var(--accent)}
+.ftext{font-family:var(--serif);font-size:17px;line-height:1.8;margin-top:2px}
+.fphoto{display:block;max-width:100%;max-height:260px;border-radius:6px;margin-top:6px;border:1px solid var(--line)}
+.blocked{background:#F6E3E0;color:#8A2D24;border-radius:6px;padding:10px 14px;margin-bottom:16px;font-size:14px}
+.modlist{list-style:none;margin:12px 0 0;padding:0}
+.modlist li{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:flex-start;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.modlist .mtxt{flex:1;min-width:200px;font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.modlist .mmeta{display:block;font-size:12.5px;color:var(--muted)}
+.modlist img{max-width:160px;max-height:120px;border-radius:4px;display:block;margin-top:4px}
+.modlist .acts{display:flex;gap:6px;flex-wrap:wrap}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -194,6 +207,7 @@ footer a{color:var(--muted)}
 </header>
 
 <main class="wrap">
+  <p class="blocked" id="blockedBar" hidden>관리자에 의해 글쓰기가 제한된 계정입니다. 문의는 교회로 해 주세요.</p>
   <div id="gate" class="login" hidden>
     <h2>성도마당에 오신 것을 환영합니다</h2>
     <p>카카오 계정으로 로그인하면 성경을 이어서 필사하고,<br>큐티 묵상을 기록하고 함께 나눌 수 있습니다.</p>
@@ -211,8 +225,9 @@ footer a{color:var(--muted)}
       <div class="stat"><div class="k">참여한 성도</div><div class="v" id="stPeople">–</div><div class="sm muted" id="stMine"></div></div>
     </div>
     <div class="card recent">
-      <h2 class="h">최근 이어 쓴 성도</h2>
-      <ul id="recentList"><li class="muted sm">불러오는 중…</li></ul>
+      <h2 class="h">최근 성도님들이 쓴 말씀</h2>
+      <ul id="recentList" class="feed"><li class="muted sm">불러오는 중…</li></ul>
+      <button class="btn sm" type="button" id="moreFeed" hidden>더 보기</button>
     </div>
     <div class="card photos" id="photoGallery" hidden>
       <h2 class="h">손글씨 필사 사진</h2>
@@ -264,7 +279,7 @@ footer a{color:var(--muted)}
     </div>
     <p class="sm muted" style="margin-top:18px">칸 색: <span class="key done"></span> 필사됨 · <span class="key mine"></span> 내가 씀 · <span class="key photo"></span> 손글씨 사진 · <span class="key"></span> 아직 비어 있음 (칸을 누르면 누가 썼는지 보입니다)</p>
     <div class="grid" id="verseGrid" aria-label="이 장의 절 목록"></div>
-    <details class="chapterText" id="chapterBox">
+    <details class="chapterText" id="chapterBox" open>
       <summary>이 장에서 성도님들이 쓴 말씀 보기</summary>
       <ol id="chapterList"></ol>
     </details>
@@ -361,6 +376,18 @@ footer a{color:var(--muted)}
   <!-- 관리 -->
   <section class="page" data-page="admin">
     <div class="phead"><h1>관리</h1><p>목사님·관리자만 보이는 화면입니다.</p></div>
+    <div class="card" style="margin-bottom:16px">
+      <h2 class="h">최근 올라온 글 살펴보기</h2>
+      <p class="hint">필사·손글씨 사진·큐티 나눔·기도 제목을 한곳에서 최신순으로 봅니다. 장난 글이나 부적절한 글은 여기서 바로 지우세요. 큐티는 성도 나눔·홈페이지 공개 글만 보입니다(비공개 글은 보이지 않습니다).</p>
+      <div class="row" id="modTabs"><button class="btn sm acc" type="button" data-mt="all">전체</button><button class="btn sm" type="button" data-mt="relay">필사</button><button class="btn sm" type="button" data-mt="photo">손글씨 사진</button><button class="btn sm" type="button" data-mt="qt">큐티</button><button class="btn sm" type="button" data-mt="pray">기도 제목</button></div>
+      <ul class="modlist" id="modList"><li class="muted sm">불러오는 중…</li></ul>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <h2 class="h">회원 관리</h2>
+      <p class="hint">모르는 사람이 장난을 치면 <b>글쓰기 차단</b>을 하고, 필요하면 <b>이 회원의 글 모두 삭제</b>를 누르세요. 이름이 부적절하면 이름을 바꿀 수 있습니다.</p>
+      <input id="memSearch" type="text" placeholder="이름으로 찾기" style="font:inherit;font-size:16px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;width:100%;max-width:280px;background:var(--surface);color:var(--ink)">
+      <ul class="modlist" id="memList"></ul>
+    </div>
     <div class="card form">
       <h2 class="h">큐티 묵상 엑셀로 내려받기</h2>
       <p class="hint">성도님들이 ‘교회 묵상집에 실어도 좋아요’에 동의한 묵상을 엑셀(.xlsx)로 내려받습니다. 묵상집(책)을 만들 때 쓰세요.</p>
@@ -469,10 +496,11 @@ function renderWho(){
     <a href="#me" class="btn sm">내 정보</a><button class="btn sm" type="button" id="logoutBtn">로그아웃</button>`;
   $("#logoutBtn").onclick = logout;
   $("#adminTab").hidden = !profile?.is_admin;
+  $("#blockedBar").hidden = !profile?.is_blocked;
 }
 
 async function loadProfile(){
-  const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin,group_id").eq("id", user.id).maybeSingle();
+  const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin,group_id,is_blocked").eq("id", user.id).maybeSingle();
   profile = data || { nickname: "성도" };
 }
 
@@ -539,7 +567,7 @@ async function refreshRelay(){
   const [last, stats, recent, mine] = await Promise.all([
     sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("book", { ascending: false }).order("chapter", { ascending: false }).order("verse", { ascending: false }).limit(1),
     sb.rpc("relay_stats"),
-    sb.from("relay_view").select("book,chapter,verse,nickname,created_at,photo_id").order("created_at", { ascending: false }).limit(60),
+    sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,photo_id").order("created_at", { ascending: false }).limit(80),
     sb.from("relay_verses").select("verse", { count: "exact", head: true }).eq("user_id", user.id)
   ]);
   const l = last.data && last.data[0];
@@ -557,11 +585,22 @@ async function refreshRelay(){
     if (r.photo_id && g && g.photo_id === r.photo_id) { g.items.push(r); continue; }
     groups.push({ photo_id: r.photo_id, items: [r] });
   }
-  $("#recentList").innerHTML = groups.slice(0, 8).map(g => { const a = g.items[g.items.length-1], z = g.items[0];
-    const span = g.items.length > 1 ? `${refOf({ b: a.book, c: a.chapter, v: a.verse })} ~ ${z.chapter}:${z.verse}` : refOf({ b: z.book, c: z.chapter, v: z.verse });
-    return `<li><b>${esc(z.nickname)}</b> <span>${span}</span>${g.photo_id ? ' <span class="badge">📷 손글씨</span>' : ''} <span class="muted">${ago(z.created_at)}</span></li>`; }).join("") || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
-  loadPhotos();
+  feedGroups = groups;
+  await loadPhotos();
+  renderFeed();
 }
+let feedGroups = [], feedShown = 5;
+function renderFeed(){
+  const html = feedGroups.slice(0, feedShown).map(g => { const a = g.items[g.items.length-1], z = g.items[0];
+    if (g.photo_id) {
+      const ph = photoCache.get(g.photo_id), u = ph && urlCache.get(ph.path);
+      return `<li data-go="${a.book},${a.chapter},${a.verse}"><div class="fmeta"><b>${esc(z.nickname)}</b> · ${ph ? esc(rangeText(ph)) : refOf({ b: a.book, c: a.chapter, v: a.verse })} · ${ago(z.created_at)} <span class="badge">📷 손글씨</span></div>${u ? `<img class="fphoto" src="${esc(u)}" alt="손글씨 필사 사진" loading="lazy">` : ""}</li>`; }
+    return `<li data-go="${z.book},${z.chapter},${z.verse}"><div class="fmeta"><b>${esc(z.nickname)}</b> · ${refOf({ b: z.book, c: z.chapter, v: z.verse })} · ${ago(z.created_at)}</div><div class="ftext">${esc(z.content)}</div></li>`; }).join("");
+  $("#recentList").innerHTML = html || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
+  $("#moreFeed").hidden = feedGroups.length <= feedShown;
+}
+$("#moreFeed").onclick = () => { feedShown += 10; renderFeed(); };
+$("#recentList").addEventListener("click", e => { const li = e.target.closest("li[data-go]"); if (!li) return; const [b, c, v] = li.dataset.go.split(",").map(Number); go({ b, c, v }); $("#verseBox").scrollIntoView({ behavior: "smooth" }); });
 async function openChapter(b, c, v){
   cur.b = b; cur.c = c;
   $("#selBook").value = b;
@@ -907,7 +946,8 @@ async function loadPublic(reset){
   const from = pubPage * PAGE;
   const { data, error } = await sb.from("public_qt").select("*").order("qt_date", { ascending: false }).order("created_at", { ascending: false }).range(from, from + PAGE - 1);
   if (error) { $("#publicList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
-  const html = (data || []).map(n => `<li><div class="author"><span>${esc(n.nickname)}</span><span>· ${fmtDate(n.qt_date)}</span></div><h3>${esc(n.passage || "큐티")}</h3>${qtBody(n)}</li>`).join("");
+  const adm = !!profile?.is_admin;
+  const html = (data || []).map(n => `<li><div class="author"><span>${esc(n.nickname)}</span><span>· ${fmtDate(n.qt_date)}</span></div><h3>${esc(n.passage || "큐티")}</h3>${qtBody(n)}${adm ? `<div class="acts"><button class="btn sm" type="button" data-mod="qthide" data-id="${n.id}">숨기기</button><button class="btn sm warn" type="button" data-mod="qt" data-id="${n.id}">삭제</button></div>` : ""}</li>`).join("");
   if (reset && !html) $("#publicList").innerHTML = `<li class="muted">아직 공개된 묵상이 없습니다.</li>`;
   else $("#publicList").insertAdjacentHTML("beforeend", html);
   $("#morePublic").hidden = (data || []).length < PAGE;
@@ -918,7 +958,7 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadGroups();
+  loadGroups(); await loadMembers(); loadMod();
 }
 $("#exBtn").onclick = async () => {
   const msg = (t, err) => { $("#exMsg").textContent = t; $("#exMsg").className = err ? "msg err" : "msg"; };
@@ -974,6 +1014,72 @@ $("#grpList").addEventListener("click", async e => {
     if (error) return toast("삭제하지 못했습니다: " + error.message);
     toast(`‘${b.dataset.name}’ 모임을 삭제했습니다`); loadGroups();
   }
+});
+
+
+/* ---------- 관리: 살펴보기 · 회원 관리 ---------- */
+let modType = "all", members = [];
+const clip = (t, n = 140) => { t = String(t || ""); return t.length > n ? t.slice(0, n) + "…" : t; };
+async function loadMod(){
+  const items = [];
+  const want = k => modType === "all" || modType === k;
+  const jobs = [];
+  if (want("relay")) jobs.push(sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,user_id").is("photo_id", null).order("created_at", { ascending: false }).limit(30).then(r => (r.data || []).forEach(x => items.push({ k: "relay", t: x.created_at, who: x.nickname, uid: x.user_id, ref: refOf({ b: x.book, c: x.chapter, v: x.verse }), text: x.content, key: `${x.book},${x.chapter},${x.verse}` }))));
+  if (want("photo")) jobs.push(sb.from("relay_photos_view").select("*").order("created_at", { ascending: false }).limit(15).then(async r => {
+    const list = r.data || []; if (!list.length) return;
+    const { data: urls } = await sb.storage.from("relay-photos").createSignedUrls(list.map(p => p.path), 3600);
+    const um = new Map((urls || []).map(u => [u.path, u.signedUrl]));
+    list.forEach(p => items.push({ k: "photo", t: p.created_at, who: p.nickname, uid: p.user_id, ref: rangeText(p), img: um.get(p.path), key: p.id, path: p.path })); }));
+  if (want("qt")) jobs.push(sb.from("qt_notes").select("id,user_id,qt_date,passage,content,is_shared,is_public,is_hidden,created_at").eq("is_shared", true).order("created_at", { ascending: false }).limit(20).then(r => (r.data || []).forEach(x => items.push({ k: "qt", t: x.created_at, uid: x.user_id, ref: (x.passage || "큐티") + (x.is_public ? " · 홈페이지 공개" : " · 성도 나눔") + (x.is_hidden ? " · 숨김" : ""), text: x.content, key: x.id, hidden: x.is_hidden }))));
+  if (want("pray")) jobs.push(sb.from("prayer_checks").select("user_id,day,note,created_at").not("note", "is", null).order("created_at", { ascending: false }).limit(20).then(r => (r.data || []).forEach(x => items.push({ k: "pray", t: x.created_at, uid: x.user_id, ref: "기도 제목 · " + fmtDate(x.day), text: x.note, key: `${x.user_id}|${x.day}` }))));
+  await Promise.all(jobs);
+  if (!members.length) await loadMembers(true);
+  const nm = new Map(members.map(m => [m.id, m.nickname]));
+  items.sort((a, b) => b.t.localeCompare(a.t));
+  const label = { relay: "필사", photo: "손글씨 사진", qt: "큐티", pray: "기도 제목" };
+  $("#modList").innerHTML = items.slice(0, 40).map(i => `<li><div class="mtxt"><span class="mmeta"><span class="badge">${label[i.k]}</span><b>${esc(i.who || nm.get(i.uid) || "")}</b> · ${esc(i.ref)} · ${ago(i.t)}</span>${i.img ? `<a href="${esc(i.img)}" target="_blank" rel="noopener"><img src="${esc(i.img)}" alt="" loading="lazy"></a>` : esc(clip(i.text))}</div>
+    <div class="acts">${i.k === "qt" ? `<button class="btn sm" type="button" data-mod="qthide" data-id="${i.key}" data-h="${i.hidden ? 0 : 1}">${i.hidden ? "다시 보이기" : "숨기기"}</button>` : ""}<button class="btn sm warn" type="button" data-mod="${i.k}" data-id="${esc(i.key)}" ${i.path ? `data-path="${esc(i.path)}"` : ""}>삭제</button></div></li>`).join("") || `<li class="muted sm">올라온 글이 없습니다.</li>`;
+}
+$("#modTabs").addEventListener("click", e => { const b = e.target.closest("button[data-mt]"); if (!b) return; modType = b.dataset.mt; [...$("#modTabs").children].forEach(x => x.classList.toggle("acc", x === b)); loadMod(); });
+document.addEventListener("click", async e => {
+  const b = e.target.closest("button[data-mod]"); if (!b) return;
+  const k = b.dataset.mod, id = b.dataset.id;
+  if (k === "qthide") { await sb.rpc("admin_set_hidden", { note_id: +id, hidden: b.dataset.h !== "0" }); toast(b.dataset.h !== "0" ? "숨겼습니다" : "다시 보이게 했습니다"); return location.hash === "#public" ? loadPublic(true) : loadMod(); }
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "정말 삭제?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = "삭제"; } }, 4000); return; }
+  let error;
+  if (k === "relay") { const [bk, c, v] = id.split(",").map(Number); ({ error } = await sb.from("relay_verses").delete().eq("book", bk).eq("chapter", c).eq("verse", v)); }
+  if (k === "photo") { ({ error } = await sb.from("relay_photos").delete().eq("id", +id)); if (!error && b.dataset.path) await sb.storage.from("relay-photos").remove([b.dataset.path]); }
+  if (k === "qt") ({ error } = await sb.from("qt_notes").delete().eq("id", +id));
+  if (k === "pray") { const [u, d] = id.split("|"); ({ error } = await sb.rpc("admin_clear_prayer_note", { uid: u, d })); }
+  if (error) return toast("삭제하지 못했습니다: " + error.message);
+  toast("삭제했습니다");
+  if (location.hash === "#public") loadPublic(true); else loadMod();
+});
+async function loadMembers(silent){
+  const { data, error } = await sb.rpc("admin_members");
+  if (error) { if (!silent) $("#memList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
+  members = data || []; renderMembers();
+}
+function renderMembers(){
+  const q = $("#memSearch").value.trim();
+  $("#memList").innerHTML = members.filter(m => !q || (m.nickname || "").includes(q)).map(m => `<li><div class="mtxt"><b>${esc(m.nickname)}</b>${m.is_admin ? ' <span class="badge">관리자</span>' : ""}${m.is_blocked ? ' <span class="badge hid">차단됨</span>' : ""}<span class="mmeta">가입 ${fmtDate((m.joined || "").slice(0, 10))} · 필사 ${m.relay_count}절 · 사진 ${m.photo_count} · 큐티 ${m.qt_count}</span></div>
+    ${m.id === user.id ? "" : `<div class="acts"><button class="btn sm" type="button" data-mem="rename" data-id="${m.id}" data-name="${esc(m.nickname)}">이름 바꾸기</button><button class="btn sm ${m.is_blocked ? "" : "warn"}" type="button" data-mem="block" data-id="${m.id}" data-b="${m.is_blocked ? 0 : 1}">${m.is_blocked ? "차단 풀기" : "글쓰기 차단"}</button><button class="btn sm warn" type="button" data-mem="purge" data-id="${m.id}" data-name="${esc(m.nickname)}">이 회원의 글 모두 삭제</button></div>`}</li>`).join("") || `<li class="muted sm">회원이 없습니다.</li>`;
+}
+$("#memSearch").addEventListener("input", renderMembers);
+$("#memList").addEventListener("click", async e => {
+  const b = e.target.closest("button[data-mem]"); if (!b) return;
+  const id = b.dataset.id;
+  if (b.dataset.mem === "rename") { const n = prompt("새 이름", b.dataset.name); if (!n || !n.trim()) return; const { error } = await sb.rpc("admin_set_nickname", { uid: id, new_name: n }); if (error) return toast("바꾸지 못했습니다: " + error.message); toast("이름을 바꿨습니다"); }
+  if (b.dataset.mem === "block") { const { error } = await sb.rpc("admin_set_blocked", { uid: id, blocked: b.dataset.b === "1" }); if (error) return toast("처리하지 못했습니다: " + error.message); toast(b.dataset.b === "1" ? "글쓰기를 차단했습니다" : "차단을 풀었습니다"); }
+  if (b.dataset.mem === "purge") {
+    if (!confirm(`‘${b.dataset.name}’님이 쓴 필사·사진·큐티·기도 기록을 모두 삭제합니다. 되돌릴 수 없습니다. 계속할까요?`)) return;
+    const { data: ph } = await sb.from("relay_photos").select("path").eq("user_id", id);
+    const { error } = await sb.rpc("admin_purge_user", { uid: id });
+    if (error) return toast("삭제하지 못했습니다: " + error.message);
+    if (ph && ph.length) await sb.storage.from("relay-photos").remove(ph.map(p => p.path));
+    toast("모두 삭제했습니다");
+  }
+  await loadMembers(); loadMod();
 });
 
 /* ---------- 내 정보 ---------- */
