@@ -655,7 +655,7 @@ $("#acctNum").textContent = CHURCH.bank;
 $("#acctOwner").textContent = CHURCH.owner;
 $("#naverMap").href = "https://map.naver.com/p/search/" + encodeURIComponent("서울 성북구 도봉로 31");
 $("#kakaoMap").href = "https://map.kakao.com/?q=" + encodeURIComponent("서울 성북구 도봉로 31");
-$("#mainNav").innerHTML = MENU.map((m,i) => `<li><a href="#${m.p || m.sub[0][1]}" data-i="${i}">${m.t}</a></li>`).join("");
+$("#mainNav").innerHTML = MENU.map((m,i) => `<li><a href="#${m.p || m.sub[0][1]}" data-i="${i}">${m.t}</a></li>`).join("") + `<li><a href="member.html" style="color:var(--accent);font-weight:700">성도마당</a></li>`;
 
 /* ---------- public views ---------- */
 function thumb(s, cap){
