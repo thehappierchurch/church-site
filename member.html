@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>성도마당 | 더행복한교회</title>
+<meta name="description" content="더행복한교회 성도마당 - 성경 필사, 큐티 기록, 묵상 나눔">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#FBFBF9; --surface:#FFFFFF; --tint:#EEF3F1;
+  --ink:#1D2322; --muted:#68716F; --line:#E2E6E4;
+  --accent:#2F5D55; --accent-ink:#FFFFFF; --gold:#B8914A; --brand:#1B2A5C;
+  --ok:#2F7D55; --warn:#B4463C; --kakao:#FEE500; --kakao-ink:#191600;
+  --serif:"Gowun Batang","Noto Serif KR",Georgia,serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#121615; --surface:#191E1D; --tint:#1F2826;
+    --ink:#E9EDEB; --muted:#9BA5A2; --line:#2B3331;
+    --accent:#86B8AB; --accent-ink:#0F1614; --gold:#D6B476; --brand:#C9D3F2;
+    --ok:#7CC49C; --warn:#E58A80;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#121615; --surface:#191E1D; --tint:#1F2826;
+  --ink:#E9EDEB; --muted:#9BA5A2; --line:#2B3331;
+  --accent:#86B8AB; --accent-ink:#0F1614; --gold:#D6B476; --brand:#C9D3F2;
+  --ok:#7CC49C; --warn:#E58A80;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased;word-break:keep-all;overflow-wrap:anywhere}
+a{color:inherit}
+h1,h2,h3{font-family:var(--serif);line-height:1.35;margin:0;text-wrap:balance}
+p{margin:0}
+[hidden]{display:none!important}
+.wrap{max-width:900px;margin:0 auto;padding-inline:16px}
+header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.logo{font-family:"Black Han Sans","Noto Sans KR",sans-serif;font-size:24px;color:var(--brand);text-decoration:none;line-height:1.1}
+.logo small{display:block;font-family:var(--sans);font-size:11px;color:var(--muted);letter-spacing:.3em;margin-top:2px}
+.who{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);min-width:0}
+.who img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--tint)}
+.who b{color:var(--ink);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:9em}
+nav ul{list-style:none;margin:0;padding:0;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--line)}
+nav ul::-webkit-scrollbar{display:none}
+nav a{display:block;padding:12px 14px;font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap;color:var(--muted);border-bottom:2px solid transparent}
+nav a.on{color:var(--ink);border-bottom-color:var(--ink)}
+nav a.home{margin-left:auto;font-weight:400;font-size:14px}
+a:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+main{padding-block:32px 80px;min-height:70vh}
+.phead{margin-bottom:24px}
+.phead h1{font-size:clamp(26px,4.5vw,34px)}
+.phead p{color:var(--muted);font-size:15px;margin-top:6px}
+section.page{display:none}
+section.page.active{display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px;border-radius:999px;font:inherit;font-size:14.5px;font-weight:500;text-decoration:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:44px}
+.btn.acc{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.kakao{background:var(--kakao);color:var(--kakao-ink);border-color:var(--kakao);font-weight:700}
+.btn.sm{padding:5px 12px;font-size:13px;min-height:32px}
+.btn.warn{color:var(--warn);border-color:var(--warn)}
+.btn:disabled{opacity:.5;cursor:default}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px}
+.login{text-align:center;padding:40px 20px;background:var(--tint);border-radius:8px}
+.login h2{font-size:22px;margin-bottom:8px}
+.login p{color:var(--muted);margin-bottom:20px}
+.muted{color:var(--muted)}
+.sm{font-size:13.5px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+.stat .k{font-size:12.5px;color:var(--muted)}
+.stat .v{font-family:var(--serif);font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--tint);border-radius:3px;overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent);width:0}
+.pick{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+select,input[type=text],input[type=date],textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px;max-width:100%}
+textarea{width:100%;resize:vertical;line-height:1.7}
+.verse{font-family:var(--serif);font-size:clamp(18px,2.6vw,21px);line-height:1.85;background:var(--tint);border-radius:8px;padding:18px 20px;margin-bottom:12px}
+.verse .ref{display:block;font-family:var(--sans);font-size:13px;color:var(--accent);font-weight:700;margin-bottom:4px}
+.typed{font-family:var(--serif);font-size:18px}
+.check{font-size:14px;min-height:1.6em;margin-top:6px}
+.check.ok{color:var(--ok)}.check.ng{color:var(--warn)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.grid{display:flex;flex-wrap:wrap;gap:4px;margin-top:18px}
+.grid button{width:34px;height:30px;border-radius:4px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:inherit;font-size:12px;cursor:pointer;font-variant-numeric:tabular-nums;padding:0}
+.grid button.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.grid button.cur{outline:2px solid var(--gold);outline-offset:1px;color:var(--ink)}
+.form{display:grid;gap:10px}
+.form label{font-size:13.5px;color:var(--muted)}
+.form .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.form .two>div{display:grid;gap:6px}
+.toggle{display:flex;align-items:center;gap:8px;font-size:15px;cursor:pointer}
+.toggle input{width:18px;height:18px;accent-color:var(--accent)}
+.notes{list-style:none;margin:20px 0 0;padding:0;border-top:1px solid var(--ink)}
+.notes li{border-bottom:1px solid var(--line);padding-block:18px}
+.notes h3{font-size:19px;margin-block:2px 6px}
+.notes .body{white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.notes .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.author{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.author img{width:24px;height:24px;border-radius:50%;object-fit:cover;background:var(--tint)}
+.badge{display:inline-block;font-size:11.5px;padding:1px 8px;border-radius:3px;background:var(--tint);color:var(--accent);font-weight:700;margin-right:6px;vertical-align:1px}
+.badge.hid{color:var(--warn)}
+.msg{font-size:14px;margin-top:8px;min-height:1.4em}
+.msg.err{color:var(--warn)}
+.policy h2{font-size:19px;margin-top:28px;margin-bottom:8px}
+.policy p,.policy li{font-size:15px;color:var(--ink)}
+.policy ul{padding-left:20px;margin:6px 0}
+footer{border-top:1px solid var(--line);background:var(--surface);padding-block:24px;font-size:13px;color:var(--muted)}
+footer a{color:var(--muted)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
+@media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap top">
+    <a class="logo" href="./">더행복한교회<small>성도마당</small></a>
+    <div class="who" id="who"></div>
+  </div>
+  <div class="wrap">
+    <nav aria-label="성도마당 메뉴"><ul>
+      <li><a href="#write" data-p="write">성경 필사</a></li>
+      <li><a href="#qt" data-p="qt">나의 큐티</a></li>
+      <li><a href="#share" data-p="share">묵상 나눔</a></li>
+      <li><a href="./" class="home">← 홈페이지</a></li>
+    </ul></nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="gate" class="login" hidden>
+    <h2>성도마당에 오신 것을 환영합니다</h2>
+    <p>카카오 계정으로 로그인하면 성경을 이어서 필사하고,<br>큐티 묵상을 기록하고 함께 나눌 수 있습니다.</p>
+    <button class="btn kakao" type="button" id="loginBtn">카카오로 로그인</button>
+    <p class="sm" style="margin:16px 0 0">로그인하면 <a href="#privacy">개인정보처리방침</a>에 동의하는 것으로 봅니다.</p>
+    <p class="msg err" id="loginErr"></p>
+  </div>
+
+  <!-- 성경 필사 -->
+  <section class="page" data-page="write">
+    <div class="phead"><h1>성경 필사</h1><p>한 절씩 따라 쓰며 말씀을 마음에 새겨 보세요. 쓴 자리는 저장되어 언제든 이어 쓸 수 있습니다.</p></div>
+    <div class="stats">
+      <div class="stat"><div class="k">내가 쓴 절</div><div class="v" id="stMine">–</div><div class="bar"><i id="barMine"></i></div></div>
+      <div class="stat"><div class="k" id="stBookK">이 책 진도</div><div class="v" id="stBook">–</div><div class="bar"><i id="barBook"></i></div></div>
+      <div class="stat"><div class="k">교회 전체 필사</div><div class="v" id="stChurch">–</div><div class="sm muted" id="stChurchP"></div></div>
+    </div>
+    <div class="pick">
+      <select id="selBook" aria-label="책 선택"></select>
+      <select id="selCh" aria-label="장 선택"></select>
+      <button class="btn sm" type="button" id="resumeBtn">이어 쓰기</button>
+    </div>
+    <div class="verse" id="verseBox"><span class="ref" id="verseRef"></span><span id="verseText">불러오는 중…</span></div>
+    <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장 후 다음 절로 넘어갑니다)</label>
+    <textarea id="typeBox" class="typed" rows="3" autocomplete="off" spellcheck="false"></textarea>
+    <div class="check" id="checkMsg" aria-live="polite"></div>
+    <div class="row">
+      <button class="btn acc" type="button" id="saveVerse">저장하고 다음 절</button>
+      <button class="btn sm" type="button" id="prevVerse">이전 절</button>
+      <button class="btn sm" type="button" id="nextVerse">다음 절</button>
+    </div>
+    <div class="grid" id="verseGrid" aria-label="이 장의 절 목록"></div>
+    <p class="sm muted" style="margin-top:14px">본문: 성경전서 개역한글판 (대한성서공회)</p>
+  </section>
+
+  <!-- 나의 큐티 -->
+  <section class="page" data-page="qt">
+    <div class="phead"><h1>나의 큐티</h1><p>오늘 받은 말씀과 묵상을 기록하세요. '성도들과 나누기'를 켜면 묵상 나눔 게시판에 함께 올라갑니다.</p></div>
+    <form class="card form" id="qtForm" novalidate>
+      <div class="two">
+        <div><label for="qDate">날짜</label><input id="qDate" type="date"></div>
+        <div><label for="qPassage">본문</label><input id="qPassage" type="text" placeholder="예) 시편 23:1-6"></div>
+      </div>
+      <div style="display:grid;gap:6px"><label for="qTitle">제목</label><input id="qTitle" type="text" placeholder="오늘 나에게 주신 말씀"></div>
+      <div style="display:grid;gap:6px"><label for="qBody">묵상 내용</label><textarea id="qBody" rows="8" placeholder="말씀을 읽고 깨달은 것, 적용할 것, 기도 제목을 적어 보세요."></textarea></div>
+      <label class="toggle"><input type="checkbox" id="qShare"> 성도들과 나누기</label>
+      <p class="msg" id="qMsg"></p>
+      <div class="row" style="margin-top:0">
+        <button class="btn acc" type="submit" id="qSubmit">저장</button>
+        <button class="btn" type="button" id="qCancel" hidden>수정 취소</button>
+      </div>
+    </form>
+    <ul class="notes" id="myNotes"></ul>
+  </section>
+
+  <!-- 묵상 나눔 -->
+  <section class="page" data-page="share">
+    <div class="phead"><h1>묵상 나눔</h1><p>성도님들이 나눠 주신 큐티 묵상입니다. 함께 읽고 서로를 위해 기도해 주세요.</p></div>
+    <ul class="notes" id="shared"></ul>
+    <div class="row"><button class="btn" type="button" id="moreShared" hidden>더 보기</button></div>
+  </section>
+
+  <!-- 내 정보 -->
+  <section class="page" data-page="me">
+    <div class="phead"><h1>내 정보</h1></div>
+    <form class="card form" id="nameForm" novalidate>
+      <label for="nick">홈페이지에 표시할 이름</label>
+      <input id="nick" type="text" maxlength="20">
+      <div class="row" style="margin-top:0"><button class="btn acc" type="submit">이름 저장</button></div>
+      <p class="msg" id="nickMsg"></p>
+    </form>
+    <div class="card" style="margin-top:16px">
+      <h3 style="font-size:18px">회원 탈퇴</h3>
+      <p class="muted sm" style="margin-top:6px">탈퇴하면 필사 기록과 큐티 글이 모두 지워지며 되돌릴 수 없습니다.</p>
+      <div class="row"><button class="btn warn" type="button" id="leaveBtn">회원 탈퇴</button></div>
+    </div>
+  </section>
+
+  <!-- 개인정보처리방침 -->
+  <section class="page policy" data-page="privacy">
+    <div class="phead"><h1>개인정보처리방침</h1><p>시행일: 2026년 10월 10일</p></div>
+    <p>대한예수교장로회 더행복한교회(이하 ‘교회’)는 성도마당 이용자의 개인정보를 소중히 다루며, 「개인정보 보호법」에 따라 다음과 같이 처리합니다.</p>
+    <h2>1. 수집하는 항목과 방법</h2>
+    <ul>
+      <li>카카오 로그인 시 카카오로부터 받는 정보: 닉네임(필수), 프로필 사진(선택), 카카오계정 이메일(선택)</li>
+      <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글</li>
+    </ul>
+    <h2>2. 이용 목적</h2>
+    <ul>
+      <li>회원 식별과 로그인 유지</li>
+      <li>성경 필사 진도 저장, 큐티 기록 보관, 묵상 나눔 게시 시 작성자 표시</li>
+    </ul>
+    <h2>3. 보유 기간</h2>
+    <p>회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
+    <h2>4. 공개 범위</h2>
+    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. 필사 내용은 본인만 볼 수 있고, 교회 전체 통계에는 숫자만 반영됩니다.</p>
+    <h2>5. 처리 위탁 및 국외 이전</h2>
+    <p>교회는 회원 정보와 글을 안전하게 보관하기 위해 데이터 저장을 위탁합니다.</p>
+    <ul>
+      <li>수탁자: Supabase Inc. (미국) — 데이터는 Amazon Web Services 서울 리전(대한민국)에 저장됩니다.</li>
+      <li>이전 항목: 위 1항의 정보 / 이전 시기: 로그인 및 글 저장 시 네트워크를 통해 전송 / 보유 기간: 회원 탈퇴 시까지</li>
+    </ul>
+    <h2>6. 이용자의 권리</h2>
+    <p>이용자는 언제든지 자신의 글을 수정·삭제하고, 표시 이름을 바꾸거나 탈퇴할 수 있습니다. 카카오 계정 연결은 카카오톡 설정 → 카카오계정 → 연결된 서비스 관리에서도 끊을 수 있습니다.</p>
+    <h2>7. 개인정보 보호책임자</h2>
+    <p>더행복한교회 담임목사 김충만 · 서울시 성북구 도봉로 31, 2층 · 문의: 교회 오픈채팅방</p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">대한예수교장로회 더행복한교회 · <a href="#privacy">개인정보처리방침</a> · <a href="./">홈페이지</a></div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const SUPABASE_URL = "https://jdgyvvjpkklyrxxgxtav.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Mx9v3fHWJhiDXva59qA6lA_8N7zEDQV";
+const TOTAL_VERSES = 31101;
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmtDate = d => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(d || ""); return m ? `${m[1]}. ${+m[2]}. ${+m[3]}` : ""; };
+const today = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0,10); };
+const img = u => esc(String(u||"").replace(/^http:/, "https:"));
+const num = n => Number(n || 0).toLocaleString("ko-KR");
+function toast(t){ const el = document.createElement("div"); el.className = "toast"; el.textContent = t; document.body.appendChild(el); setTimeout(() => el.remove(), 2400); }
+
+let user = null, profile = null;
+const PUBLIC_PAGES = ["privacy"];
+
+/* ---------- 로그인 ---------- */
+$("#loginBtn").addEventListener("click", async () => {
+  $("#loginErr").textContent = "";
+  const { error } = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + location.pathname } });
+  if (error) $("#loginErr").textContent = "로그인을 시작하지 못했습니다: " + error.message;
+});
+async function logout(){ await sb.auth.signOut(); location.hash = "#write"; location.reload(); }
+
+function renderWho(){
+  if (!user) { $("#who").innerHTML = ""; return; }
+  const av = profile?.avatar_url ? `<img src="${img(profile.avatar_url)}" alt="">` : "";
+  $("#who").innerHTML = `${av}<b>${esc(profile?.nickname || "성도")}</b><span class="lbl">님</span>
+    <a href="#me" class="btn sm">내 정보</a><button class="btn sm" type="button" id="logoutBtn">로그아웃</button>`;
+  $("#logoutBtn").onclick = logout;
+}
+
+async function loadProfile(){
+  const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin").eq("id", user.id).maybeSingle();
+  profile = data || { nickname: "성도" };
+}
+
+/* ---------- 라우팅 ---------- */
+const loaded = {};
+function route(){
+  let p = (location.hash || "#write").slice(1);
+  if (!document.querySelector(`section[data-page="${p}"]`)) p = "write";
+  const needLogin = !user && !PUBLIC_PAGES.includes(p);
+  $("#gate").hidden = !needLogin;
+  document.querySelectorAll("section.page").forEach(s => s.classList.toggle("active", !needLogin && s.dataset.page === p));
+  document.querySelectorAll("nav a[data-p]").forEach(a => a.classList.toggle("on", a.dataset.p === p));
+  if (needLogin) return;
+  if (p === "write") initWrite();
+  if (p === "qt") loadMyNotes();
+  if (p === "share") loadShared(true);
+  if (p === "me") $("#nick").value = profile?.nickname || "";
+  window.scrollTo(0,0);
+}
+addEventListener("hashchange", route);
+
+/* ---------- 성경 필사 ---------- */
+let BOOKS = null; const bookCache = {};
+let cur = { b: 1, c: 1, v: 1 }, doneSet = new Set();
+const norm = s => String(s).replace(/[\s.,;:!?'"“”‘’()\[\]{}<>·…\-—]/g, "");
+
+async function getBook(b){
+  if (!bookCache[b]) bookCache[b] = fetch(`bible/${b}.json`).then(r => r.json());
+  return bookCache[b];
+}
+async function initWrite(){
+  if (!BOOKS) {
+    BOOKS = await fetch("bible/index.json").then(r => r.json());
+    $("#selBook").innerHTML = BOOKS.map((b,i) => `<option value="${i+1}">${b[0]}</option>`).join("");
+    $("#selBook").onchange = () => goTo(+$("#selBook").value, 1, null);
+    $("#selCh").onchange = () => goTo(cur.b, +$("#selCh").value, null);
+    await resume();
+  }
+  refreshStats();
+}
+async function resume(){
+  const { data } = await sb.from("transcriptions").select("book,chapter,verse").order("created_at", { ascending: false }).limit(1);
+  if (data && data[0]) { const r = data[0]; await goTo(r.book, r.chapter, r.verse, true); }
+  else await goTo(1, 1, 1);
+}
+$("#resumeBtn").onclick = resume;
+
+async function goTo(b, c, v, after){
+  cur.b = b; cur.c = c;
+  $("#selBook").value = b;
+  $("#selCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
+  $("#selCh").value = c;
+  const { data } = await sb.from("transcriptions").select("verse").eq("book", b).eq("chapter", c);
+  doneSet = new Set((data || []).map(r => r.verse));
+  const n = BOOKS[b-1][1][c-1];
+  if (v == null) { v = 1; while (v <= n && doneSet.has(v)) v++; if (v > n) v = 1; }
+  else if (after) { v = v + 1; if (v > n) return nextChapter(); }
+  cur.v = v;
+  await showVerse();
+  refreshStats();
+}
+async function nextChapter(){
+  const chs = BOOKS[cur.b-1][1];
+  if (cur.c < chs.length) return goTo(cur.b, cur.c + 1, null);
+  if (cur.b < 66) return goTo(cur.b + 1, 1, null);
+  toast("요한계시록까지 모두 쓰셨습니다. 할렐루야!"); return goTo(66, 22, 21);
+}
+async function showVerse(){
+  const book = await getBook(cur.b), text = book[cur.c-1][cur.v-1];
+  $("#verseRef").textContent = `${BOOKS[cur.b-1][0]} ${cur.c}:${cur.v}`;
+  $("#verseText").textContent = text;
+  const n = BOOKS[cur.b-1][1][cur.c-1];
+  $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => `<button type="button" data-v="${i+1}" class="${doneSet.has(i+1)?'done':''} ${i+1===cur.v?'cur':''}" aria-label="${i+1}절${doneSet.has(i+1)?' (씀)':''}">${i+1}</button>`).join("");
+  $("#typeBox").value = ""; $("#checkMsg").textContent = doneSet.has(cur.v) ? "이미 쓴 절입니다. 다시 쓰면 새로 저장됩니다." : ""; $("#checkMsg").className = "check";
+}
+$("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); $("#typeBox").focus(); } });
+$("#prevVerse").onclick = () => { if (cur.v > 1) { cur.v--; showVerse(); } else if (cur.c > 1) goTo(cur.b, cur.c-1, BOOKS[cur.b-1][1][cur.c-2]); };
+$("#nextVerse").onclick = () => { if (cur.v < BOOKS[cur.b-1][1][cur.c-1]) { cur.v++; showVerse(); } else nextChapter(); };
+$("#typeBox").addEventListener("input", async () => {
+  const want = norm((await getBook(cur.b))[cur.c-1][cur.v-1]), got = norm($("#typeBox").value);
+  const msg = $("#checkMsg");
+  if (!got) { msg.textContent = ""; msg.className = "check"; return; }
+  if (got === want) { msg.textContent = "✓ 말씀과 똑같이 쓰셨습니다"; msg.className = "check ok"; }
+  else if (want.startsWith(got)) { msg.textContent = `${Math.round(got.length / want.length * 100)}% 썼습니다`; msg.className = "check"; }
+  else { msg.textContent = "본문과 다른 글자가 있어요. 확인해 보세요."; msg.className = "check ng"; }
+});
+$("#typeBox").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey && !e.isComposing) { e.preventDefault(); saveVerse(); } });
+$("#saveVerse").onclick = saveVerse;
+async function saveVerse(){
+  const content = $("#typeBox").value.trim();
+  if (!content) { $("#checkMsg").textContent = "말씀을 따라 쓴 뒤 저장해 주세요."; $("#checkMsg").className = "check ng"; return; }
+  $("#saveVerse").disabled = true;
+  const { error } = await sb.from("transcriptions").upsert({ user_id: user.id, book: cur.b, chapter: cur.c, verse: cur.v, content }, { onConflict: "user_id,book,chapter,verse" });
+  $("#saveVerse").disabled = false;
+  if (error) { $("#checkMsg").textContent = "저장하지 못했습니다: " + error.message; $("#checkMsg").className = "check ng"; return; }
+  doneSet.add(cur.v);
+  const n = BOOKS[cur.b-1][1][cur.c-1];
+  if (cur.v < n) { cur.v++; await showVerse(); } else { toast(`${BOOKS[cur.b-1][0]} ${cur.c}장을 마쳤습니다`); await nextChapter(); }
+  $("#typeBox").focus();
+  refreshStats();
+}
+let statTimer;
+function refreshStats(){
+  clearTimeout(statTimer);
+  statTimer = setTimeout(async () => {
+    const [mine, book, church] = await Promise.all([
+      sb.from("transcriptions").select("id", { count: "exact", head: true }),
+      sb.from("transcriptions").select("id", { count: "exact", head: true }).eq("book", cur.b),
+      sb.rpc("church_progress")
+    ]);
+    const m = mine.count || 0, bk = book.count || 0, bt = BOOKS[cur.b-1][1].reduce((a,x) => a + x, 0);
+    $("#stMine").textContent = num(m) + "절"; $("#barMine").style.width = (m / TOTAL_VERSES * 100) + "%";
+    $("#stBookK").textContent = BOOKS[cur.b-1][0] + " 진도";
+    $("#stBook").textContent = `${num(bk)} / ${num(bt)}`; $("#barBook").style.width = (bk / bt * 100) + "%";
+    const c = church.data && church.data[0];
+    if (c) { $("#stChurch").textContent = num(c.total_verses) + "절"; $("#stChurchP").textContent = `${num(c.participants)}명 참여`; }
+  }, 150);
+}
+
+/* ---------- 나의 큐티 ---------- */
+let myNotes = [], editingId = null;
+function resetQt(){
+  editingId = null; $("#qtForm").reset(); $("#qDate").value = today();
+  $("#qSubmit").textContent = "저장"; $("#qCancel").hidden = true; $("#qMsg").textContent = ""; $("#qMsg").className = "msg";
+}
+$("#qCancel").onclick = resetQt;
+$("#qtForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const row = { qt_date: $("#qDate").value || today(), passage: $("#qPassage").value.trim(), title: $("#qTitle").value.trim(), content: $("#qBody").value.trim(), is_shared: $("#qShare").checked };
+  if (!row.content) { $("#qMsg").textContent = "묵상 내용을 적어 주세요."; $("#qMsg").className = "msg err"; return; }
+  $("#qSubmit").disabled = true;
+  const q = editingId ? sb.from("qt_notes").update({ ...row, updated_at: new Date().toISOString() }).eq("id", editingId) : sb.from("qt_notes").insert(row);
+  const { error } = await q;
+  $("#qSubmit").disabled = false;
+  if (error) { $("#qMsg").textContent = "저장하지 못했습니다: " + error.message; $("#qMsg").className = "msg err"; return; }
+  toast(editingId ? "수정했습니다" : (row.is_shared ? "저장하고 나눔에 올렸습니다" : "저장했습니다"));
+  resetQt(); loadMyNotes();
+});
+async function loadMyNotes(){
+  if (!$("#qDate").value) $("#qDate").value = today();
+  const { data, error } = await sb.from("qt_notes").select("*").eq("user_id", user.id).order("qt_date", { ascending: false }).order("created_at", { ascending: false }).limit(200);
+  myNotes = data || [];
+  $("#myNotes").innerHTML = error ? `<li class="msg err">불러오지 못했습니다.</li>` : myNotes.map(n => `<li>
+      <div class="sm muted">${fmtDate(n.qt_date)}${n.passage ? " · " + esc(n.passage) : ""}</div>
+      <h3>${n.is_shared ? `<span class="badge">나눔</span>` : ""}${n.is_hidden ? `<span class="badge hid">관리자가 숨김</span>` : ""}${esc(n.title || "제목 없음")}</h3>
+      <div class="body">${esc(n.content)}</div>
+      <div class="acts"><button class="btn sm" data-edit="${n.id}" type="button">수정</button>
+      <button class="btn sm" data-share="${n.id}" type="button">${n.is_shared ? "나눔 그만하기" : "성도들과 나누기"}</button>
+      <button class="btn sm warn" data-del="${n.id}" type="button">삭제</button></div></li>`).join("") || `<li class="muted">아직 기록한 큐티가 없습니다. 오늘의 묵상을 적어 보세요.</li>`;
+}
+$("#myNotes").addEventListener("click", async e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.edit) {
+    const n = myNotes.find(x => x.id == t.dataset.edit); editingId = n.id;
+    $("#qDate").value = n.qt_date; $("#qPassage").value = n.passage || ""; $("#qTitle").value = n.title || ""; $("#qBody").value = n.content; $("#qShare").checked = n.is_shared;
+    $("#qSubmit").textContent = "수정 저장"; $("#qCancel").hidden = false; $("#qtForm").scrollIntoView({ behavior: "smooth" });
+  }
+  if (t.dataset.share) {
+    const n = myNotes.find(x => x.id == t.dataset.share);
+    await sb.from("qt_notes").update({ is_shared: !n.is_shared }).eq("id", n.id); loadMyNotes();
+  }
+  if (t.dataset.del) {
+    if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 삭제"; setTimeout(() => { if (t.isConnected) { delete t.dataset.armed; t.textContent = "삭제"; } }, 3000); return; }
+    await sb.from("qt_notes").delete().eq("id", t.dataset.del); toast("삭제했습니다"); loadMyNotes();
+  }
+});
+
+/* ---------- 묵상 나눔 ---------- */
+let sharedPage = 0; const PAGE = 20;
+async function loadShared(reset){
+  if (reset) { sharedPage = 0; $("#shared").innerHTML = ""; }
+  const from = sharedPage * PAGE;
+  const { data, error } = await sb.from("shared_qt").select("*").order("qt_date", { ascending: false }).order("created_at", { ascending: false }).range(from, from + PAGE - 1);
+  if (error) { $("#shared").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
+  const admin = !!profile?.is_admin;
+  const html = (data || []).map(n => `<li>
+      <div class="author">${n.avatar_url ? `<img src="${img(n.avatar_url)}" alt="" onerror="this.remove()">` : ""}<span>${esc(n.nickname)}</span><span>· ${fmtDate(n.qt_date)}${n.passage ? " · " + esc(n.passage) : ""}</span></div>
+      <h3>${n.is_hidden ? `<span class="badge hid">숨김</span>` : ""}${esc(n.title || "제목 없음")}</h3>
+      <div class="body">${esc(n.content)}</div>
+      ${admin && n.user_id !== user.id ? `<div class="acts"><button class="btn sm" type="button" data-hide="${n.id}" data-h="${n.is_hidden ? 0 : 1}">${n.is_hidden ? "다시 보이기" : "숨기기"}</button><button class="btn sm warn" type="button" data-adel="${n.id}">삭제</button></div>` : ""}
+    </li>`).join("");
+  if (reset && !html) $("#shared").innerHTML = `<li class="muted">아직 나눈 묵상이 없습니다. '나의 큐티'에서 첫 묵상을 나눠 보세요.</li>`;
+  else $("#shared").insertAdjacentHTML("beforeend", html);
+  $("#moreShared").hidden = (data || []).length < PAGE;
+}
+$("#moreShared").onclick = () => { sharedPage++; loadShared(false); };
+$("#shared").addEventListener("click", async e => {
+  const t = e.target.closest("button"); if (!t) return;
+  if (t.dataset.hide) { await sb.rpc("admin_set_hidden", { note_id: +t.dataset.hide, hidden: t.dataset.h === "1" }); loadShared(true); }
+  if (t.dataset.adel) {
+    if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 삭제"; return; }
+    await sb.from("qt_notes").delete().eq("id", t.dataset.adel); loadShared(true);
+  }
+});
+
+/* ---------- 내 정보 ---------- */
+$("#nameForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const v = $("#nick").value.trim();
+  if (!v) { $("#nickMsg").textContent = "이름을 입력해 주세요."; $("#nickMsg").className = "msg err"; return; }
+  const { error } = await sb.from("profiles").update({ nickname: v }).eq("id", user.id);
+  if (error) { $("#nickMsg").textContent = "저장하지 못했습니다."; $("#nickMsg").className = "msg err"; return; }
+  profile.nickname = v; renderWho(); $("#nickMsg").textContent = "저장했습니다."; $("#nickMsg").className = "msg";
+});
+$("#leaveBtn").addEventListener("click", async e => {
+  const t = e.currentTarget;
+  if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "한 번 더 누르면 탈퇴됩니다"; return; }
+  const { error } = await sb.rpc("delete_my_account");
+  if (error) { toast("탈퇴하지 못했습니다: " + error.message); return; }
+  await sb.auth.signOut(); alert("탈퇴가 완료되었습니다. 그동안 함께해 주셔서 감사합니다."); location.href = "./";
+});
+
+/* ---------- 시작 ---------- */
+(async () => {
+  const params = new URLSearchParams(location.hash.slice(1) + "&" + location.search.slice(1));
+  if (params.get("error_description")) $("#loginErr").textContent = "로그인하지 못했습니다: " + params.get("error_description");
+  const { data: { session } } = await sb.auth.getSession();
+  user = session?.user || null;
+  if (user) await loadProfile();
+  if (/access_token|error/.test(location.hash)) history.replaceState(null, "", location.pathname + "#write");
+  renderWho(); route();
+  sb.auth.onAuthStateChange(async (ev, s) => {
+    const nu = s?.user || null;
+    if ((nu?.id || null) !== (user?.id || null)) { user = nu; if (user) await loadProfile(); renderWho(); route(); }
+  });
+})();
+</script>
+</body>
+</html>
