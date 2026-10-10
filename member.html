@@ -114,6 +114,26 @@ textarea{width:100%;resize:vertical;line-height:1.7}
 .policy ul{padding-left:20px;margin:6px 0}
 footer{border-top:1px solid var(--line);background:var(--surface);padding-block:24px;font-size:13px;color:var(--muted)}
 footer a{color:var(--muted)}
+.recent{margin-bottom:20px;padding:16px 20px}
+.recent .h{font-size:16px;margin-bottom:8px}
+.recent ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14.5px}
+.recent li{display:flex;gap:8px;flex-wrap:wrap}
+.written{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px 20px}
+.written .by{font-size:14px;color:var(--muted);margin-bottom:6px}
+.written .by b{color:var(--accent)}
+.grid button.mine{background:var(--gold);border-color:var(--gold);color:#fff}
+.key{display:inline-block;width:12px;height:12px;border-radius:3px;border:1px solid var(--line);background:var(--surface);vertical-align:-1px}
+.key.done{background:var(--accent);border-color:var(--accent)}.key.mine{background:var(--gold);border-color:var(--gold)}
+.chapterText{margin-top:18px}
+.chapterText summary{cursor:pointer;font-weight:500}
+.chapterText ol{font-family:var(--serif);font-size:17px;line-height:1.9;padding-left:2.2em}
+.chapterText .who{font-family:var(--sans);font-size:12.5px;color:var(--muted)}
+.field{display:grid;gap:4px}
+.hint{font-size:13px;color:var(--muted);line-height:1.6}
+.req{color:var(--warn);font-weight:700}.opt{font-size:12.5px;color:var(--muted)}
+.qtv{margin:0;display:grid;gap:2px}
+.qtv dt{font-size:12.5px;font-weight:700;color:var(--accent);margin-top:8px}
+.qtv dd{margin:0}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -145,40 +165,70 @@ footer a{color:var(--muted)}
 
   <!-- 성경 필사 -->
   <section class="page" data-page="write">
-    <div class="phead"><h1>성경 필사</h1><p>한 절씩 따라 쓰며 말씀을 마음에 새겨 보세요. 쓴 자리는 저장되어 언제든 이어 쓸 수 있습니다.</p></div>
+    <div class="phead"><h1>함께 쓰는 성경</h1><p>온 교회가 한 권의 성경을 한 절씩 이어서 필사합니다. 앞 성도님이 쓴 곳 다음부터 이어 써 주세요.</p></div>
     <div class="stats">
-      <div class="stat"><div class="k">내가 쓴 절</div><div class="v" id="stMine">–</div><div class="bar"><i id="barMine"></i></div></div>
-      <div class="stat"><div class="k" id="stBookK">이 책 진도</div><div class="v" id="stBook">–</div><div class="bar"><i id="barBook"></i></div></div>
-      <div class="stat"><div class="k">교회 전체 필사</div><div class="v" id="stChurch">–</div><div class="sm muted" id="stChurchP"></div></div>
+      <div class="stat"><div class="k">교회가 쓴 말씀</div><div class="v" id="stChurch">–</div><div class="bar"><i id="barChurch"></i></div></div>
+      <div class="stat"><div class="k">지금 이어 쓸 곳</div><div class="v" id="stNext">–</div><div class="sm muted" id="stLast"></div></div>
+      <div class="stat"><div class="k">참여한 성도</div><div class="v" id="stPeople">–</div><div class="sm muted" id="stMine"></div></div>
+    </div>
+    <div class="card recent">
+      <h2 class="h">최근 이어 쓴 성도</h2>
+      <ul id="recentList"><li class="muted sm">불러오는 중…</li></ul>
     </div>
     <div class="pick">
+      <button class="btn acc sm" type="button" id="resumeBtn">이어 쓸 곳으로 가기</button>
       <select id="selBook" aria-label="책 선택"></select>
       <select id="selCh" aria-label="장 선택"></select>
-      <button class="btn sm" type="button" id="resumeBtn">이어 쓰기</button>
     </div>
     <div class="verse" id="verseBox"><span class="ref" id="verseRef"></span><span id="verseText">불러오는 중…</span></div>
-    <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장 후 다음 절로 넘어갑니다)</label>
-    <textarea id="typeBox" class="typed" rows="3" autocomplete="off" spellcheck="false"></textarea>
-    <div class="check" id="checkMsg" aria-live="polite"></div>
-    <div class="row">
-      <button class="btn acc" type="button" id="saveVerse">저장하고 다음 절</button>
-      <button class="btn sm" type="button" id="prevVerse">이전 절</button>
-      <button class="btn sm" type="button" id="nextVerse">다음 절</button>
+    <div id="writeArea">
+      <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장하고 다음 절로 넘어갑니다)</label>
+      <textarea id="typeBox" class="typed" rows="3" autocomplete="off" spellcheck="false"></textarea>
+      <div class="check" id="checkMsg" aria-live="polite"></div>
+      <div class="row">
+        <button class="btn acc" type="button" id="saveVerse">저장하고 다음 절</button>
+        <button class="btn sm" type="button" id="prevVerse">이전 절</button>
+        <button class="btn sm" type="button" id="nextVerse">다음 절</button>
+      </div>
     </div>
+    <div id="doneArea" class="written" hidden>
+      <div class="by" id="doneBy"></div>
+      <div class="typed" id="doneText"></div>
+      <div class="row">
+        <button class="btn acc sm" type="button" id="goNextFree">다음 빈 절로</button>
+        <button class="btn sm" type="button" id="prevVerse2">이전 절</button>
+        <button class="btn sm" type="button" id="nextVerse2">다음 절</button>
+        <button class="btn sm warn" type="button" id="delVerse" hidden>이 절 지우기</button>
+      </div>
+    </div>
+    <p class="sm muted" style="margin-top:18px">칸 색: <span class="key done"></span> 필사됨 · <span class="key mine"></span> 내가 씀 · <span class="key"></span> 아직 비어 있음 (칸을 누르면 누가 썼는지 보입니다)</p>
     <div class="grid" id="verseGrid" aria-label="이 장의 절 목록"></div>
-    <p class="sm muted" style="margin-top:14px">본문: 성경전서 개역한글판 (대한성서공회)</p>
+    <details class="chapterText" id="chapterBox">
+      <summary>이 장에서 성도님들이 쓴 말씀 보기</summary>
+      <ol id="chapterList"></ol>
+    </details>
+    <p class="sm muted" style="margin-top:18px">본문: 성경전서 개역한글판 (대한성서공회) — 저작권 보호기간이 끝난 공유 저작물(Public Domain) 번역본만 사용합니다.</p>
   </section>
 
   <!-- 나의 큐티 -->
   <section class="page" data-page="qt">
-    <div class="phead"><h1>나의 큐티</h1><p>오늘 받은 말씀과 묵상을 기록하세요. '성도들과 나누기'를 켜면 묵상 나눔 게시판에 함께 올라갑니다.</p></div>
+    <div class="phead"><h1>나의 큐티</h1><p>읽은 말씀과 느낀 점을 기록하세요. 별표(*) 두 칸만 쓰면 저장되고, 나머지는 쓰고 싶을 때만 채우시면 됩니다. '성도들과 나누기'를 켜면 묵상 나눔 게시판에 함께 올라갑니다.</p></div>
     <form class="card form" id="qtForm" novalidate>
       <div class="two">
-        <div><label for="qDate">날짜</label><input id="qDate" type="date"></div>
-        <div><label for="qPassage">본문</label><input id="qPassage" type="text" placeholder="예) 시편 23:1-6"></div>
+        <div><label for="qDate">읽은 날짜</label><input id="qDate" type="date"></div>
+        <div><label for="qPassage">읽은 본문 <b class="req">*</b></label><input id="qPassage" type="text" placeholder="예) 시편 23:1-6"></div>
       </div>
-      <div style="display:grid;gap:6px"><label for="qTitle">제목</label><input id="qTitle" type="text" placeholder="오늘 나에게 주신 말씀"></div>
-      <div style="display:grid;gap:6px"><label for="qBody">묵상 내용</label><textarea id="qBody" rows="8" placeholder="말씀을 읽고 깨달은 것, 적용할 것, 기도 제목을 적어 보세요."></textarea></div>
+      <div class="field"><label for="qBody">느낀 점 <b class="req">*</b></label>
+        <p class="hint">말씀을 읽을 때 유독 마음을 치는 한 구절이 있었나요? “왜 이 말씀이 내 마음을 두드렸을까?”를 생각하며 적어 보세요.</p>
+        <textarea id="qBody" rows="5"></textarea></div>
+      <div class="field"><label for="qQuestion">의문점 <span class="opt">(선택)</span></label>
+        <p class="hint">잘 이해되지 않거나 더 알고 싶은 부분을 적어 두세요.</p>
+        <textarea id="qQuestion" rows="2"></textarea></div>
+      <div class="field"><label for="qApply">적용 및 실천 계획 <span class="opt">(선택)</span></label>
+        <p class="hint">“네 마음을 다하고 목숨을 다하고 뜻을 다하여 주 너의 하나님을 사랑하라” (마태복음 22:37) — 오늘 말씀대로 살기 위해 실천할 한 가지를 적어 보세요.</p>
+        <textarea id="qApply" rows="3"></textarea></div>
+      <div class="field"><label for="qPrayer">기도 제목 <span class="opt">(선택)</span></label>
+        <textarea id="qPrayer" rows="2"></textarea></div>
       <label class="toggle"><input type="checkbox" id="qShare"> 성도들과 나누기</label>
       <p class="msg" id="qMsg"></p>
       <div class="row" style="margin-top:0">
@@ -229,7 +279,7 @@ footer a{color:var(--muted)}
     <h2>3. 보유 기간</h2>
     <p>회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
-    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. 필사 내용은 본인만 볼 수 있고, 교회 전체 통계에는 숫자만 반영됩니다.</p>
+    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
     <p>교회는 회원 정보와 글을 안전하게 보관하기 위해 데이터 저장을 위탁합니다.</p>
     <ul>
@@ -304,11 +354,30 @@ function route(){
 }
 addEventListener("hashchange", route);
 
-/* ---------- 성경 필사 ---------- */
+/* ---------- 함께 쓰는 성경 (이어 쓰기) ---------- */
 let BOOKS = null; const bookCache = {};
-let cur = { b: 1, c: 1, v: 1 }, doneSet = new Set();
+let cur = { b: 1, c: 1, v: 1 }, rows = new Map(), nextPos = { b: 1, c: 1, v: 1 };
 const norm = s => String(s).replace(/[\s.,;:!?'"“”‘’()\[\]{}<>·…\-—]/g, "");
-
+const refOf = p => `${BOOKS[p.b-1][0]} ${p.c}:${p.v}`;
+const chLen = (b, c) => BOOKS[b-1][1][c-1];
+function after(p){
+  if (p.v < chLen(p.b, p.c)) return { b: p.b, c: p.c, v: p.v + 1 };
+  if (p.c < BOOKS[p.b-1][1].length) return { b: p.b, c: p.c + 1, v: 1 };
+  if (p.b < 66) return { b: p.b + 1, c: 1, v: 1 };
+  return null;
+}
+function before(p){
+  if (p.v > 1) return { b: p.b, c: p.c, v: p.v - 1 };
+  if (p.c > 1) return { b: p.b, c: p.c - 1, v: chLen(p.b, p.c - 1) };
+  if (p.b > 1) { const c = BOOKS[p.b-2][1].length; return { b: p.b - 1, c, v: chLen(p.b - 1, c) }; }
+  return null;
+}
+function ago(t){
+  const s = (Date.now() - new Date(t)) / 1000;
+  if (s < 60) return "방금"; if (s < 3600) return Math.floor(s/60) + "분 전";
+  if (s < 86400) return Math.floor(s/3600) + "시간 전"; if (s < 86400*7) return Math.floor(s/86400) + "일 전";
+  return fmtDate(new Date(t).toISOString().slice(0,10));
+}
 async function getBook(b){
   if (!bookCache[b]) bookCache[b] = fetch(`bible/${b}.json`).then(r => r.json());
   return bookCache[b];
@@ -317,50 +386,80 @@ async function initWrite(){
   if (!BOOKS) {
     BOOKS = await fetch("bible/index.json").then(r => r.json());
     $("#selBook").innerHTML = BOOKS.map((b,i) => `<option value="${i+1}">${b[0]}</option>`).join("");
-    $("#selBook").onchange = () => goTo(+$("#selBook").value, 1, null);
-    $("#selCh").onchange = () => goTo(cur.b, +$("#selCh").value, null);
-    await resume();
-  }
-  refreshStats();
+    $("#selBook").onchange = () => openChapter(+$("#selBook").value, 1, null);
+    $("#selCh").onchange = () => openChapter(cur.b, +$("#selCh").value, null);
+    await refreshRelay();
+    await openChapter(nextPos.b, nextPos.c, nextPos.v);
+  } else refreshRelay();
 }
-async function resume(){
-  const { data } = await sb.from("transcriptions").select("book,chapter,verse").order("created_at", { ascending: false }).limit(1);
-  if (data && data[0]) { const r = data[0]; await goTo(r.book, r.chapter, r.verse, true); }
-  else await goTo(1, 1, 1);
+async function refreshRelay(){
+  const [last, stats, recent, mine] = await Promise.all([
+    sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("book", { ascending: false }).order("chapter", { ascending: false }).order("verse", { ascending: false }).limit(1),
+    sb.rpc("relay_stats"),
+    sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("created_at", { ascending: false }).limit(8),
+    sb.from("relay_verses").select("verse", { count: "exact", head: true }).eq("user_id", user.id)
+  ]);
+  const l = last.data && last.data[0];
+  nextPos = l ? (after({ b: l.book, c: l.chapter, v: l.verse }) || { b: 66, c: 22, v: 21 }) : { b: 1, c: 1, v: 1 };
+  $("#stNext").textContent = refOf(nextPos);
+  $("#stLast").textContent = l ? `${refOf({ b: l.book, c: l.chapter, v: l.verse })}까지 · ${l.nickname}님 (${ago(l.created_at)})` : "창세기 1장 1절부터 시작해 주세요";
+  const s = stats.data && stats.data[0] || { total: 0, participants: 0 };
+  $("#stChurch").textContent = `${num(s.total)} / ${num(TOTAL_VERSES)}절`;
+  $("#barChurch").style.width = (s.total / TOTAL_VERSES * 100) + "%";
+  $("#stPeople").textContent = num(s.participants) + "명";
+  $("#stMine").textContent = `나는 ${num(mine.count || 0)}절을 썼습니다`;
+  $("#recentList").innerHTML = (recent.data || []).map(r => `<li><b>${esc(r.nickname)}</b> <span>${refOf({ b: r.book, c: r.chapter, v: r.verse })}</span> <span class="muted">${ago(r.created_at)}</span></li>`).join("") || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
 }
-$("#resumeBtn").onclick = resume;
-
-async function goTo(b, c, v, after){
+async function openChapter(b, c, v){
   cur.b = b; cur.c = c;
   $("#selBook").value = b;
   $("#selCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
   $("#selCh").value = c;
-  const { data } = await sb.from("transcriptions").select("verse").eq("book", b).eq("chapter", c);
-  doneSet = new Set((data || []).map(r => r.verse));
-  const n = BOOKS[b-1][1][c-1];
-  if (v == null) { v = 1; while (v <= n && doneSet.has(v)) v++; if (v > n) v = 1; }
-  else if (after) { v = v + 1; if (v > n) return nextChapter(); }
+  const { data } = await sb.from("relay_view").select("verse,user_id,nickname,content,created_at").eq("book", b).eq("chapter", c);
+  rows = new Map((data || []).map(r => [r.verse, r]));
+  if (v == null) { v = 1; const n = chLen(b, c); while (v <= n && rows.has(v)) v++; if (v > n) v = 1; }
   cur.v = v;
   await showVerse();
-  refreshStats();
 }
-async function nextChapter(){
-  const chs = BOOKS[cur.b-1][1];
-  if (cur.c < chs.length) return goTo(cur.b, cur.c + 1, null);
-  if (cur.b < 66) return goTo(cur.b + 1, 1, null);
-  toast("요한계시록까지 모두 쓰셨습니다. 할렐루야!"); return goTo(66, 22, 21);
+async function go(p){ if (!p) return; if (p.b === cur.b && p.c === cur.c) { cur.v = p.v; await showVerse(); } else await openChapter(p.b, p.c, p.v); }
+async function goNextFree(){
+  let p = { ...cur };
+  for (let i = 0; i < 200; i++) {
+    p = after(p); if (!p) return toast("요한계시록까지 모두 채워졌습니다. 할렐루야!");
+    if (p.b !== cur.b || p.c !== cur.c) return openChapter(p.b, p.c, null);
+    if (!rows.has(p.v)) return go(p);
+  }
 }
 async function showVerse(){
   const book = await getBook(cur.b), text = book[cur.c-1][cur.v-1];
-  $("#verseRef").textContent = `${BOOKS[cur.b-1][0]} ${cur.c}:${cur.v}`;
+  $("#verseRef").textContent = refOf(cur) + (cur.b === nextPos.b && cur.c === nextPos.c && cur.v === nextPos.v ? "  · 지금 이어 쓸 곳" : "");
   $("#verseText").textContent = text;
-  const n = BOOKS[cur.b-1][1][cur.c-1];
-  $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => `<button type="button" data-v="${i+1}" class="${doneSet.has(i+1)?'done':''} ${i+1===cur.v?'cur':''}" aria-label="${i+1}절${doneSet.has(i+1)?' (씀)':''}">${i+1}</button>`).join("");
-  $("#typeBox").value = ""; $("#checkMsg").textContent = doneSet.has(cur.v) ? "이미 쓴 절입니다. 다시 쓰면 새로 저장됩니다." : ""; $("#checkMsg").className = "check";
+  const r = rows.get(cur.v);
+  $("#writeArea").hidden = !!r; $("#doneArea").hidden = !r;
+  if (r) {
+    $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} 쓰셨습니다`;
+    $("#doneText").textContent = r.content;
+    $("#delVerse").hidden = !(r.user_id === user.id || profile?.is_admin);
+    delete $("#delVerse").dataset.armed; $("#delVerse").textContent = "이 절 지우기";
+  } else { $("#typeBox").value = ""; $("#checkMsg").textContent = ""; $("#checkMsg").className = "check"; }
+  const n = chLen(cur.b, cur.c);
+  $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => { const w = rows.get(i+1);
+    return `<button type="button" data-v="${i+1}" class="${w ? (w.user_id === user.id ? 'done mine' : 'done') : ''} ${i+1===cur.v?'cur':''}" title="${w ? esc(w.nickname) + '님' : '비어 있음'}" aria-label="${i+1}절${w ? ' (' + esc(w.nickname) + ')' : ''}">${i+1}</button>`; }).join("");
+  const list = [...rows.values()].sort((a,b) => a.verse - b.verse);
+  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${esc(r.content)} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
 }
-$("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); $("#typeBox").focus(); } });
-$("#prevVerse").onclick = () => { if (cur.v > 1) { cur.v--; showVerse(); } else if (cur.c > 1) goTo(cur.b, cur.c-1, BOOKS[cur.b-1][1][cur.c-2]); };
-$("#nextVerse").onclick = () => { if (cur.v < BOOKS[cur.b-1][1][cur.c-1]) { cur.v++; showVerse(); } else nextChapter(); };
+$("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); if (!rows.has(cur.v)) $("#typeBox").focus(); } });
+$("#resumeBtn").onclick = async () => { await refreshRelay(); await go(nextPos); $("#typeBox").focus(); };
+$("#prevVerse").onclick = $("#prevVerse2").onclick = () => go(before(cur));
+$("#nextVerse").onclick = $("#nextVerse2").onclick = () => go(after(cur));
+$("#goNextFree").onclick = goNextFree;
+$("#delVerse").onclick = async e => {
+  const t = e.currentTarget;
+  if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 지울까요?"; return; }
+  const { error } = await sb.from("relay_verses").delete().eq("book", cur.b).eq("chapter", cur.c).eq("verse", cur.v);
+  if (error) return toast("지우지 못했습니다: " + error.message);
+  rows.delete(cur.v); toast("지웠습니다"); await showVerse(); refreshRelay();
+};
 $("#typeBox").addEventListener("input", async () => {
   const want = norm((await getBook(cur.b))[cur.c-1][cur.v-1]), got = norm($("#typeBox").value);
   const msg = $("#checkMsg");
@@ -375,34 +474,26 @@ async function saveVerse(){
   const content = $("#typeBox").value.trim();
   if (!content) { $("#checkMsg").textContent = "말씀을 따라 쓴 뒤 저장해 주세요."; $("#checkMsg").className = "check ng"; return; }
   $("#saveVerse").disabled = true;
-  const { error } = await sb.from("transcriptions").upsert({ user_id: user.id, book: cur.b, chapter: cur.c, verse: cur.v, content }, { onConflict: "user_id,book,chapter,verse" });
+  const { error } = await sb.from("relay_verses").insert({ book: cur.b, chapter: cur.c, verse: cur.v, content });
   $("#saveVerse").disabled = false;
-  if (error) { $("#checkMsg").textContent = "저장하지 못했습니다: " + error.message; $("#checkMsg").className = "check ng"; return; }
-  doneSet.add(cur.v);
-  const n = BOOKS[cur.b-1][1][cur.c-1];
-  if (cur.v < n) { cur.v++; await showVerse(); } else { toast(`${BOOKS[cur.b-1][0]} ${cur.c}장을 마쳤습니다`); await nextChapter(); }
+  if (error) {
+    if (error.code === "23505") { toast("방금 다른 성도님이 이 절을 쓰셨어요. 다음 빈 절로 이동합니다."); await openChapter(cur.b, cur.c, cur.v); return goNextFree(); }
+    $("#checkMsg").textContent = "저장하지 못했습니다: " + error.message; $("#checkMsg").className = "check ng"; return;
+  }
+  rows.set(cur.v, { verse: cur.v, user_id: user.id, nickname: profile?.nickname || "나", content, created_at: new Date().toISOString() });
+  if (cur.v === chLen(cur.b, cur.c)) toast(`${BOOKS[cur.b-1][0]} ${cur.c}장을 다 채웠습니다!`);
+  await goNextFree();
   $("#typeBox").focus();
-  refreshStats();
+  refreshRelay();
 }
-let statTimer;
-function refreshStats(){
-  clearTimeout(statTimer);
-  statTimer = setTimeout(async () => {
-    const [mine, book, church] = await Promise.all([
-      sb.from("transcriptions").select("id", { count: "exact", head: true }),
-      sb.from("transcriptions").select("id", { count: "exact", head: true }).eq("book", cur.b),
-      sb.rpc("church_progress")
-    ]);
-    const m = mine.count || 0, bk = book.count || 0, bt = BOOKS[cur.b-1][1].reduce((a,x) => a + x, 0);
-    $("#stMine").textContent = num(m) + "절"; $("#barMine").style.width = (m / TOTAL_VERSES * 100) + "%";
-    $("#stBookK").textContent = BOOKS[cur.b-1][0] + " 진도";
-    $("#stBook").textContent = `${num(bk)} / ${num(bt)}`; $("#barBook").style.width = (bk / bt * 100) + "%";
-    const c = church.data && church.data[0];
-    if (c) { $("#stChurch").textContent = num(c.total_verses) + "절"; $("#stChurchP").textContent = `${num(c.participants)}명 참여`; }
-  }, 150);
-}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && user && BOOKS && ["", "#write"].includes(location.hash) && !$("#typeBox").value) { refreshRelay(); openChapter(cur.b, cur.c, cur.v); } });
 
 /* ---------- 나의 큐티 ---------- */
+function qtBody(n){
+  const parts = [["느낀 점", n.content], ["의문점", n.question], ["적용 및 실천", n.application], ["기도 제목", n.prayer]].filter(x => x[1]);
+  if (!n.question && !n.application && !n.prayer) return `<div class="body">${esc(n.content)}</div>`;
+  return `<dl class="qtv">${parts.map(([k,v]) => `<dt>${k}</dt><dd class="body">${esc(v)}</dd>`).join("")}</dl>`;
+}
 let myNotes = [], editingId = null;
 function resetQt(){
   editingId = null; $("#qtForm").reset(); $("#qDate").value = today();
@@ -411,8 +502,10 @@ function resetQt(){
 $("#qCancel").onclick = resetQt;
 $("#qtForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const row = { qt_date: $("#qDate").value || today(), passage: $("#qPassage").value.trim(), title: $("#qTitle").value.trim(), content: $("#qBody").value.trim(), is_shared: $("#qShare").checked };
-  if (!row.content) { $("#qMsg").textContent = "묵상 내용을 적어 주세요."; $("#qMsg").className = "msg err"; return; }
+  const row = { qt_date: $("#qDate").value || today(), passage: $("#qPassage").value.trim(), content: $("#qBody").value.trim(),
+    question: $("#qQuestion").value.trim(), application: $("#qApply").value.trim(), prayer: $("#qPrayer").value.trim(), is_shared: $("#qShare").checked };
+  if (!row.passage) { $("#qMsg").textContent = "읽은 본문을 적어 주세요."; $("#qMsg").className = "msg err"; $("#qPassage").focus(); return; }
+  if (!row.content) { $("#qMsg").textContent = "느낀 점을 적어 주세요."; $("#qMsg").className = "msg err"; $("#qBody").focus(); return; }
   $("#qSubmit").disabled = true;
   const q = editingId ? sb.from("qt_notes").update({ ...row, updated_at: new Date().toISOString() }).eq("id", editingId) : sb.from("qt_notes").insert(row);
   const { error } = await q;
@@ -427,8 +520,8 @@ async function loadMyNotes(){
   myNotes = data || [];
   $("#myNotes").innerHTML = error ? `<li class="msg err">불러오지 못했습니다.</li>` : myNotes.map(n => `<li>
       <div class="sm muted">${fmtDate(n.qt_date)}${n.passage ? " · " + esc(n.passage) : ""}</div>
-      <h3>${n.is_shared ? `<span class="badge">나눔</span>` : ""}${n.is_hidden ? `<span class="badge hid">관리자가 숨김</span>` : ""}${esc(n.title || "제목 없음")}</h3>
-      <div class="body">${esc(n.content)}</div>
+      <h3>${n.is_shared ? `<span class="badge">나눔</span>` : ""}${n.is_hidden ? `<span class="badge hid">관리자가 숨김</span>` : ""}${esc(n.title || n.passage || "큐티")}</h3>
+      ${qtBody(n)}
       <div class="acts"><button class="btn sm" data-edit="${n.id}" type="button">수정</button>
       <button class="btn sm" data-share="${n.id}" type="button">${n.is_shared ? "나눔 그만하기" : "성도들과 나누기"}</button>
       <button class="btn sm warn" data-del="${n.id}" type="button">삭제</button></div></li>`).join("") || `<li class="muted">아직 기록한 큐티가 없습니다. 오늘의 묵상을 적어 보세요.</li>`;
@@ -437,7 +530,7 @@ $("#myNotes").addEventListener("click", async e => {
   const t = e.target.closest("button"); if (!t) return;
   if (t.dataset.edit) {
     const n = myNotes.find(x => x.id == t.dataset.edit); editingId = n.id;
-    $("#qDate").value = n.qt_date; $("#qPassage").value = n.passage || ""; $("#qTitle").value = n.title || ""; $("#qBody").value = n.content; $("#qShare").checked = n.is_shared;
+    $("#qDate").value = n.qt_date; $("#qPassage").value = n.passage || ""; $("#qBody").value = n.content; $("#qQuestion").value = n.question || ""; $("#qApply").value = n.application || ""; $("#qPrayer").value = n.prayer || ""; $("#qShare").checked = n.is_shared;
     $("#qSubmit").textContent = "수정 저장"; $("#qCancel").hidden = false; $("#qtForm").scrollIntoView({ behavior: "smooth" });
   }
   if (t.dataset.share) {
@@ -460,8 +553,8 @@ async function loadShared(reset){
   const admin = !!profile?.is_admin;
   const html = (data || []).map(n => `<li>
       <div class="author">${n.avatar_url ? `<img src="${img(n.avatar_url)}" alt="" onerror="this.remove()">` : ""}<span>${esc(n.nickname)}</span><span>· ${fmtDate(n.qt_date)}${n.passage ? " · " + esc(n.passage) : ""}</span></div>
-      <h3>${n.is_hidden ? `<span class="badge hid">숨김</span>` : ""}${esc(n.title || "제목 없음")}</h3>
-      <div class="body">${esc(n.content)}</div>
+      <h3>${n.is_hidden ? `<span class="badge hid">숨김</span>` : ""}${esc(n.title || n.passage || "큐티")}</h3>
+      ${qtBody(n)}
       ${admin && n.user_id !== user.id ? `<div class="acts"><button class="btn sm" type="button" data-hide="${n.id}" data-h="${n.is_hidden ? 0 : 1}">${n.is_hidden ? "다시 보이기" : "숨기기"}</button><button class="btn sm warn" type="button" data-adel="${n.id}">삭제</button></div>` : ""}
     </li>`).join("");
   if (reset && !html) $("#shared").innerHTML = `<li class="muted">아직 나눈 묵상이 없습니다. '나의 큐티'에서 첫 묵상을 나눠 보세요.</li>`;
