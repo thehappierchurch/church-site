@@ -134,6 +134,17 @@ footer a{color:var(--muted)}
 .qtv{margin:0;display:grid;gap:2px}
 .qtv dt{font-size:12.5px;font-weight:700;color:var(--accent);margin-top:8px}
 .qtv dd{margin:0}
+.photos{margin-bottom:20px;padding:16px 20px}.photos .h,.upload .h{font-size:16px;margin-bottom:8px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.pgrid button{border:1px solid var(--line);border-radius:6px;background:var(--surface);padding:0;cursor:pointer;text-align:left;overflow:hidden;font:inherit;color:var(--ink)}
+.pgrid img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:var(--tint)}
+.pgrid span{display:block;padding:6px 8px;font-size:12.5px;line-height:1.4}
+.upload{margin-bottom:16px}
+.range{display:flex;flex-wrap:wrap;align-items:center;gap:4px;font-size:14px}
+.range input{width:4.2em;font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px}
+.ppreview{max-width:100%;max-height:320px;border-radius:6px;border:1px solid var(--line)}
+.donephoto{display:block;max-width:100%;max-height:420px;border-radius:6px;margin-top:10px;border:1px solid var(--line)}
+.grid button.photo{background:#7B6A9E;border-color:#7B6A9E;color:#fff}.key.photo{background:#7B6A9E;border-color:#7B6A9E}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -175,11 +186,32 @@ footer a{color:var(--muted)}
       <h2 class="h">최근 이어 쓴 성도</h2>
       <ul id="recentList"><li class="muted sm">불러오는 중…</li></ul>
     </div>
+    <div class="card photos" id="photoGallery" hidden>
+      <h2 class="h">손글씨 필사 사진</h2>
+      <div class="pgrid" id="photoList"></div>
+    </div>
     <div class="pick">
       <button class="btn acc sm" type="button" id="resumeBtn">이어 쓸 곳으로 가기</button>
+      <button class="btn sm" type="button" id="photoOpen">📷 종이에 쓴 필사 사진 올리기</button>
       <select id="selBook" aria-label="책 선택"></select>
       <select id="selCh" aria-label="장 선택"></select>
     </div>
+    <form class="card form upload" id="photoForm" hidden novalidate>
+      <h2 class="h">종이에 쓴 필사 사진 올리기</h2>
+      <p class="hint">공책에 손으로 쓴 필사를 사진으로 올리면, 쓴 범위가 교회 필사에 ‘손글씨’로 표시되어 다음 분이 그 뒤부터 이어 쓸 수 있습니다. 한 권 안에서 최대 300절까지 한 번에 올릴 수 있어요.</p>
+      <div class="two">
+        <div><label for="pBook">책</label><select id="pBook"></select></div>
+        <div><label>쓴 범위</label>
+          <div class="range"><input id="pFromC" type="number" min="1" inputmode="numeric" aria-label="시작 장">장 <input id="pFromV" type="number" min="1" inputmode="numeric" aria-label="시작 절">절 ~ <input id="pToC" type="number" min="1" inputmode="numeric" aria-label="끝 장">장 <input id="pToV" type="number" min="1" inputmode="numeric" aria-label="끝 절">절</div></div>
+      </div>
+      <div class="field"><label for="pFile">사진</label><input id="pFile" type="file" accept="image/*"></div>
+      <img id="pPreview" class="ppreview" alt="올릴 사진 미리보기" hidden>
+      <p class="msg" id="pMsg"></p>
+      <div class="row" style="margin-top:0">
+        <button class="btn acc" type="submit" id="pSubmit">사진 올리기</button>
+        <button class="btn" type="button" id="pCancel">닫기</button>
+      </div>
+    </form>
     <div class="verse" id="verseBox"><span class="ref" id="verseRef"></span><span id="verseText">불러오는 중…</span></div>
     <div id="writeArea">
       <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장하고 다음 절로 넘어갑니다)</label>
@@ -194,6 +226,7 @@ footer a{color:var(--muted)}
     <div id="doneArea" class="written" hidden>
       <div class="by" id="doneBy"></div>
       <div class="typed" id="doneText"></div>
+      <a id="donePhotoLink" target="_blank" rel="noopener" hidden><img id="donePhoto" class="donephoto" alt="손글씨 필사 사진"></a>
       <div class="row">
         <button class="btn acc sm" type="button" id="goNextFree">다음 빈 절로</button>
         <button class="btn sm" type="button" id="prevVerse2">이전 절</button>
@@ -201,7 +234,7 @@ footer a{color:var(--muted)}
         <button class="btn sm warn" type="button" id="delVerse" hidden>이 절 지우기</button>
       </div>
     </div>
-    <p class="sm muted" style="margin-top:18px">칸 색: <span class="key done"></span> 필사됨 · <span class="key mine"></span> 내가 씀 · <span class="key"></span> 아직 비어 있음 (칸을 누르면 누가 썼는지 보입니다)</p>
+    <p class="sm muted" style="margin-top:18px">칸 색: <span class="key done"></span> 필사됨 · <span class="key mine"></span> 내가 씀 · <span class="key photo"></span> 손글씨 사진 · <span class="key"></span> 아직 비어 있음 (칸을 누르면 누가 썼는지 보입니다)</p>
     <div class="grid" id="verseGrid" aria-label="이 장의 절 목록"></div>
     <details class="chapterText" id="chapterBox">
       <summary>이 장에서 성도님들이 쓴 말씀 보기</summary>
@@ -396,7 +429,7 @@ async function refreshRelay(){
   const [last, stats, recent, mine] = await Promise.all([
     sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("book", { ascending: false }).order("chapter", { ascending: false }).order("verse", { ascending: false }).limit(1),
     sb.rpc("relay_stats"),
-    sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("created_at", { ascending: false }).limit(8),
+    sb.from("relay_view").select("book,chapter,verse,nickname,created_at,photo_id").order("created_at", { ascending: false }).limit(60),
     sb.from("relay_verses").select("verse", { count: "exact", head: true }).eq("user_id", user.id)
   ]);
   const l = last.data && last.data[0];
@@ -408,14 +441,23 @@ async function refreshRelay(){
   $("#barChurch").style.width = (s.total / TOTAL_VERSES * 100) + "%";
   $("#stPeople").textContent = num(s.participants) + "명";
   $("#stMine").textContent = `나는 ${num(mine.count || 0)}절을 썼습니다`;
-  $("#recentList").innerHTML = (recent.data || []).map(r => `<li><b>${esc(r.nickname)}</b> <span>${refOf({ b: r.book, c: r.chapter, v: r.verse })}</span> <span class="muted">${ago(r.created_at)}</span></li>`).join("") || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
+  const groups = [];
+  for (const r of (recent.data || [])) {
+    const g = groups[groups.length - 1];
+    if (r.photo_id && g && g.photo_id === r.photo_id) { g.items.push(r); continue; }
+    groups.push({ photo_id: r.photo_id, items: [r] });
+  }
+  $("#recentList").innerHTML = groups.slice(0, 8).map(g => { const a = g.items[g.items.length-1], z = g.items[0];
+    const span = g.items.length > 1 ? `${refOf({ b: a.book, c: a.chapter, v: a.verse })} ~ ${z.chapter}:${z.verse}` : refOf({ b: z.book, c: z.chapter, v: z.verse });
+    return `<li><b>${esc(z.nickname)}</b> <span>${span}</span>${g.photo_id ? ' <span class="badge">📷 손글씨</span>' : ''} <span class="muted">${ago(z.created_at)}</span></li>`; }).join("") || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
+  loadPhotos();
 }
 async function openChapter(b, c, v){
   cur.b = b; cur.c = c;
   $("#selBook").value = b;
   $("#selCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
   $("#selCh").value = c;
-  const { data } = await sb.from("relay_view").select("verse,user_id,nickname,content,created_at").eq("book", b).eq("chapter", c);
+  const { data } = await sb.from("relay_view").select("verse,user_id,nickname,content,created_at,photo_id").eq("book", b).eq("chapter", c);
   rows = new Map((data || []).map(r => [r.verse, r]));
   if (v == null) { v = 1; const n = chLen(b, c); while (v <= n && rows.has(v)) v++; if (v > n) v = 1; }
   cur.v = v;
@@ -437,16 +479,18 @@ async function showVerse(){
   const r = rows.get(cur.v);
   $("#writeArea").hidden = !!r; $("#doneArea").hidden = !r;
   if (r) {
-    $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} 쓰셨습니다`;
-    $("#doneText").textContent = r.content;
+    $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} ${r.photo_id ? "종이에 손으로 쓰셨습니다 📷" : "쓰셨습니다"}`;
+    $("#doneText").textContent = r.content; $("#doneText").hidden = !r.content;
+    $("#donePhotoLink").hidden = true;
+    if (r.photo_id) showPhotoFor(r.photo_id);
     $("#delVerse").hidden = !(r.user_id === user.id || profile?.is_admin);
-    delete $("#delVerse").dataset.armed; $("#delVerse").textContent = "이 절 지우기";
+    delete $("#delVerse").dataset.armed; $("#delVerse").textContent = r.photo_id ? "이 사진 필사 지우기" : "이 절 지우기";
   } else { $("#typeBox").value = ""; $("#checkMsg").textContent = ""; $("#checkMsg").className = "check"; }
   const n = chLen(cur.b, cur.c);
   $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => { const w = rows.get(i+1);
-    return `<button type="button" data-v="${i+1}" class="${w ? (w.user_id === user.id ? 'done mine' : 'done') : ''} ${i+1===cur.v?'cur':''}" title="${w ? esc(w.nickname) + '님' : '비어 있음'}" aria-label="${i+1}절${w ? ' (' + esc(w.nickname) + ')' : ''}">${i+1}</button>`; }).join("");
+    return `<button type="button" data-v="${i+1}" class="${w ? (w.photo_id ? 'done photo' : w.user_id === user.id ? 'done mine' : 'done') : ''} ${i+1===cur.v?'cur':''}" title="${w ? esc(w.nickname) + '님' : '비어 있음'}" aria-label="${i+1}절${w ? ' (' + esc(w.nickname) + ')' : ''}">${i+1}</button>`; }).join("");
   const list = [...rows.values()].sort((a,b) => a.verse - b.verse);
-  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${esc(r.content)} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
+  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${r.photo_id ? '<span class="muted">(손글씨 사진)</span>' : esc(r.content)} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
 }
 $("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); if (!rows.has(cur.v)) $("#typeBox").focus(); } });
 $("#resumeBtn").onclick = async () => { await refreshRelay(); await go(nextPos); $("#typeBox").focus(); };
@@ -456,6 +500,14 @@ $("#goNextFree").onclick = goNextFree;
 $("#delVerse").onclick = async e => {
   const t = e.currentTarget;
   if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "정말 지울까요?"; return; }
+  const r = rows.get(cur.v);
+  if (r && r.photo_id) {
+    const ph = await getPhoto(r.photo_id);
+    const { error } = await sb.from("relay_photos").delete().eq("id", r.photo_id);
+    if (error) return toast("지우지 못했습니다: " + error.message);
+    if (ph) await sb.storage.from("relay-photos").remove([ph.path]);
+    toast("사진 필사를 지웠습니다"); await openChapter(cur.b, cur.c, cur.v); return refreshRelay();
+  }
   const { error } = await sb.from("relay_verses").delete().eq("book", cur.b).eq("chapter", cur.c).eq("verse", cur.v);
   if (error) return toast("지우지 못했습니다: " + error.message);
   rows.delete(cur.v); toast("지웠습니다"); await showVerse(); refreshRelay();
@@ -487,6 +539,78 @@ async function saveVerse(){
   refreshRelay();
 }
 document.addEventListener("visibilitychange", () => { if (!document.hidden && user && BOOKS && ["", "#write"].includes(location.hash) && !$("#typeBox").value) { refreshRelay(); openChapter(cur.b, cur.c, cur.v); } });
+
+
+/* ---------- 손글씨 필사 사진 ---------- */
+const photoCache = new Map(), urlCache = new Map();
+async function getPhoto(id){
+  if (!photoCache.has(id)) { const { data } = await sb.from("relay_photos").select("*").eq("id", id).maybeSingle(); photoCache.set(id, data); }
+  return photoCache.get(id);
+}
+async function photoUrl(path){
+  if (!urlCache.has(path)) { const { data } = await sb.storage.from("relay-photos").createSignedUrl(path, 3600); urlCache.set(path, data?.signedUrl || ""); }
+  return urlCache.get(path);
+}
+async function showPhotoFor(id){
+  const ph = await getPhoto(id); if (!ph) return;
+  const u = await photoUrl(ph.path); if (!u) return;
+  $("#donePhoto").src = u; $("#donePhotoLink").href = u; $("#donePhotoLink").hidden = false;
+}
+const rangeText = p => p.ch_from === p.ch_to ? `${BOOKS[p.book-1][0]} ${p.ch_from}:${p.v_from}–${p.v_to}` : `${BOOKS[p.book-1][0]} ${p.ch_from}:${p.v_from}–${p.ch_to}:${p.v_to}`;
+async function loadPhotos(){
+  const { data } = await sb.from("relay_photos_view").select("*").order("created_at", { ascending: false }).limit(8);
+  const list = data || [];
+  $("#photoGallery").hidden = !list.length;
+  if (!list.length) return;
+  const { data: urls } = await sb.storage.from("relay-photos").createSignedUrls(list.map(p => p.path), 3600);
+  const um = new Map((urls || []).map(u => [u.path, u.signedUrl]));
+  list.forEach(p => { photoCache.set(p.id, p); if (um.get(p.path)) urlCache.set(p.path, um.get(p.path)); });
+  $("#photoList").innerHTML = list.map(p => `<button type="button" data-pid="${p.id}"><img src="${esc(um.get(p.path) || "")}" alt="" loading="lazy"><span><b>${esc(p.nickname)}</b><br>${esc(rangeText(p))}</span></button>`).join("");
+}
+$("#photoList").addEventListener("click", e => { const b = e.target.closest("button[data-pid]"); if (!b) return; const p = photoCache.get(+b.dataset.pid); if (p) { go({ b: p.book, c: p.ch_from, v: p.v_from }); $("#verseBox").scrollIntoView({ behavior: "smooth" }); } });
+$("#photoOpen").onclick = () => {
+  const f = $("#photoForm"); f.hidden = !f.hidden; if (f.hidden) return;
+  $("#pBook").innerHTML = BOOKS.map((b,i) => `<option value="${i+1}">${b[0]}</option>`).join("");
+  $("#pBook").value = nextPos.b; $("#pFromC").value = nextPos.c; $("#pFromV").value = nextPos.v;
+  $("#pToC").value = nextPos.c; $("#pToV").value = chLen(nextPos.b, nextPos.c);
+  $("#pMsg").textContent = ""; $("#pMsg").className = "msg"; f.scrollIntoView({ behavior: "smooth" });
+};
+$("#pCancel").onclick = () => { $("#photoForm").hidden = true; };
+$("#pFile").onchange = () => { const f = $("#pFile").files[0]; if (!f) return; $("#pPreview").src = URL.createObjectURL(f); $("#pPreview").hidden = false; };
+async function shrink(file){
+  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+  const k = Math.min(1, 1800 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+  return new Promise(r => c.toBlob(r, "image/jpeg", 0.82));
+}
+$("#photoForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const msg = (t, err) => { $("#pMsg").textContent = t; $("#pMsg").className = err ? "msg err" : "msg"; };
+  const b = +$("#pBook").value, fc = +$("#pFromC").value, fv = +$("#pFromV").value, tc = +$("#pToC").value, tv = +$("#pToV").value;
+  const chs = BOOKS[b-1][1], file = $("#pFile").files[0];
+  if (!file) return msg("사진을 골라 주세요.", true);
+  if (!(fc >= 1 && fc <= chs.length && tc >= 1 && tc <= chs.length && fv >= 1 && fv <= chs[fc-1] && tv >= 1 && tv <= chs[tc-1])) return msg(`장·절 번호를 확인해 주세요. (${BOOKS[b-1][0]}은 ${chs.length}장까지 있습니다)`, true);
+  if (tc < fc || (tc === fc && tv < fv)) return msg("끝나는 곳이 시작보다 앞에 있습니다.", true);
+  const verses = []; let p = { b, c: fc, v: fv };
+  while (p && p.b === b && (p.c < tc || (p.c === tc && p.v <= tv))) { verses.push(p); p = after(p); }
+  if (verses.length > 300) return msg("한 번에 300절까지 올릴 수 있습니다. 범위를 나눠서 올려 주세요.", true);
+  $("#pSubmit").disabled = true; msg("사진을 올리는 중입니다…");
+  try {
+    const blob = await shrink(file);
+    const path = `${user.id}/${Date.now()}.jpg`;
+    const up = await sb.storage.from("relay-photos").upload(path, blob, { contentType: "image/jpeg" });
+    if (up.error) throw up.error;
+    const ins = await sb.from("relay_photos").insert({ book: b, ch_from: fc, v_from: fv, ch_to: tc, v_to: tv, path }).select("id").single();
+    if (ins.error) { await sb.storage.from("relay-photos").remove([path]); throw ins.error; }
+    const res = await sb.from("relay_verses").upsert(verses.map(x => ({ book: x.b, chapter: x.c, verse: x.v, content: "", photo_id: ins.data.id })), { onConflict: "book,chapter,verse", ignoreDuplicates: true });
+    if (res.error) throw res.error;
+    toast(`${BOOKS[b-1][0]} ${fc}:${fv}부터 ${tc}:${tv}까지 손글씨 필사를 올렸습니다`);
+    $("#photoForm").reset(); $("#pPreview").hidden = true; $("#photoForm").hidden = true;
+    await refreshRelay(); await go(nextPos);
+  } catch (err) { msg("올리지 못했습니다: " + (err.message || err), true); }
+  $("#pSubmit").disabled = false;
+});
 
 /* ---------- 나의 큐티 ---------- */
 function qtBody(n){
