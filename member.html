@@ -946,7 +946,7 @@ $("#exBtn").onclick = async () => {
 async function loadGroups(){
   const { data, error } = await sb.rpc("admin_groups");
   if (error) { $("#grpList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
-  $("#grpList").innerHTML = (data || []).map(g => `<li><b>${esc(g.name)}</b> · 코드 <code class="code">${esc(g.code)}</code> · ${g.members}명 <button class="btn sm" type="button" data-copy="${esc(g.code)}">코드 복사</button> <button class="btn sm" type="button" data-gm="${g.id}">명단 보기</button><ul class="plain gm" id="gm${g.id}" hidden></ul></li>`).join("") || `<li class="muted">아직 만든 모임이 없습니다.</li>`;
+  $("#grpList").innerHTML = (data || []).map(g => `<li><b>${esc(g.name)}</b> · 코드 <code class="code">${esc(g.code)}</code> · ${g.members}명 <button class="btn sm" type="button" data-copy="${esc(g.code)}">코드 복사</button> <button class="btn sm" type="button" data-gm="${g.id}">명단 보기</button> <button class="btn sm" type="button" data-gren="${g.id}" data-name="${esc(g.name)}">이름 바꾸기</button> <button class="btn sm warn" type="button" data-gdel="${g.id}" data-name="${esc(g.name)}">모임 삭제</button><ul class="plain gm" id="gm${g.id}" hidden></ul></li>`).join("") || `<li class="muted">아직 만든 모임이 없습니다.</li>`;
 }
 $("#grpAdd").onclick = async () => {
   const n = $("#grpName").value.trim(); if (!n) return;
@@ -963,6 +963,17 @@ $("#grpList").addEventListener("click", async e => {
     box.innerHTML = (data || []).map(p => `<li>${esc(p.nickname)} <button class="btn sm warn" type="button" data-out="${p.id}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
   }
   if (b.dataset.out) { await sb.rpc("admin_set_group", { uid: b.dataset.out, gid: null }); toast("모임에서 뺐습니다"); loadGroups(); }
+  if (b.dataset.gren) {
+    const n = prompt("새 모임 이름", b.dataset.name); if (!n || !n.trim()) return;
+    const { error } = await sb.rpc("admin_rename_group", { gid: +b.dataset.gren, new_name: n });
+    if (error) return toast("바꾸지 못했습니다: " + error.message); toast("이름을 바꿨습니다"); loadGroups();
+  }
+  if (b.dataset.gdel) {
+    if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "정말 삭제할까요?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = "모임 삭제"; } }, 4000); return; }
+    const { error } = await sb.rpc("admin_delete_group", { gid: +b.dataset.gdel });
+    if (error) return toast("삭제하지 못했습니다: " + error.message);
+    toast(`‘${b.dataset.name}’ 모임을 삭제했습니다`); loadGroups();
+  }
 });
 
 /* ---------- 내 정보 ---------- */
