@@ -196,6 +196,7 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .cal2 .d.t{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
 .cal2 .d .n{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 .cal2 .d.sun .n{color:#B4463C}
+.cal2 .d i.f{background:none;color:var(--gold);font-weight:700;padding-left:0}
 .cal2 .d i{display:block;font-style:normal;font-size:11.5px;line-height:1.35;background:var(--tint);color:var(--accent);border-radius:3px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .calnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
 .calnav h2{font-size:21px;white-space:nowrap}
@@ -610,7 +611,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
     <div class="cal2" id="calGrid"></div>
     <div class="block-h" style="margin-top:40px"><h2>다가오는 일정</h2></div>
     <ul class="list" id="calUp"><li><span class="t meta">불러오는 중…</span></li></ul>
-    <p class="note">정기 예배: 주일 오전 10:30 · 주일 오후 1:00 · 수요 저녁 7:00 · 금요 저녁 7:00</p>
+    <p class="note">정기 예배: 주일 오전 10:30 · 주일 오후 1:00 · 수요 저녁 7:00 · 금요 저녁 7:00<br>금색 글씨는 교회력 절기로 해마다 자동으로 표시됩니다. 교회 일정은 관리자가 <a href="member.html#admin">성도마당 › 관리 › 교회 일정</a>에서 등록합니다.</p>
   </div>
 </section>
 
@@ -868,15 +869,28 @@ const SB_URL = "https://jdgyvvjpkklyrxxgxtav.supabase.co", SB_KEY = "sb_publisha
 const sbGet = q => fetch(SB_URL + "/rest/v1/" + q, { headers: { apikey: SB_KEY } }).then(r => r.ok ? r.json() : null).catch(() => null);
 const kst = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
 let calM = kst().slice(0, 7), calRows = null;
+/* 개신교 절기 (해마다 자동 계산) */
+function feasts(y){
+  const D = (m, d) => new Date(Date.UTC(y, m - 1, d)), add = (dt, n) => new Date(dt.getTime() + n * 864e5), iso = dt => dt.toISOString().slice(0, 10);
+  const sunOnOrAfter = dt => add(dt, (7 - dt.getUTCDay()) % 7);
+  const a = y % 19, b = Math.floor(y / 100), c = y % 100, d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3),
+    h = (19 * a + b - d - g + 15) % 30, i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    E = D(Math.floor((h + l - 7 * m + 114) / 31), ((h + l - 7 * m + 114) % 31) + 1);
+  const L = [[D(1, 1), "신년 감사"], [D(1, 6), "주현절"], [add(E, -46), "사순절 시작 (재의 수요일)"], [add(E, -7), "종려주일 · 고난주간 시작"], [add(E, -2), "성금요일"], [E, "부활절"],
+    [sunOnOrAfter(D(5, 1)), "어린이주일"], [add(sunOnOrAfter(D(5, 1)), 7), "어버이주일"], [add(E, 39), "예수 승천일"], [add(E, 49), "성령강림절"], [add(E, 56), "삼위일체주일"],
+    [sunOnOrAfter(D(7, 1)), "맥추감사주일"], [add(D(10, 31), -D(10, 31).getUTCDay()), "종교개혁기념주일"], [D(10, 31), "종교개혁일"], [add(sunOnOrAfter(D(11, 1)), 14), "추수감사주일"],
+    [add(sunOnOrAfter(D(11, 27)), 0), "대림절 시작"], [D(12, 24), "성탄 전야"], [D(12, 25), "성탄절"], [D(12, 31), "송구영신 예배"], [D(3, 12), "교회 창립 기념일"]];
+  return L.map(([dt, title]) => ({ day: iso(dt), title, feast: true }));
+}
 async function renderCal(){
   if (!calRows) calRows = await sbGet("church_calendar?select=day,time,title,place,memo&order=day,time") || [];
-  const [y, m] = calM.split("-").map(Number), first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), days = new Date(Date.UTC(y, m, 0)).getUTCDate(), t = kst();
+  const [y, m] = calM.split("-").map(Number), evs = [...calRows, ...feasts(y)], first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), days = new Date(Date.UTC(y, m, 0)).getUTCDate(), t = kst();
   $("#calTitle").textContent = `${y}년 ${m}월`;
   let h = "일월화수목금토".split("").map(d => `<b>${d}</b>`).join("") + '<div class="d o"></div>'.repeat(first);
-  for (let d = 1; d <= days; d++) { const k = `${calM}-${String(d).padStart(2, "0")}`, ev = calRows.filter(x => x.day === k), wd = (first + d - 1) % 7;
-    h += `<div class="d${k === t ? " t" : ""}${wd === 0 ? " sun" : ""}"><span class="n">${d}</span>${ev.map(x => `<i title="${esc((x.time ? x.time + " " : "") + x.title + (x.place ? " · " + x.place : ""))}">${esc(x.title)}</i>`).join("")}</div>`; }
+  for (let d = 1; d <= days; d++) { const k = `${calM}-${String(d).padStart(2, "0")}`, ev = evs.filter(x => x.day === k).sort((p, q) => !!q.feast - !!p.feast), wd = (first + d - 1) % 7;
+    h += `<div class="d${k === t ? " t" : ""}${wd === 0 ? " sun" : ""}"><span class="n">${d}</span>${ev.map(x => `<i${x.feast ? ' class="f"' : ""} title="${esc((x.time ? x.time + " " : "") + x.title + (x.place ? " · " + x.place : ""))}">${esc(x.title)}</i>`).join("")}</div>`; }
   $("#calGrid").innerHTML = h;
-  const up = calRows.filter(x => x.day >= t).slice(0, 12);
+  const ty = +t.slice(0, 4), up = [...calRows, ...feasts(ty), ...feasts(ty + 1)].filter(x => x.day >= t).sort((p, q) => p.day.localeCompare(q.day) || String(p.time || "").localeCompare(String(q.time || ""))).slice(0, 12);
   $("#calUp").innerHTML = up.map(x => `<li><span class="t">${esc(x.title)}${x.place ? ` <span class="meta">· ${esc(x.place)}</span>` : ""}${x.memo ? `<br><span class="meta">${esc(x.memo)}</span>` : ""}</span><span class="d">${fmtDate(x.day)}${x.time ? " " + esc(x.time) : ""}</span></li>`).join("") || `<li><span class="t meta">등록된 일정이 없습니다.</span></li>`;
 }
 $("#calPrev").onclick = () => { const [y, m] = calM.split("-").map(Number); calM = new Date(Date.UTC(y, m - 2, 1)).toISOString().slice(0, 7); renderCal(); };
