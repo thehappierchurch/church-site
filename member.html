@@ -325,6 +325,11 @@ footer a{color:var(--muted)}
 .favpick .fv{font-family:var(--serif);font-size:19px;line-height:1.8;margin:4px 0}
 .fv-k{font-family:var(--serif);font-size:17.5px;line-height:1.85}
 .fv-e{font-family:"Noto Serif",Georgia,serif;font-size:15.5px;line-height:1.75;color:var(--muted);margin-top:4px}
+.vsay{font:inherit;font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--accent);border-radius:999px;padding:2px 10px;margin-inline-start:6px;cursor:pointer;vertical-align:2px;min-height:30px;white-space:nowrap;direction:ltr}
+.vsay:hover{border-color:var(--accent)}
+.pr{display:block;font-family:var(--sans);font-size:14px;color:var(--accent);margin:2px 0 6px;line-height:1.6;direction:ltr;text-align:left}
+.orig .w small{display:block;font-family:var(--sans);font-size:11.5px;color:var(--muted);line-height:1.3;direction:ltr}
+.orig .w.on small{color:var(--accent)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -448,6 +453,7 @@ footer a{color:var(--muted)}
         <li>영어 본문: World English Bible (공유 저작물) — 하나님의 이름 ‘Yahweh’는 우리에게 익숙한 ‘the LORD’로 바꿔 표기했습니다</li>
         <li>단어 뜻 · 한글 발음: 더행복한교회가 학습용으로 새로 만든 풀이입니다. 참고용이며 틀린 곳이 있으면 알려 주세요</li>
         <li>소리 듣기: 휴대폰·컴퓨터에 들어 있는 읽어 주기 기능을 씁니다. 헬라어·히브리어는 현대 발음으로 읽힙니다</li>
+        <li>문장 읽는 법(한글): 원어는 규칙에 따라 자동으로 옮겨 적은 참고용 발음이고, 영어는 단어마다 우리말 발음을 이어 붙인 것입니다. 실제 발음과 조금 다를 수 있습니다</li>
         <li>구약 절 번호는 우리말 성경에 맞췄습니다 (시편 표제는 1절에 함께 표시).</li>
       </ul>
     </details>
@@ -1206,7 +1212,11 @@ async function initReader(){
   $("#rText").onclick = e => {
     const ew = e.target.closest(".ew"), li0 = e.target.closest("li[data-v]");
     if (ew && li0) { const v = +li0.dataset.v; document.querySelectorAll("#rText .ew.on").forEach(x => x.classList.remove("on")); ew.classList.add("on");
-      return openWordEn(ew.textContent, `${BOOKS[rCur.b-1][0]} ${rCur.c}:${v}`, li0.querySelector(".en")?.textContent || ""); }
+      return openWordEn(ew.textContent, `${BOOKS[rCur.b-1][0]} ${rCur.c}:${v}`, li0.querySelector(".en .et")?.textContent || ""); }
+    const vb = e.target.closest(".vsay");
+    if (vb && li0) { const pr = li0.querySelector(".pr");
+      return vb.dataset.vs === "en" ? sayVerse("en", false, li0.querySelector(".en .et")?.textContent || "", pr, +$("#rRate").value)
+        : sayVerse("og", rCur.b <= 39, ($("#rText")._og || {})[rCur.c + ":" + li0.dataset.v] || [], pr); }
     const ow = e.target.closest(".og .w");
     if (ow && li0) { const ws = ($("#rText")._og || {})[rCur.c + ":" + li0.dataset.v] || []; return openWordOg(ws[+ow.dataset.j], rCur.b, `${BOOKS[rCur.b-1][0]} ${rCur.c}:${li0.dataset.v}`); }
     const li = li0; if (!li) return;
@@ -1278,12 +1288,12 @@ async function renderReader(){
   if (rCur.b !== b || rCur.c !== c || rMode !== mode) return;
   el._og = og;
   el.innerHTML = ko.map((t, i) => { const v = i + 1;
-    return `<li data-v="${v}"><b>${v}</b><span class="ko">${esc(t)}</span>${en ? `<span class="en">${enWords(en[i] || "—")}</span>` : ""}${og ? `<span class="og orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}>${(og[c + ":" + v] || []).map((w, j) => `<button type="button" class="w" data-j="${j}">${esc(w.t)}</button>`).join("")}</span>` : ""}</li>`; }).join("");
+    return `<li data-v="${v}"><b>${v}</b><span class="ko">${esc(t)}</span>${en ? `<span class="en"><span class="et">${enWords(en[i] || "—")}</span><button type="button" class="vsay" data-vs="en" aria-label="${v}절 영어로 듣기">🔊 듣기</button></span>` : ""}${og ? `<span class="og orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}>${(og[c + ":" + v] || []).map((w, j) => `<button type="button" class="w" data-j="${j}">${esc(w.t)}<small>${esc(ogKo(w.t, ot))}</small></button>`).join("")}<button type="button" class="vsay" data-vs="og" aria-label="${v}절 원어로 듣기">🔊 듣기</button></span>` : ""}${en || og ? '<span class="pr" hidden></span>' : ""}</li>`; }).join("");
   markSel();
   $("#rListen").hidden = !en;
   $("#rHint").textContent = mode === "ko" ? "마음에 닿는 구절을 누르면 표시됩니다. 처음 구절과 끝 구절을 차례로 누르고 ‘읽은 본문에 넣기’를 누르면 아래 칸에 자동으로 적힙니다."
-    : mode === "og" ? "원어 단어를 누르면 사전형, 한글 발음, 뜻이 나옵니다. 구절 번호 쪽을 누르면 구절이 선택됩니다."
-    : "영어 단어를 누르면 발음과 뜻이 나오고 단어장에 넣을 수 있습니다. 단어가 아닌 곳을 누르면 구절이 선택됩니다.";
+    : mode === "og" ? "원어 단어를 누르면 사전형, 한글 발음, 뜻이 나옵니다. 🔊 듣기를 누르면 그 절 전체를 읽어 줍니다. 구절 번호 쪽을 누르면 구절이 선택됩니다."
+    : "영어 단어를 누르면 발음과 뜻이 나오고 단어장에 넣을 수 있습니다. 🔊 듣기를 누르면 그 절을 읽어 주고 읽는 법이 나옵니다. 단어가 아닌 곳을 누르면 구절이 선택됩니다.";
 }
 
 /* ---------- 소리로 듣기 ---------- */
@@ -1305,7 +1315,7 @@ function speakChapter(){
   const [a, z] = rSel, items = [...document.querySelectorAll("#rText li[data-v]")].filter(li => !a || (+li.dataset.v >= a && +li.dataset.v <= (z || a)));
   const v = pickVoice("en-US"), rate = +$("#rRate").value;
   items.forEach((li, k) => {
-    const t = li.querySelector(".en")?.textContent; if (!t || t === "—") return;
+    const t = li.querySelector(".en .et")?.textContent; if (!t || t === "—") return;
     const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; if (v) u.voice = v; u.rate = rate;
     u.onstart = () => { document.querySelectorAll("#rText li.speak").forEach(x => x.classList.remove("speak")); li.classList.add("speak"); const box = $("#rText"); box.scrollTop = li.offsetTop - box.offsetTop - 40; };
     if (k === items.length - 1) u.onend = () => stopSpeak();
@@ -1389,6 +1399,105 @@ $("#wDlgSave").onclick = async () => {
   (await vocabKeys()).add(w.lang + ":" + w.key); wordsDirty = true;
   $("#wDlgSave").disabled = true; $("#wDlgSave").textContent = "단어장에 있음 ✓"; toast("단어장에 넣었습니다");
 };
+
+/* ---------- 원어 · 영어 문장 발음 (한글로 옮겨 적기, 참고용) ---------- */
+const HG = (() => {
+  const MED = { a: 0, e: 5, i: 20, o: 8, u: 13, y: 16 }, GLIDE = { a: 2, e: 7, o: 12, u: 17, i: 20, y: 16 };
+  const syl = (L, V, T) => String.fromCharCode(0xAC00 + (L * 21 + V) * 28 + (T || 0));
+  /* 소리 조각 [{c}|{v}] → 한글. tb.init: 첫소리, tb.coda: 받침, tb.solo: 모음 없이 홀로 쓸 때, tb.glide: 뒤 모음을 ㅑ·ㅕ처럼 바꾸는 소리 */
+  function compose(tk, tb){
+    let out = "";
+    for (let i = 0; i < tk.length; i++) {
+      const t = tk[i];
+      if (t.v) {
+        let L = 11, V = MED[t.v];
+        const p = tk[i - 1];
+        if (p && p.c && !p.used) {
+          L = tb.init[p.c] ?? 11; if (tb.glide.includes(p.c)) V = GLIDE[t.v]; p.used = 1;
+          const lc = out.charCodeAt(out.length - 1) - 0xAC00;      // 모음 사이 ㄹ은 '엘로'처럼 앞 글자에 ㄹ 받침
+          if (p.c === "l" && lc >= 0 && lc < 11172 && lc % 28 === 0) out = out.slice(0, -1) + String.fromCharCode(0xAC00 + lc + 8);
+        }
+        let T = 0;
+        const n1 = tk[i + 1], n2 = tk[i + 2];
+        if (n1 && n1.c && tb.coda[n1.c] != null && !(n2 && n2.v)) { T = tb.coda[n1.c]; n1.used = 1; }
+        out += syl(L, V, T);
+      } else if (!t.used && !(tk[i + 1] && tk[i + 1].v)) {
+        out += tb.solo[t.c] ?? syl(tb.init[t.c] ?? 11, 18);
+      }
+    }
+    return out;
+  }
+  /* 헬라어 */
+  const GK = { β: "b", γ: "g", δ: "d", ζ: "z", θ: "th", κ: "k", λ: "l", μ: "m", ν: "n", π: "p", ρ: "r", σ: "s", ς: "s", τ: "t", φ: "ph", χ: "ch" };
+  const GV = { α: "a", ε: "e", η: "e", ι: "i", ο: "o", υ: "y", ω: "o" };
+  const GTB = { init: { b: 7, g: 0, d: 3, z: 12, th: 16, k: 15, l: 5, m: 6, n: 2, p: 17, r: 5, s: 9, t: 16, ph: 17, ch: 15, h: 18 },
+    coda: { n: 4, m: 16, l: 8, ng: 21 }, solo: { s: "스", k: "크", ch: "크", t: "트", th: "트", p: "프", ph: "프", r: "르", d: "드", g: "그", b: "브" }, glide: [] };
+  function greek(word){
+    const s = word.normalize("NFD").toLowerCase(), tk = [];
+    const chars = [];
+    for (const ch of s) { if (/[̀-ͯ]/.test(ch)) { if (chars.length) chars[chars.length - 1].m += ch; } else chars.push({ ch, m: "" }); }
+    for (let i = 0; i < chars.length; i++) {
+      const { ch, m } = chars[i], nx = chars[i + 1];
+      if (GV[ch]) {
+        if (m.includes("̔") || (nx && GV[nx.ch] && nx.m.includes("̔") && !nx.m.includes("̈"))) tk.push({ c: "h" });
+        const pair = nx && GV[nx.ch] && !nx.m.includes("̈") ? ch + nx.ch : "";
+        if (pair === "ου") { tk.push({ v: "u" }); i++; continue; }
+        if (["αυ", "ευ", "ηυ"].includes(pair)) { tk.push({ v: GV[ch] }, { v: "u" }); i++; continue; }
+        if (["αι", "ει", "οι"].includes(pair)) { tk.push({ v: GV[ch] }, { v: "i" }); i++; continue; }
+        if (pair === "υι") { tk.push({ v: "y" }); i++; continue; }
+        tk.push({ v: GV[ch] });
+      } else if (ch === "ξ") tk.push({ c: "k" }, { c: "s" });
+      else if (ch === "ψ") tk.push({ c: "p" }, { c: "s" });
+      else if (ch === "γ" && nx && "γκχξ".includes(nx.ch)) tk.push({ c: "ng" });
+      else if (GK[ch]) { const c = GK[ch], pv = tk[tk.length - 1]; if (!(pv && pv.c === c && !"lmn".includes(c))) tk.push({ c }); }
+    }
+    return compose(tk, GTB);
+  }
+  /* 히브리어 (모음 부호가 있는 본문) */
+  const HG_PRE = { "ו": "베", "ל": "라", "ב": "바", "מ": "메" };
+  const HC = { "א": "", "ב": "b", "ג": "g", "ד": "d", "ה": "h", "ו": "v", "ז": "z", "ח": "ch", "ט": "t", "י": "y", "כ": "k", "ך": "k", "ל": "l", "מ": "m", "ם": "m", "נ": "n", "ן": "n", "ס": "s", "ע": "", "פ": "p", "ף": "p", "צ": "ts", "ץ": "ts", "ק": "k", "ר": "r", "ש": "sh", "ת": "t" };
+  const HVOW = { "ַ": "a", "ָ": "a", "ֶ": "e", "ֵ": "e", "ִ": "i", "ֹ": "o", "ֺ": "o", "ֻ": "u", "ֲ": "a", "ֱ": "e", "ֳ": "o" };
+  const HTB = { init: { b: 7, g: 0, d: 3, h: 18, v: 7, z: 12, ch: 18, t: 16, y: 11, k: 15, l: 5, m: 6, n: 2, s: 9, p: 17, ts: 14, r: 5, sh: 9, "": 11 },
+    coda: { n: 4, m: 16, l: 8 }, solo: { r: "르", sh: "쉬", ch: "흐", ts: "츠", k: "크", t: "트", s: "스", p: "프", b: "브", v: "브", d: "드", g: "그", z: "즈", h: "", y: "", "": "" }, glide: ["y", "sh"] };
+  function hebrew(word){
+    const s = word.normalize("NFD").replace(/[֑-ֽֿ֯׀׃-ׇ]/g, "");
+    if (/^כָּל$/.test(s)) return "콜";
+    if (/^(?:[ולבמ][\u05B0-\u05BC]*)?י[\u05B0\u05B1]?הו[\u05B4\u05B8]?ה$/.test(s)) return (s.length > 6 ? HG_PRE[s[0]] || "" : "") + "여호와";
+    const L = [];
+    for (const ch of s) { if (HC[ch] !== undefined) L.push({ ch, m: "" }); else if (L.length) L[L.length - 1].m += ch; }
+    const tk = [];
+    L.forEach((x, i) => {
+      const vow = [...x.m].map(c => HVOW[c]).find(Boolean), shva = x.m.includes("ְ"), dag = x.m.includes("ּ");
+      const prev = L[i - 1], prevVow = prev && [...prev.m].some(c => HVOW[c]), last = i === L.length - 1;
+      let c = HC[x.ch];
+      if (x.ch === "ש" && x.m.includes("ׂ")) c = "s";
+      if (x.ch === "ו" && !vow && !shva && i > 0) {           // 모음 글자 ו
+        if (x.m.includes("ֹ") || (dag && !prevVow)) { tk.push({ v: x.m.includes("ֹ") ? "o" : "u" }); return; }
+      }
+      if (x.ch === "ו" && x.m.includes("ֹ") && i > 0 && !shva) { tk.push({ v: "o" }); return; }
+      if (x.ch === "ו" && dag && !vow && i === 0) { tk.push({ v: "u" }); return; }
+      if (!vow && !shva) {
+        if (x.ch === "י" && prev && /[ִֵֶ]/.test(prev.m)) return;   // 모음 글자 י
+        if (x.ch === "ה" && !dag) return;
+        if (x.ch === "א" || x.ch === "ע") return;
+      }
+      if (last && vow === "a" && "חעה".includes(x.ch) && x.m.includes("ַ")) { tk.push({ v: "a" }, { c }); return; }   // 숨은 파타
+      tk.push({ c });
+      if (vow) tk.push({ v: vow });
+      else if (shva && i === 0) tk.push({ v: "e" });
+    });
+    return compose(tk, HTB);
+  }
+  return { greek, hebrew };
+})();
+const ogKo = (t, ot) => String(t || "").split(/[־\s]+/).filter(Boolean).map(w => ot ? HG.hebrew(w) : HG.greek(w)).join(ot ? "-" : " ");
+const ogSpeakText = (ws, ot) => ws.map(w => w.t).join(" ").replace(/[֑-ֽ֯׀׃]/g, "").replace(/־/g, " ");
+async function enPron(t){ const D = await dict("en"); return (String(t).match(EW) || []).map(w => { const [, e] = enLookup(D, w); return e?.[1] || w; }).join(" "); }
+async function sayVerse(kind, ot, src, pr, rate){
+  if (kind === "en") { const t = src.trim(); if (!t || t === "—") return; say(t, "en-US", rate || 0.85); pr.textContent = "읽는 법 · " + await enPron(t); }
+  else { if (!src.length) return; say(ogSpeakText(src, ot), ot ? "he-IL" : "el-GR", 0.75); pr.textContent = "읽는 법 · " + src.map(w => ogKo(w.t, ot)).join(" "); }
+  pr.hidden = false;
+}
 
 /* ---------- 내 말씀 저장 ---------- */
 async function saveFav(b, c, v1, v2){
@@ -2059,16 +2168,16 @@ async function openPanel(li){
   li.classList.add("open"); p.hidden = false;
   trk("m-study", "study", `${BOOKS[sCur.b-1][0]} ${sCur.c}:${li.dataset.v}`);
   const v = +li.dataset.v, { b, c } = sCur, ot = b <= 39, notes = sNotes.filter(x => x.v_from <= v && v <= x.v_to);
-  p.innerHTML = `<div class="sec"><h3>원어 <small>${ot ? "히브리어" : "헬라어"} · 단어를 누르면 뜻이 나옵니다</small></h3>
-      <div class="orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}><span class="muted sm">원문을 불러오는 중…</span></div><div class="wcard" hidden></div></div>
-    <div class="sec"><h3>영어 <small>World English Bible · 단어를 누르면 발음과 뜻</small></h3><p class="enline"><span class="muted sm">불러오는 중…</span></p></div>
+  p.innerHTML = `<div class="sec"><h3>원어 <small>${ot ? "히브리어" : "헬라어"} · 단어를 누르면 뜻이 나옵니다</small><button type="button" class="vsay" data-vs="og">🔊 문장 듣기</button></h3>
+      <div class="orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}><span class="muted sm">원문을 불러오는 중…</span></div><p class="pr" data-pr="og" hidden></p><div class="wcard" hidden></div></div>
+    <div class="sec"><h3>영어 <small>World English Bible · 단어를 누르면 발음과 뜻</small><button type="button" class="vsay" data-vs="en">🔊 문장 듣기</button></h3><p class="enline"><span class="muted sm">불러오는 중…</span></p><p class="pr" data-pr="en" hidden></p></div>
     <div class="row"><button class="btn sm" type="button" data-sfav>♡ 내 말씀에 저장</button></div>
     <div class="sec"><h3>옛 주석 <small>저작권이 끝난 고전 주석 · 영어 · 새 창</small></h3><div class="links">${commLinks(b, c, v)}</div></div>`;
   getEn(b).then(en => { p.querySelector(".enline").innerHTML = enWords(en[c-1]?.[v-1] || "—"); }).catch(() => { p.querySelector(".enline").innerHTML = '<span class="muted sm">영어 본문을 불러오지 못했습니다.</span>'; });
   try {
     const ws = (await origBook(b))[c + ":" + v] || [];
     p._words = ws;
-    p.querySelector(".orig").innerHTML = ws.length ? ws.map((w,i) => `<button type="button" class="w" data-i="${i}">${esc(w.t)}</button>`).join("") : '<span class="muted sm">이 절은 원문 사본에 따라 없는 절입니다.</span>';
+    p.querySelector(".orig").innerHTML = ws.length ? ws.map((w,i) => `<button type="button" class="w" data-i="${i}">${esc(w.t)}<small>${esc(ogKo(w.t, ot))}</small></button>`).join("") : '<span class="muted sm">이 절은 원문 사본에 따라 없는 절입니다.</span>';
   } catch (e) { p.querySelector(".orig").innerHTML = `<span class="muted sm">${esc(e.message)}</span>`; }
 }
 async function showWord(p, i){
@@ -2114,6 +2223,9 @@ $("#sList").addEventListener("click", async e => {
   const li = e.target.closest("li[data-v]"); if (!li) return;
   const p = li.querySelector(".spanel"), v = +li.dataset.v, t = e.target;
   if (t.closest(".sv")) return openPanel(li);
+  const vb = t.closest(".vsay");
+  if (vb) { const k = vb.dataset.vs, pr = p.querySelector(`.pr[data-pr="${k}"]`);
+    return k === "en" ? sayVerse("en", false, p.querySelector(".enline").textContent, pr) : sayVerse("og", sCur.b <= 39, p._words || [], pr); }
   const w = t.closest(".w"); if (w) { p.querySelectorAll(".w").forEach(x => x.classList.toggle("on", x === w)); return openWordOg(p._words[+w.dataset.i], sCur.b, `${BOOKS[sCur.b-1][0]} ${sCur.c}:${v}`); }
   const ew = t.closest(".ew"); if (ew) return openWordEn(ew.textContent, `${BOOKS[sCur.b-1][0]} ${sCur.c}:${v}`, p.querySelector(".enline").textContent);
   if (t.closest("[data-sfav]")) return saveFav(sCur.b, sCur.c, v, v);
