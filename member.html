@@ -279,6 +279,52 @@ footer a{color:var(--muted)}
 .cal span.sel{outline:2px solid var(--accent);outline-offset:1px}
 .dayinfo{margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
 .dayh{font-size:16px;margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}
+.seg button{font:inherit;font-size:13.5px;padding:6px 12px;min-height:34px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--muted);cursor:pointer}
+.seg button.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.listen{margin:0 0 10px}
+.listen select{font-size:14px;padding:5px 8px}
+.rtext .ko{display:inline}
+.rtext .en{display:block;font-family:"Noto Serif",Georgia,serif;font-size:16px;line-height:1.75;color:var(--ink)}
+.rtext.koen .en{color:var(--muted);font-size:15.5px;margin:2px 0 6px}
+.rtext.en .ko,.rtext.ko .en,.rtext.ko .og,.rtext.koen .og,.rtext.en .og,.rtext.og .en{display:none}
+.rtext .og{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 8px}
+.rtext .og .w{font-size:19px;padding:2px 8px;min-height:34px}
+.ew{cursor:pointer;border-radius:3px}
+.ew:hover{background:var(--tint);color:var(--accent)}
+.ew.on{background:var(--gold);color:#fff}
+.rtext li.speak{background:color-mix(in srgb,var(--gold) 18%,transparent)}
+.enline{font-family:"Noto Serif",Georgia,serif;font-size:16.5px;line-height:1.8}
+.wdlg{border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);padding:20px;width:min(440px,calc(100% - 32px));max-height:85vh;overflow:auto}
+.wdlg::backdrop{background:rgba(0,0,0,.35)}
+.wd-w{font-family:"Noto Serif",Georgia,serif;font-size:30px;line-height:1.3;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wd-w[lang=he]{font-family:"Noto Serif Hebrew",serif}
+.wd-p{font-size:15px;color:var(--muted);margin-top:2px}
+.wd-p b{color:var(--ink);font-weight:500}
+.wd-m{font-size:18px;font-weight:500;margin-top:10px;line-height:1.6}
+.wd-x{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.6}
+.wd-s{font-size:14px;margin-top:10px;padding:8px 10px;background:var(--tint);border-radius:6px;font-family:"Noto Serif",Georgia,serif}
+.say{font:inherit;font-size:15px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;min-width:36px;min-height:36px;cursor:pointer;padding:0 10px}
+.vlist{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--ink)}
+.vlist li{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.vlist .vw{font-family:"Noto Serif",Georgia,serif;font-size:21px;min-width:6em}
+.vlist .vw[lang=he]{font-family:"Noto Serif Hebrew",serif;font-size:24px}
+.vlist .vi{flex:1;min-width:12em;font-size:14.5px;line-height:1.55}
+.vlist .vi small{display:block;color:var(--muted);font-size:13px}
+.vlist .va{display:flex;gap:6px;flex-wrap:wrap}
+.vlist .vm{display:flex;gap:6px;flex-basis:100%}
+.vlist .vm input{flex:1}
+.drill{text-align:center;padding:28px 20px;margin:12px 0}
+.drill .dq{font-family:"Noto Serif",Georgia,serif;font-size:36px;line-height:1.3;margin:6px 0}
+.drill .dq[lang=he]{font-family:"Noto Serif Hebrew",serif;font-size:40px}
+.drill .dq.kor{font-family:var(--serif);font-size:24px}
+.drill .da{margin-top:10px}
+.drill .row{justify-content:center}
+.drill .dp{font-size:13px;color:var(--muted)}
+.favpick{background:var(--tint);border:0;margin-bottom:12px}
+.favpick .fv{font-family:var(--serif);font-size:19px;line-height:1.8;margin:4px 0}
+.fv-k{font-family:var(--serif);font-size:17.5px;line-height:1.85}
+.fv-e{font-family:"Noto Serif",Georgia,serif;font-size:15.5px;line-height:1.75;color:var(--muted);margin-top:4px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 </style>
@@ -294,8 +340,11 @@ footer a{color:var(--muted)}
       <li><a href="#write" data-p="write">성경 필사</a></li>
       <li><a href="#study" data-p="study">말씀 공부</a></li>
       <li><a href="#qt" data-p="qt">나의 큐티</a></li>
+      <li><a href="#words" data-p="words">단어장</a></li>
+      <li><a href="#fav" data-p="fav">내 말씀</a></li>
       <li><a href="#share" data-p="share">묵상 나눔</a></li>
       <li><a href="#pray" data-p="pray">기도</a></li>
+      <li><a href="#team" data-p="team" id="teamTab" hidden>모임방</a></li>
       <li><a href="#space" data-p="space">교회 공간</a></li>
       <li><a href="#public" data-p="public">성도 묵상</a></li>
       <li><a href="#admin" data-p="admin" id="adminTab" hidden>관리</a></li>
@@ -386,8 +435,7 @@ footer a{color:var(--muted)}
 
   <!-- 말씀 공부 -->
   <section class="page" data-page="study">
-    <div class="phead"><h1>말씀 공부</h1><p>구절을 누르면 히브리어·헬라어 원어 단어의 뜻, 목사님 해설, 믿을 만한 옛 주석을 볼 수 있습니다.</p></div>
-    <div class="card" id="noteRecentBox" hidden style="margin-bottom:16px"><h2 class="h">최근 목사님 해설</h2><ul id="noteRecent"></ul></div>
+    <div class="phead"><h1>말씀 공부</h1><p>구절을 누르면 영어 성경, 히브리어·헬라어 원어 단어의 뜻과 발음, 믿을 만한 옛 주석을 볼 수 있습니다. 모르는 단어는 단어장에 넣어 외워 보세요.</p></div>
     <div class="pick"><select id="sBook" aria-label="책 선택"></select><select id="sCh" aria-label="장 선택"></select></div>
     <ol class="slist" id="sList"></ol>
     <details class="chapterText"><summary>자료 출처와 저작권</summary>
@@ -397,7 +445,9 @@ footer a{color:var(--muted)}
         <li>헬라어 신약: Robinson–Pierpont 비잔틴 다수 사본 (공유 저작물)</li>
         <li>원어 사전: Strong's Exhaustive Concordance (1890, 공유 저작물) · 전자판 Open Scriptures (CC BY-SA)</li>
         <li>옛 주석: 매튜 헨리, 장 칼뱅, 존 길, JFB 등 저작권이 끝난 고전 주석을 Bible Hub에서 엽니다 (영어)</li>
-        <li>목사님 해설: 더행복한교회 김충만 목사 — 무단 전재를 삼가 주세요</li>
+        <li>영어 본문: World English Bible (공유 저작물) — 하나님의 이름 ‘Yahweh’는 우리에게 익숙한 ‘the LORD’로 바꿔 표기했습니다</li>
+        <li>단어 뜻 · 한글 발음: 더행복한교회가 학습용으로 새로 만든 풀이입니다. 참고용이며 틀린 곳이 있으면 알려 주세요</li>
+        <li>소리 듣기: 휴대폰·컴퓨터에 들어 있는 읽어 주기 기능을 씁니다. 헬라어·히브리어는 현대 발음으로 읽힙니다</li>
         <li>구약 절 번호는 우리말 성경에 맞췄습니다 (시편 표제는 1절에 함께 표시).</li>
       </ul>
     </details>
@@ -414,11 +464,20 @@ footer a{color:var(--muted)}
         <select id="rBook" aria-label="책 선택"></select><select id="rCh" aria-label="장 선택"></select>
         <button class="btn sm" type="button" id="rPrev">← 앞 장</button><button class="btn sm" type="button" id="rNext">다음 장 →</button>
       </div>
+      <div class="seg" id="rMode" role="group" aria-label="보기 방식">
+        <button type="button" data-m="ko">한글</button><button type="button" data-m="koen">한글 + 영어</button><button type="button" data-m="en">영어</button><button type="button" data-m="og">원어</button>
+      </div>
+      <div class="row listen" id="rListen" hidden>
+        <button class="btn sm" type="button" id="rSpeak">🔊 영어로 듣기</button>
+        <select id="rRate" aria-label="읽는 빠르기"><option value="0.7">천천히</option><option value="0.85" selected>조금 천천히</option><option value="1">보통</option></select>
+        <span class="hint" id="rSpeakHint">구절을 고르면 그 구절만, 고르지 않으면 장 전체를 읽어 줍니다.</span>
+      </div>
       <ol class="rtext" id="rText"><li class="muted">불러오는 중…</li></ol>
-      <p class="hint" style="margin-top:8px">마음에 닿는 구절을 누르면 표시됩니다. 처음 구절과 끝 구절을 차례로 누르고 ‘읽은 본문에 넣기’를 누르면 아래 칸에 자동으로 적힙니다.</p>
+      <p class="hint" style="margin-top:8px" id="rHint">마음에 닿는 구절을 누르면 표시됩니다. 처음 구절과 끝 구절을 차례로 누르고 ‘읽은 본문에 넣기’를 누르면 아래 칸에 자동으로 적힙니다.</p>
       <div class="row" style="margin-top:4px">
         <button class="btn acc sm" type="button" id="rUse">읽은 본문에 넣기</button>
-        <a class="btn sm" id="rStudy" href="#study">원어 · 해설 보기</a>
+        <button class="btn sm" type="button" id="rFav">♡ 내 말씀에 저장</button>
+        <a class="btn sm" id="rStudy" href="#study">원어 · 주석 보기</a>
       </div>
       <p class="hint" style="margin-top:10px">매일 큐티 본문은 교회 분기 통독 범위를 날마다 고르게 나눈 것입니다. <b>매일성경</b>이나 <b>생명의 삶</b>으로 큐티하시는 분은 그 본문을 ‘읽은 본문’에 적으셔도 됩니다.</p>
     </div>
@@ -500,6 +559,47 @@ footer a{color:var(--muted)}
     <p class="sm muted" style="margin-top:14px" id="groupInfo"></p>
   </section>
 
+  <!-- 단어장 -->
+  <section class="page" data-page="words">
+    <div class="phead"><h1>내 단어장</h1><p>말씀을 읽다가 모르는 영어·헬라어·히브리어 단어를 누르고 ‘단어장에 넣기’를 하면 여기에 모입니다. 외운 단어는 지우고, 모르는 단어는 남겨 두고 반복해서 외워 보세요. 나만 볼 수 있습니다.</p></div>
+    <div class="row seg" id="wTabs" style="margin-top:0"></div>
+    <div class="row">
+      <button class="btn acc" type="button" id="wDrill">암기 연습 시작</button>
+      <label class="toggle sm"><input type="checkbox" id="wRev"> 뜻 보고 단어 떠올리기</label>
+      <select id="wSort" aria-label="정렬"><option value="new">최근 넣은 순</option><option value="miss">자주 틀린 순</option><option value="abc">가나다·ABC 순</option></select>
+    </div>
+    <div class="card drill" id="wCard" hidden></div>
+    <ul class="vlist" id="wList"><li class="muted sm">불러오는 중…</li></ul>
+    <p class="hint" style="margin-top:16px">단어는 <a href="#qt">나의 큐티 › 말씀 읽기</a>에서 ‘한글 + 영어’ 또는 ‘원어’로 바꾼 뒤 단어를 누르거나, <a href="#study">말씀 공부</a>에서 구절을 열고 단어를 눌러 넣을 수 있습니다.</p>
+  </section>
+
+  <!-- 내 말씀 -->
+  <section class="page" data-page="fav">
+    <div class="phead"><h1>내가 좋아하는 말씀</h1><p>큐티하거나 말씀을 읽다가 마음에 닿은 구절을 ‘♡ 내 말씀에 저장’하면 여기에 모입니다. 나만 볼 수 있습니다.</p></div>
+    <div class="card favpick" id="fPick" hidden></div>
+    <div class="row" style="margin-top:0"><input id="fFind" type="text" placeholder="말씀이나 메모로 찾기" style="flex:1;min-width:12em"><label class="toggle sm"><input type="checkbox" id="fEn"> 영어도 함께 보기</label></div>
+    <ul class="notes" id="fList"><li class="muted sm">불러오는 중…</li></ul>
+  </section>
+
+  <!-- 모임방 -->
+  <section class="page" data-page="team">
+    <div class="phead"><h1>모임방</h1><p>찬양팀·커피전도팀처럼 함께 섬기는 팀의 회의 기록을 남기고 봅니다. 그 팀에 든 성도만 볼 수 있습니다.</p></div>
+    <div class="row seg" id="tTabs" style="margin-top:0"></div>
+    <p class="sm muted" id="tMembers"></p>
+    <form class="card form" id="tForm" novalidate style="margin:12px 0 16px">
+      <h2 class="h" id="tFormTitle">회의 기록 쓰기</h2>
+      <div class="two">
+        <div><label for="tDate">날짜</label><input id="tDate" type="date"></div>
+        <div><label for="tTitle">제목</label><input id="tTitle" type="text" maxlength="100" placeholder="예) 10월 셋째 주 찬양팀 회의"></div>
+      </div>
+      <div class="field"><label for="tWho">참석자 <span class="opt">(선택)</span></label><input id="tWho" type="text" maxlength="300" placeholder="예) 김OO, 이OO"></div>
+      <div class="field"><label for="tBody">회의 내용</label><textarea id="tBody" rows="8" maxlength="20000" placeholder="나눈 이야기, 정한 일, 다음에 할 일을 적어 주세요."></textarea></div>
+      <p class="msg" id="tMsg"></p>
+      <div class="row" style="margin-top:0"><button class="btn acc" type="submit">저장</button><button class="btn" type="button" id="tCancel" hidden>고치기 취소</button></div>
+    </form>
+    <ul class="notes" id="tList"></ul>
+  </section>
+
   <!-- 교회 공간 -->
   <section class="page" data-page="space">
     <div class="phead"><h1>교회 공간 사용</h1><p>기도나 모임으로 교회에 오실 때 시간을 적어 두세요. 다른 분들이 보고 시간을 피해서 오실 수 있습니다. 적은 시간은 언제든 직접 지울 수 있어요.</p></div>
@@ -559,7 +659,7 @@ footer a{color:var(--muted)}
       <ul class="slots" id="stRecent"></ul>
       <p class="sm muted" style="margin-top:8px">로그인하지 않은 방문자는 이름 없이 숫자로만 셉니다. 방문 기록은 1년 뒤 자동으로 지워집니다.</p>
     </div>
-    <div class="card form" style="margin-bottom:16px">
+    <div data-area="sermons" class="card form" style="margin-bottom:16px">
       <h2 class="h">홈페이지 고치기 — 설교</h2>
       <p class="hint">여기서 저장하면 홈페이지 ‘설교말씀’과 첫 화면에 <b>바로</b> 반영됩니다. 영상이 나중에 올라가면 ‘고치기’를 눌러 유튜브 링크만 넣으세요 (유튜브 앱 공유 → 링크 복사).</p>
       <ul class="slots" id="serList"><li class="muted sm">불러오는 중…</li></ul>
@@ -574,7 +674,7 @@ footer a{color:var(--muted)}
       <div class="row"><button class="btn acc" type="button" id="serSave">저장</button><button class="btn" type="button" id="serNew" hidden>새로 쓰기</button></div>
       <p class="msg" id="serMsg"></p>
     </div>
-    <div class="card form" style="margin-bottom:16px">
+    <div class="card form" style="margin-bottom:16px" data-area="news">
       <h2 class="h">홈페이지 고치기 — 알려드려요</h2>
       <p class="hint">첫 화면 ‘알려드려요’와 교회소식에 바로 반영됩니다. 최근 날짜가 위에 나옵니다.</p>
       <ul class="slots" id="newsAdm"><li class="muted sm">불러오는 중…</li></ul>
@@ -585,7 +685,7 @@ footer a{color:var(--muted)}
       <div class="row"><input id="nwText" type="text" maxlength="300" placeholder="알릴 내용" style="flex:1;min-width:14em"><button class="btn acc sm" type="button" id="nwSave">등록</button><button class="btn sm" type="button" id="nwNew" hidden>취소</button></div>
       <p class="msg" id="nwMsg"></p>
     </div>
-    <div class="card form" style="margin-bottom:16px">
+    <div class="card form" style="margin-bottom:16px" data-area="prayer">
       <h2 class="h">홈페이지 고치기 — 기도제목</h2>
       <p class="hint">교회생활 › 기도제목 화면에 바로 반영됩니다. 한 줄에 하나씩 적으세요.</p>
       <div class="field"><label for="prWeekly">이번 주 함께 기도해요</label><textarea id="prWeekly" rows="3"></textarea></div>
@@ -604,6 +704,20 @@ footer a{color:var(--muted)}
       <p class="hint">모르는 사람이 장난을 치면 <b>글쓰기 차단</b>을 하고, 필요하면 <b>이 회원의 글 모두 삭제</b>를 누르세요. 이름이 부적절하면 이름을 바꿀 수 있습니다.</p>
       <input id="memSearch" type="text" placeholder="이름으로 찾기" style="font:inherit;font-size:16px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;width:100%;max-width:280px;background:var(--surface);color:var(--ink)">
       <ul class="modlist" id="memList"></ul>
+    </div>
+    <div class="card form" style="margin-bottom:16px">
+      <h2 class="h">홈페이지 관리 맡기기</h2>
+      <p class="hint">성도에게 홈페이지의 일부를 고칠 수 있게 맡깁니다. 맡은 성도는 성도마당에 ‘관리’ 메뉴가 생기고, 맡은 부분만 고칠 수 있습니다.</p>
+      <ul class="slots" id="edList"></ul>
+      <div class="row"><select id="edWho" aria-label="성도"></select><select id="edArea" aria-label="맡길 일"><option value="prayer">기도제목</option><option value="news">알려드려요</option><option value="sermons">설교</option></select><button class="btn acc sm" type="button" id="edAdd">맡기기</button></div>
+      <p class="msg" id="edMsg"></p>
+    </div>
+    <div class="card form" style="margin-bottom:16px">
+      <h2 class="h">모임방 관리</h2>
+      <p class="hint">팀을 만들고 성도를 넣으면, 그 성도들만 ‘모임방’에서 회의 기록을 쓰고 볼 수 있습니다.</p>
+      <ul class="plain" id="tmAdm"></ul>
+      <div class="row"><input id="tmName" type="text" maxlength="30" placeholder="새 팀 이름 (예: 교사 모임)" style="width:14em"><button class="btn acc sm" type="button" id="tmAdd">팀 만들기</button></div>
+      <p class="msg" id="tmMsg"></p>
     </div>
     <div class="card form">
       <h2 class="h">큐티 묵상 엑셀로 내려받기</h2>
@@ -660,7 +774,7 @@ footer a{color:var(--muted)}
     <h2>1. 수집하는 항목과 방법</h2>
     <ul>
       <li>카카오 로그인 시 카카오로부터 받는 정보: 닉네임(필수), 프로필 사진(선택), 카카오계정 이메일(선택)</li>
-      <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글</li>
+      <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글, 단어장에 넣은 단어, 저장한 말씀과 메모, 모임방 회의 기록</li>
       <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
       <li>방문 기록: 홈페이지와 성도마당에서 본 화면, 누른 설교 영상, 방문 시각, 접속 기기 종류(휴대폰/PC), 들어온 경로. 로그인하지 않은 방문자는 이름 없이 브라우저에 저장된 임의 번호로만 집계합니다.</li>
     </ul>
@@ -675,7 +789,7 @@ footer a{color:var(--muted)}
     <h2>3. 보유 기간</h2>
     <p>방문 기록은 1년이 지나면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
-    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다.</p>
+    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
     <h2>4-1. 만 14세 미만 아동</h2>
     <p>만 14세 미만 아동은 법정대리인(부모님)의 동의를 받은 뒤 이용할 수 있습니다. 동의 없이 가입한 사실을 알게 되면 해당 정보를 지체 없이 삭제합니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
@@ -690,6 +804,11 @@ footer a{color:var(--muted)}
     <p>더행복한교회 담임목사 김충만 · 서울시 성북구 도봉로 31, 2층 · 문의: 교회 오픈채팅방</p>
   </section>
 </main>
+
+<dialog class="wdlg" id="wDlg" aria-label="단어 뜻">
+  <div id="wDlgBody"></div>
+  <div class="row"><button class="btn acc sm" type="button" id="wDlgSave">단어장에 넣기</button><button class="btn sm" type="button" id="wDlgClose">닫기</button></div>
+</dialog>
 
 <footer>
   <div class="wrap">대한예수교장로회(백석) 더행복한교회 · <a href="#privacy">개인정보처리방침</a> · <a href="./">홈페이지</a></div>
@@ -727,13 +846,17 @@ function renderWho(){
   $("#who").innerHTML = `${av}<b>${esc(profile?.nickname || "성도")}</b><span class="lbl">님</span>
     <a href="#me" class="btn sm">내 정보</a><button class="btn sm" type="button" id="logoutBtn">로그아웃</button>`;
   $("#logoutBtn").onclick = logout;
-  $("#adminTab").hidden = !profile?.is_admin;
+  $("#adminTab").hidden = !(profile?.is_admin || profile?.areas?.length);
+  $("#teamTab").hidden = !(profile?.is_admin || profile?.teams?.length);
   $("#blockedBar").hidden = !profile?.is_blocked;
 }
 
 async function loadProfile(){
   const { data } = await sb.from("profiles").select("nickname,avatar_url,is_admin,group_id,is_blocked").eq("id", user.id).maybeSingle();
   profile = data || { nickname: "성도" };
+  const [ed, tm] = await Promise.all([sb.from("site_editors").select("area").eq("user_id", user.id), sb.from("team_members").select("team_id").eq("user_id", user.id)]);
+  profile.areas = (ed.data || []).map(x => x.area);
+  profile.teams = (tm.data || []).map(x => x.team_id);
 }
 
 /* ---------- 라우팅 ---------- */
@@ -756,7 +879,10 @@ function route(){
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; }); }
   if (p === "pray") loadPray();
   if (p === "space") loadSpace();
-  if (p === "admin") { if (profile?.is_admin) initAdmin(); else location.hash = "#write"; }
+  if (p === "admin") { if (profile?.is_admin) initAdmin(); else if (profile?.areas?.length) initEditor(); else location.hash = "#write"; }
+  if (p === "words") loadWords();
+  if (p === "fav") loadFav();
+  if (p === "team") loadTeams();
   window.scrollTo(0,0);
 }
 addEventListener("hashchange", route);
@@ -873,7 +999,8 @@ async function showVerse(){
   $("#writeArea").hidden = !!r; $("#doneArea").hidden = !r;
   if (r) {
     $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} ${r.photo_id ? "종이에 손으로 쓰셨습니다 📷" : r.cafe_name ? "네이버 카페 ‘성경 필사’에 쓰셨습니다" : "쓰셨습니다"}`;
-    $("#doneText").textContent = r.content; $("#doneText").hidden = !r.content;
+    const shown = r.content || (r.cafe_name ? text : "");
+    $("#doneText").textContent = shown; $("#doneText").hidden = !shown;
     $("#donePhotoLink").hidden = true;
     if (r.photo_id) showPhotoFor(r.photo_id);
     $("#delVerse").hidden = !(r.user_id === user.id || profile?.is_admin);
@@ -883,7 +1010,7 @@ async function showVerse(){
   $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => { const w = rows.get(i+1);
     return `<button type="button" data-v="${i+1}" class="${w ? (w.photo_id ? 'done photo' : w.user_id === user.id ? 'done mine' : 'done') : ''} ${i+1===cur.v?'cur':''}" title="${w ? esc(w.nickname) + '님' : '비어 있음'}" aria-label="${i+1}절${w ? ' (' + esc(w.nickname) + ')' : ''}">${i+1}</button>`; }).join("");
   const list = [...rows.values()].sort((a,b) => a.verse - b.verse);
-  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${r.photo_id ? '<span class="muted">(손글씨 사진)</span>' : r.content ? esc(r.content) : '<span class="muted">(네이버 카페 필사)</span>'} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
+  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${r.photo_id ? '<span class="muted">(손글씨 사진)</span>' : esc(r.content || book[cur.c-1][r.verse-1] || "")} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
 }
 $("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); if (!rows.has(cur.v)) $("#typeBox").focus(); } });
 $("#resumeBtn").onclick = async () => { await refreshRelay(); await go(nextPos); $("#typeBox").focus(); };
@@ -1071,8 +1198,18 @@ async function initReader(){
   $("#rCh").onchange = () => openReader(rCur.b, +$("#rCh").value);
   $("#rPrev").onclick = () => { const { b, c } = rCur; if (c > 1) openReader(b, c - 1); else if (b > 1) openReader(b - 1, BOOKS[b-2][1].length); };
   $("#rNext").onclick = () => { const { b, c } = rCur; if (c < BOOKS[b-1][1].length) openReader(b, c + 1); else if (b < 66) openReader(b + 1, 1); };
+  document.querySelectorAll("#rMode [data-m]").forEach(x => x.classList.toggle("on", x.dataset.m === rMode));
+  $("#rMode").onclick = e => { const x = e.target.closest("[data-m]"); if (!x) return; rMode = x.dataset.m; try { localStorage.setItem("thc-rmode", rMode); } catch {}
+    document.querySelectorAll("#rMode [data-m]").forEach(y => y.classList.toggle("on", y === x)); stopSpeak(); renderReader(); };
+  $("#rSpeak").onclick = () => speakChapter();
+  $("#rFav").onclick = () => { const [a, z] = rSel; if (!a) return toast("저장할 구절을 먼저 눌러 주세요"); saveFav(rCur.b, rCur.c, a, z || a); };
   $("#rText").onclick = e => {
-    const li = e.target.closest("li[data-v]"); if (!li) return;
+    const ew = e.target.closest(".ew"), li0 = e.target.closest("li[data-v]");
+    if (ew && li0) { const v = +li0.dataset.v; document.querySelectorAll("#rText .ew.on").forEach(x => x.classList.remove("on")); ew.classList.add("on");
+      return openWordEn(ew.textContent, `${BOOKS[rCur.b-1][0]} ${rCur.c}:${v}`, li0.querySelector(".en")?.textContent || ""); }
+    const ow = e.target.closest(".og .w");
+    if (ow && li0) { const ws = ($("#rText")._og || {})[rCur.c + ":" + li0.dataset.v] || []; return openWordOg(ws[+ow.dataset.j], rCur.b, `${BOOKS[rCur.b-1][0]} ${rCur.c}:${li0.dataset.v}`); }
+    const li = li0; if (!li) return;
     const v = +li.dataset.v;
     rSel = (rSel.length !== 1) ? [v] : [Math.min(rSel[0], v), Math.max(rSel[0], v)];
     markSel();
@@ -1097,10 +1234,168 @@ async function openReader(b, c){
   $("#rCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
   $("#rCh").value = c;
   document.querySelectorAll("#qtPlan [data-rb]").forEach(x => x.classList.toggle("on", +x.dataset.rb === b));
-  const book = await getBook(b);
-  $("#rText").innerHTML = book[c-1].map((t,i) => `<li data-v="${i+1}"><b>${i+1}</b>${esc(t)}</li>`).join("");
-  $("#rText").scrollTop = 0; markSel();
+  stopSpeak();
+  await renderReader();
+  $("#rText").scrollTop = 0;
   try { localStorage.setItem("thc-reader", JSON.stringify(rCur)); } catch {}
+}
+let rMode = (() => { try { return localStorage.getItem("thc-rmode") || "ko"; } catch { return "ko"; } })();
+const enCache = {};
+/* 영어 본문: World English Bible (공유 저작물) — npm 'world-english-bible@1.0.1'을 불러와 우리말 절 번호에 맞춤 */
+const WEB_FILES = "genesis exodus leviticus numbers deuteronomy joshua judges ruth 1samuel 2samuel 1kings 2kings 1chronicles 2chronicles ezra nehemiah esther job psalms proverbs ecclesiastes songofsolomon isaiah jeremiah lamentations ezekiel daniel hosea joel amos obadiah jonah micah nahum habakkuk zephaniah haggai zechariah malachi matthew mark luke john acts romans 1corinthians 2corinthians galatians ephesians philippians colossians 1thessalonians 2thessalonians 1timothy 2timothy titus philemon hebrews james 1peter 2peter 1john 2john 3john jude revelation".split(" ");
+function webFix(t){
+  t = t.replace(/\s+/g, " ").trim().replace(/Lord Yahweh/g, "Lord GOD").replace(/(^|[“‘(]\s*)Yahweh(?=,)/g, "$1LORD").replace(/\bO Yahweh\b/g, "O LORD").replace(/\bYahweh\b/g, "the LORD").replace(/\b[Tt]he the LORD\b/g, "the LORD");
+  return t.replace(/(^|[.!?]\s+|[.!?]?[“‘(]\s*)the LORD/g, "$1The LORD");
+}
+async function webRaw(b){
+  for (const u of [`https://cdn.jsdelivr.net/npm/world-english-bible@1.0.1/json/${WEB_FILES[b-1]}.json`, `https://unpkg.com/world-english-bible@1.0.1/json/${WEB_FILES[b-1]}.json`]) {
+    try { const r = await fetch(u); if (r.ok) return await r.json(); } catch {}
+  }
+  throw new Error("영어 본문을 불러오지 못했습니다");
+}
+function getEn(b){
+  if (!enCache[b]) enCache[b] = Promise.all([webRaw(b), ensureBooks()]).then(([d]) => {
+    const V = {};
+    for (const x of d) if (x.verseNumber && x.value) { const k = x.chapterNumber + ":" + x.verseNumber; V[k] = (V[k] || "") + x.value; }
+    const out = BOOKS[b-1][1].map((n, ci) => { const c = ci + 1, ch = [];
+      for (let v = 1; v <= n; v++) ch.push(webFix(V[c + ":" + v] || ""));
+      for (let v = n + 1; V[c + ":" + v]; v++) ch[n-1] += " " + webFix(V[c + ":" + v]);
+      return ch; });
+    if (b === 45) { out[13][22] = webFix(V["14:23"] || ""); [25, 26, 27].forEach(v => { if (!out[15][v-1]) out[15][v-1] = webFix(V["14:" + (v - 1)] || ""); }); }
+    return out;
+  }).catch(e => { delete enCache[b]; throw e; });
+  return enCache[b];
+}
+const EW = /[A-Za-z]+(?:['’][A-Za-z]+)?/g;
+function enWords(t){ let out = "", i = 0; String(t || "").replace(EW, (m, at) => { out += esc(t.slice(i, at)) + `<span class="ew">${m}</span>`; i = at + m.length; return m; }); return out + esc(String(t || "").slice(i)); }
+async function renderReader(){
+  const { b, c } = rCur, mode = rMode, el = $("#rText"), ot = b <= 39;
+  el.className = "rtext " + mode;
+  const ko = (await getBook(b))[c-1];
+  let en = null, og = null;
+  if (mode === "koen" || mode === "en") { try { en = (await getEn(b))[c-1]; } catch { toast("영어 본문을 불러오지 못했습니다"); } }
+  if (mode === "og") { el.innerHTML = '<li class="muted">원문을 불러오는 중… (처음 한 번은 조금 걸립니다)</li>'; try { og = await origBook(b); } catch (e) { toast(e.message); } }
+  if (rCur.b !== b || rCur.c !== c || rMode !== mode) return;
+  el._og = og;
+  el.innerHTML = ko.map((t, i) => { const v = i + 1;
+    return `<li data-v="${v}"><b>${v}</b><span class="ko">${esc(t)}</span>${en ? `<span class="en">${enWords(en[i] || "—")}</span>` : ""}${og ? `<span class="og orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}>${(og[c + ":" + v] || []).map((w, j) => `<button type="button" class="w" data-j="${j}">${esc(w.t)}</button>`).join("")}</span>` : ""}</li>`; }).join("");
+  markSel();
+  $("#rListen").hidden = !en;
+  $("#rHint").textContent = mode === "ko" ? "마음에 닿는 구절을 누르면 표시됩니다. 처음 구절과 끝 구절을 차례로 누르고 ‘읽은 본문에 넣기’를 누르면 아래 칸에 자동으로 적힙니다."
+    : mode === "og" ? "원어 단어를 누르면 사전형, 한글 발음, 뜻이 나옵니다. 구절 번호 쪽을 누르면 구절이 선택됩니다."
+    : "영어 단어를 누르면 발음과 뜻이 나오고 단어장에 넣을 수 있습니다. 단어가 아닌 곳을 누르면 구절이 선택됩니다.";
+}
+
+/* ---------- 소리로 듣기 ---------- */
+const canSpeak = "speechSynthesis" in window;
+function pickVoice(lang){ const vs = canSpeak ? speechSynthesis.getVoices() : [], l = lang.toLowerCase(); return vs.find(v => v.lang.replace("_", "-").toLowerCase() === l) || vs.find(v => v.lang.toLowerCase().startsWith(l.slice(0, 2))); }
+if (canSpeak) speechSynthesis.getVoices();
+function say(text, lang, rate){
+  if (!canSpeak) return toast("이 브라우저는 소리 읽기를 지원하지 않습니다");
+  const v = pickVoice(lang);
+  if (!v && lang !== "en-US") return toast(lang.startsWith("el") ? "이 기기에는 그리스어 읽기 음성이 없습니다" : "이 기기에는 히브리어 읽기 음성이 없습니다");
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text); u.lang = lang; if (v) u.voice = v; u.rate = rate || 0.85;
+  speechSynthesis.speak(u);
+}
+function stopSpeak(){ if (canSpeak) speechSynthesis.cancel(); document.querySelectorAll("#rText li.speak").forEach(x => x.classList.remove("speak")); if ($("#rSpeak")) $("#rSpeak").textContent = "🔊 영어로 듣기"; }
+function speakChapter(){
+  if (!canSpeak) return toast("이 브라우저는 소리 읽기를 지원하지 않습니다");
+  if (speechSynthesis.speaking) return stopSpeak();
+  const [a, z] = rSel, items = [...document.querySelectorAll("#rText li[data-v]")].filter(li => !a || (+li.dataset.v >= a && +li.dataset.v <= (z || a)));
+  const v = pickVoice("en-US"), rate = +$("#rRate").value;
+  items.forEach((li, k) => {
+    const t = li.querySelector(".en")?.textContent; if (!t || t === "—") return;
+    const u = new SpeechSynthesisUtterance(t); u.lang = "en-US"; if (v) u.voice = v; u.rate = rate;
+    u.onstart = () => { document.querySelectorAll("#rText li.speak").forEach(x => x.classList.remove("speak")); li.classList.add("speak"); const box = $("#rText"); box.scrollTop = li.offsetTop - box.offsetTop - 40; };
+    if (k === items.length - 1) u.onend = () => stopSpeak();
+    speechSynthesis.speak(u);
+  });
+  $("#rSpeak").textContent = "■ 멈추기";
+}
+
+/* ---------- 단어 뜻 (영어 · 헬라어 · 히브리어) ---------- */
+const dictCache = {};
+function dict(k){ if (!dictCache[k]) dictCache[k] = fetch(`dict/${k}.json`).then(r => r.ok ? r.json() : {}).catch(() => ({})); return dictCache[k]; }
+let wCur = null, myVocab = null;
+async function vocabKeys(){ if (!user) return new Set(); if (!myVocab) { const { data } = await sb.from("vocab").select("lang,key"); myVocab = new Set((data || []).map(x => x.lang + ":" + x.key)); } return myVocab; }
+const LANG_NM = { en: "영어", G: "헬라어", H: "히브리어" }, TTS_LANG = { en: "en-US", G: "el-GR", H: "he-IL" };
+function enLookup(D, w){
+  const k = w.toLowerCase().replace(/’/g, "'");
+  const tries = [k, k.replace(/'s$/, ""), k.replace(/s$/, ""), k.replace(/es$/, ""), k.replace(/ies$/, "y"), k.replace(/ed$/, ""), k.replace(/d$/, ""), k.replace(/ing$/, ""), k.replace(/ing$/, "e")];
+  for (const t of tries) if (D[t]) return [t, D[t]];
+  return [k, null];
+}
+async function openWordEn(raw, ref, sentence){
+  const dlg = $("#wDlg"); $("#wDlgBody").innerHTML = '<p class="muted sm">찾는 중…</p>'; if (!dlg.open) dlg.showModal();
+  try {
+    const D = await dict("en"), [key, e] = enLookup(D, raw);
+    wCur = { lang: "en", key, word: key, ipa: e?.[0] || "", pron: e?.[1] || "", meaning: e?.[2] || "", ref: ref || "", sentence: (sentence || "").slice(0, 600) };
+    renderWord(raw);
+    if (!e) moreEn();
+  } catch (err) { $("#wDlgBody").innerHTML = `<p class="msg err">${esc(err.message)}</p>`; }
+}
+async function openWordOg(w, b, ref){
+  if (!w) return;
+  const dlg = $("#wDlg"), ot = b <= 39, lang = ot ? "H" : "G"; $("#wDlgBody").innerHTML = '<p class="muted sm">사전을 찾는 중… (처음 한 번은 조금 걸립니다)</p>'; if (!dlg.open) dlg.showModal();
+  try {
+    const [L, D] = await Promise.all([lex(lang), dict(lang)]), s = w.s[0], e = s ? L[s] : null, k = s ? D[s] : null;
+    wCur = { lang, key: s || "", word: e?.lemma || w.t, form: w.t, ipa: e ? (e.xlit || e.translit || "") : "", pron: k?.[0] || "", meaning: k?.[1] || "", ref: ref || "", sentence: "",
+      morph: ot ? hbMorph(w.m) : gkMorph(w.m), def: e ? ((e.strongs_def || "").trim() + (e.kjv_def ? " / KJV: " + e.kjv_def.trim() : "")) : "", rest: w.s.slice(1) };
+    renderWord(w.t);
+  } catch (err) { $("#wDlgBody").innerHTML = `<p class="msg err">${esc(err.message)}</p>`; }
+}
+async function renderWord(shown){
+  const w = wCur, og = w.lang !== "en", lg = w.lang === "H" ? 'lang="he" dir="rtl"' : w.lang === "G" ? 'lang="grc"' : 'lang="en"';
+  const hl = w.sentence ? esc(w.sentence).replace(new RegExp("\\b(" + shown.replace(/[^A-Za-z'’]/g, "") + ")\\b", "i"), "<b>$1</b>") : "";
+  $("#wDlgBody").innerHTML = `<div class="sm muted">${LANG_NM[w.lang]}${w.ref ? " · " + esc(w.ref) : ""}</div>
+    <div class="wd-w" ${lg}><span>${esc(og ? w.word : shown)}</span><button class="say" type="button" data-say title="소리 듣기">🔊</button></div>
+    ${og && w.form && w.form !== w.word ? `<div class="wd-p">본문의 형태: <span ${lg}>${esc(w.form)}</span></div>` : ""}
+    <div class="wd-p">${w.ipa ? (og ? "음역 " : "발음기호 ") + esc(og ? w.ipa : "[" + w.ipa + "]") + " · " : ""}${w.pron ? `한글 발음 <b>${esc(w.pron)}</b>` : ""}</div>
+    <div class="wd-m">${w.meaning ? esc(w.meaning) : '<span class="muted">우리말 풀이가 아직 없는 단어입니다.</span>'}</div>
+    ${og && w.morph ? `<div class="wd-x">문법: ${esc(w.morph)}</div>` : ""}
+    ${og && w.def ? `<details class="wd-x"><summary>스트롱 사전 (영어)</summary>${esc(w.def)}</details>` : ""}
+    ${og && w.key ? `<div class="wd-x">스트롱 번호 ${esc(w.key)}${w.rest?.length ? " (함께 붙은 말: " + esc(w.rest.join(", ")) + ")" : ""} · <a target="_blank" rel="noopener" href="https://biblehub.com/${w.lang === "H" ? "hebrew" : "greek"}/${esc(w.key.slice(1))}.htm">이 단어가 쓰인 곳</a></div>` : ""}
+    ${og ? `<div class="wd-x">🔊는 휴대폰·컴퓨터의 읽어 주기 기능으로 현대 ${w.lang === "H" ? "히브리어" : "그리스어"} 발음입니다. 한글 발음을 함께 참고하세요.</div>` : ""}
+    ${hl ? `<div class="wd-s">${hl}</div>` : ""}
+    ${!og ? `<div class="row"><button class="btn sm" type="button" data-more>영영사전 뜻 더 보기</button><a class="btn sm" target="_blank" rel="noopener" href="https://en.dict.naver.com/#/search?query=${encodeURIComponent(w.key)}">네이버 사전</a></div><div id="wMore"></div>` : ""}`;
+  const btn = $("#wDlgSave"); btn.disabled = !w.key; btn.textContent = "단어장에 넣기";
+  if (user && w.key && (await vocabKeys()).has(w.lang + ":" + w.key)) { btn.disabled = true; btn.textContent = "단어장에 있음 ✓"; }
+}
+async function moreEn(){
+  const box = $("#wMore"); if (!box || !wCur) return;
+  box.innerHTML = '<p class="muted sm">영영사전을 찾는 중…</p>';
+  try {
+    const r = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(wCur.key)); if (!r.ok) throw 0;
+    const d = (await r.json())[0], ph = (d.phonetics || []).find(x => x.audio) || {}, defs = [];
+    (d.meanings || []).forEach(m => (m.definitions || []).slice(0, 2).forEach(x => defs.length < 4 && defs.push(`<li><i>${esc(m.partOfSpeech)}</i> ${esc(x.definition)}</li>`)));
+    if (!wCur.ipa && (d.phonetic || ph.text)) wCur.ipa = (d.phonetic || ph.text).replace(/^\/|\/$/g, "");
+    box.innerHTML = `<ul class="wd-x" style="padding-left:1.2em;margin:8px 0 0">${defs.join("")}</ul>${ph.audio ? `<button class="btn sm" type="button" data-audio="${esc(ph.audio)}">▶ 원어민 발음 듣기</button>` : ""}<p class="wd-x">출처: Wiktionary (Free Dictionary API)</p>`;
+  } catch { box.innerHTML = '<p class="muted sm">영영사전에서 찾지 못했습니다.</p>'; }
+}
+$("#wDlg").addEventListener("click", e => {
+  if (e.target === $("#wDlg")) return $("#wDlg").close();
+  if (e.target.closest("[data-say]") && wCur) return say(wCur.lang === "en" ? wCur.key : wCur.word, TTS_LANG[wCur.lang], wCur.lang === "en" ? 0.8 : 0.75);
+  if (e.target.closest("[data-more]")) return moreEn();
+  const au = e.target.closest("[data-audio]"); if (au) new Audio(au.dataset.audio).play().catch(() => toast("소리를 재생하지 못했습니다"));
+});
+$("#wDlgClose").onclick = () => $("#wDlg").close();
+$("#wDlgSave").onclick = async () => {
+  if (!user) return toast("로그인하면 단어장에 넣을 수 있습니다");
+  const w = wCur; if (!w?.key) return;
+  const row = { user_id: user.id, lang: w.lang, key: w.key.slice(0, 60), word: w.word.slice(0, 80), ipa: (w.ipa || "").slice(0, 80), pron: (w.pron || "").slice(0, 80), meaning: (w.meaning || "").slice(0, 300), ref: (w.ref || "").slice(0, 40), sentence: w.sentence || "" };
+  const { error } = await sb.from("vocab").insert(row);
+  if (error && error.code !== "23505") return toast("넣지 못했습니다: " + error.message);
+  (await vocabKeys()).add(w.lang + ":" + w.key); wordsDirty = true;
+  $("#wDlgSave").disabled = true; $("#wDlgSave").textContent = "단어장에 있음 ✓"; toast("단어장에 넣었습니다");
+};
+
+/* ---------- 내 말씀 저장 ---------- */
+async function saveFav(b, c, v1, v2){
+  if (!user) return toast("로그인하면 말씀을 저장할 수 있습니다");
+  const { error } = await sb.from("fav_verses").insert({ user_id: user.id, book: b, chapter: c, v1, v2 });
+  if (error && error.code !== "23505") return toast("저장하지 못했습니다: " + error.message);
+  favDirty = true; toast(error ? "이미 저장한 말씀입니다" : "♡ 내 말씀에 저장했습니다");
 }
 
 /* ---------- 나의 큐티 ---------- */
@@ -1326,7 +1621,15 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); await loadMembers(); loadMod();
+}
+function initEditor(){
+  const a = profile.areas || [];
+  document.querySelector('section[data-page="admin"] .phead p').textContent = "맡겨 주신 부분(" + a.map(x => AREA_NM[x]).join(", ") + ")을 고치면 홈페이지에 바로 반영됩니다.";
+  document.querySelectorAll('section[data-page="admin"] > .card').forEach(c => { c.hidden = !(c.dataset.area && a.includes(c.dataset.area)); });
+  if (a.includes("sermons")) loadSermonsAdm();
+  if (a.includes("news")) loadNewsAdm();
+  if (a.includes("prayer")) loadPrayerAdm();
 }
 /* 분기별 통독 범위 관리 */
 const BOOK_ALIAS = { "요한서신": [62, 63, 64], "사무엘상하": [9, 10], "사무엘상·하": [9, 10], "열왕기상하": [11, 12], "열왕기상·하": [11, 12], "역대상하": [13, 14], "역대상·하": [13, 14], "고린도전후서": [46, 47], "데살로니가전후서": [52, 53], "디모데전후서": [54, 55], "베드로전후서": [60, 61], "모세오경": [1, 2, 3, 4, 5], "소선지서": [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] };
@@ -1722,7 +2025,6 @@ async function initStudy(ref){
     $("#sBook").onchange = () => openStudy(+$("#sBook").value, 1);
     $("#sCh").onchange = () => openStudy(sCur.b, +$("#sCh").value);
   }
-  loadRecentNotes();
   if (ref) {
     const [b, c, v] = ref;
     if (b >= 1 && b <= 66 && c >= 1 && c <= BOOKS[b-1][1].length) return openStudy(b, c, v >= 1 && v <= BOOKS[b-1][1][c-1] ? v : null);
@@ -1734,10 +2036,10 @@ async function openStudy(b, c, v){
   $("#sBook").value = b;
   $("#sCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
   $("#sCh").value = c;
-  const [book, notes] = await Promise.all([getBook(b), sb.from("verse_notes").select("id,v_from,v_to,title,body,created_at").eq("book", b).eq("chapter", c).order("v_from")]);
-  sNotes = notes.data || [];
-  $("#sList").innerHTML = book[c-1].map((t,i) => { const n = i + 1, has = sNotes.some(x => x.v_from <= n && n <= x.v_to);
-    return `<li data-v="${n}"><button type="button" class="sv"><b>${n}</b>${esc(t)}${has ? ' <span class="badge">해설</span>' : ""}</button><div class="spanel" hidden></div></li>`; }).join("");
+  const book = await getBook(b);
+  sNotes = [];
+  $("#sList").innerHTML = book[c-1].map((t,i) => { const n = i + 1;
+    return `<li data-v="${n}"><button type="button" class="sv"><b>${n}</b>${esc(t)}</button><div class="spanel" hidden></div></li>`; }).join("");
   if (v) { const li = document.querySelector(`#sList li[data-v="${v}"]`); if (li) { openPanel(li); setTimeout(() => li.scrollIntoView({ block: "start", behavior: "smooth" }), 50); } }
 }
 function commLinks(b, c, v){
@@ -1759,9 +2061,10 @@ async function openPanel(li){
   const v = +li.dataset.v, { b, c } = sCur, ot = b <= 39, notes = sNotes.filter(x => x.v_from <= v && v <= x.v_to);
   p.innerHTML = `<div class="sec"><h3>원어 <small>${ot ? "히브리어" : "헬라어"} · 단어를 누르면 뜻이 나옵니다</small></h3>
       <div class="orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}><span class="muted sm">원문을 불러오는 중…</span></div><div class="wcard" hidden></div></div>
-    <div class="sec nsec"><h3>목사님 해설</h3>${notes.length ? notes.map(noteHtml).join("") : '<p class="muted sm">아직 이 구절의 해설이 없습니다.</p>'}
-      ${profile?.is_admin ? '<button class="btn sm acc" type="button" data-nadd>이 구절 해설 쓰기</button>' : ""}</div>
+    <div class="sec"><h3>영어 <small>World English Bible · 단어를 누르면 발음과 뜻</small></h3><p class="enline"><span class="muted sm">불러오는 중…</span></p></div>
+    <div class="row"><button class="btn sm" type="button" data-sfav>♡ 내 말씀에 저장</button></div>
     <div class="sec"><h3>옛 주석 <small>저작권이 끝난 고전 주석 · 영어 · 새 창</small></h3><div class="links">${commLinks(b, c, v)}</div></div>`;
+  getEn(b).then(en => { p.querySelector(".enline").innerHTML = enWords(en[c-1]?.[v-1] || "—"); }).catch(() => { p.querySelector(".enline").innerHTML = '<span class="muted sm">영어 본문을 불러오지 못했습니다.</span>'; });
   try {
     const ws = (await origBook(b))[c + ":" + v] || [];
     p._words = ws;
@@ -1811,7 +2114,9 @@ $("#sList").addEventListener("click", async e => {
   const li = e.target.closest("li[data-v]"); if (!li) return;
   const p = li.querySelector(".spanel"), v = +li.dataset.v, t = e.target;
   if (t.closest(".sv")) return openPanel(li);
-  const w = t.closest(".w"); if (w) return showWord(p, +w.dataset.i);
+  const w = t.closest(".w"); if (w) { p.querySelectorAll(".w").forEach(x => x.classList.toggle("on", x === w)); return openWordOg(p._words[+w.dataset.i], sCur.b, `${BOOKS[sCur.b-1][0]} ${sCur.c}:${v}`); }
+  const ew = t.closest(".ew"); if (ew) return openWordEn(ew.textContent, `${BOOKS[sCur.b-1][0]} ${sCur.c}:${v}`, p.querySelector(".enline").textContent);
+  if (t.closest("[data-sfav]")) return saveFav(sCur.b, sCur.c, v, v);
   if (t.closest("[data-nadd]")) return noteForm(p, v, null);
   const ed = t.closest("[data-nedit]"); if (ed) return noteForm(p, v, sNotes.find(n => String(n.id) === ed.dataset.nedit));
   if (t.closest("[data-ncancel]")) return t.closest("form").remove();
@@ -1828,6 +2133,286 @@ async function loadRecentNotes(){
   $("#noteRecentBox").hidden = !(data && data.length);
   $("#noteRecent").innerHTML = (data || []).map(n => `<li><a href="#study-${n.book}-${n.chapter}-${n.v_from}">${esc(BOOKS[n.book-1][0])} ${n.chapter}:${n.v_from}${n.v_to > n.v_from ? "-" + n.v_to : ""}</a>${esc(n.title || "")} <span class="muted sm">${fmtDate(n.created_at)}</span></li>`).join("");
 }
+
+/* ---------- 단어장 ---------- */
+let wordsDirty = true, words = [], wTab = "all", drill = null;
+async function loadWords(){
+  if (wordsDirty) {
+    const { data, error } = await sb.from("vocab").select("*").order("created_at", { ascending: false });
+    if (error) { $("#wList").innerHTML = `<li class="msg err">불러오지 못했습니다: ${esc(error.message)}</li>`; return; }
+    words = data || []; wordsDirty = false; myVocab = new Set(words.map(x => x.lang + ":" + x.key));
+  }
+  renderWords();
+}
+function wFiltered(){
+  const l = words.filter(x => wTab === "all" || x.lang === wTab), k = $("#wSort").value;
+  if (k === "miss") l.sort((a, b) => b.miss - a.miss || (a.last_seen || "").localeCompare(b.last_seen || ""));
+  else if (k === "abc") l.sort((a, b) => (a.lang === "en" ? a.word : a.pron || a.word).localeCompare(b.lang === "en" ? b.word : b.pron || b.word, "ko"));
+  return l;
+}
+const vLang = x => x.lang === "H" ? 'lang="he" dir="rtl"' : x.lang === "G" ? 'lang="grc"' : 'lang="en"';
+function renderWords(){
+  const cnt = l => words.filter(x => l === "all" || x.lang === l).length;
+  $("#wTabs").innerHTML = [["all", "전체"], ["en", "영어"], ["G", "헬라어"], ["H", "히브리어"]].map(([k, n]) => `<button type="button" data-wt="${k}" class="${wTab === k ? "on" : ""}">${n} ${cnt(k)}</button>`).join("");
+  const l = wFiltered();
+  $("#wDrill").disabled = !l.length;
+  $("#wList").innerHTML = l.map(x => `<li data-id="${x.id}">
+      <span class="vw" ${vLang(x)}>${esc(x.word)}</span>
+      <span class="vi"><b>${esc(x.meaning || "(뜻을 적어 보세요)")}</b><small>${[x.ipa && (x.lang === "en" ? "[" + x.ipa + "]" : x.ipa), x.pron, LANG_NM[x.lang], x.ref, x.miss ? `틀린 횟수 ${x.miss}` : ""].filter(Boolean).map(esc).join(" · ")}</small></span>
+      <span class="va"><button class="say" type="button" data-wsay title="소리 듣기">🔊</button><button class="btn sm" type="button" data-wedit>뜻 고치기</button><button class="btn sm acc" type="button" data-wdel>외웠어요</button></span>
+    </li>`).join("") || `<li class="muted sm">${words.length ? "이 언어의 단어가 없습니다." : "아직 넣은 단어가 없습니다. 말씀을 읽다가 모르는 단어를 눌러 단어장에 넣어 보세요."}</li>`;
+}
+$("#wTabs").onclick = e => { const b = e.target.closest("[data-wt]"); if (!b) return; wTab = b.dataset.wt; renderWords(); };
+$("#wSort").onchange = renderWords;
+let wUndo = null;
+async function delWord(x, silent){
+  const { error } = await sb.from("vocab").delete().eq("id", x.id);
+  if (error) return toast("지우지 못했습니다: " + error.message);
+  words = words.filter(y => y.id !== x.id); myVocab?.delete(x.lang + ":" + x.key);
+  if (!silent) { wUndo = x; undoToast(`‘${x.word}’ 외웠어요! 단어장에서 뺐습니다`); }
+}
+function undoToast(t){
+  document.querySelectorAll(".toast").forEach(x => x.remove());
+  const el = document.createElement("div"); el.className = "toast"; el.innerHTML = `${esc(t)} <button class="linkbtn" type="button" style="color:inherit;margin-left:8px">되돌리기</button>`;
+  el.querySelector("button").onclick = async () => { el.remove(); const x = wUndo; if (!x) return; const { id, ...row } = x; const { data, error } = await sb.from("vocab").insert(row).select().single(); if (error) return toast("되돌리지 못했습니다"); words.unshift(data); myVocab?.add(x.lang + ":" + x.key); renderWords(); };
+  document.body.appendChild(el); setTimeout(() => el.remove(), 5000);
+}
+$("#wList").onclick = async e => {
+  const li = e.target.closest("li[data-id]"); if (!li) return;
+  const x = words.find(y => String(y.id) === li.dataset.id); if (!x) return;
+  if (e.target.closest("[data-wsay]")) return say(x.lang === "en" ? x.key : x.word, TTS_LANG[x.lang], x.lang === "en" ? 0.8 : 0.75);
+  if (e.target.closest("[data-wdel]")) { await delWord(x); return renderWords(); }
+  if (e.target.closest("[data-wedit]")) {
+    if (li.querySelector(".vm")) return li.querySelector(".vm").remove();
+    li.insertAdjacentHTML("beforeend", `<span class="vm"><input type="text" maxlength="300" value="${esc(x.meaning)}" aria-label="내가 적는 뜻"><button class="btn sm acc" type="button" data-wsave>저장</button></span>`);
+    return li.querySelector(".vm input").focus();
+  }
+  if (e.target.closest("[data-wsave]")) {
+    const m = li.querySelector(".vm input").value.trim();
+    const { error } = await sb.from("vocab").update({ meaning: m }).eq("id", x.id);
+    if (error) return toast("저장하지 못했습니다: " + error.message);
+    x.meaning = m; renderWords(); toast("뜻을 고쳤습니다");
+  }
+};
+/* 암기 연습 */
+$("#wDrill").onclick = () => {
+  const l = wFiltered().slice().sort((a, b) => (b.miss - a.miss) || (a.last_seen || "").localeCompare(b.last_seen || "")).slice(0, 20).sort(() => Math.random() - .5);
+  if (!l.length) return;
+  drill = { q: l, i: 0, known: 0, again: 0, total: l.length, rev: $("#wRev").checked, shown: false };
+  $("#wCard").hidden = false; drawCard(); $("#wCard").scrollIntoView({ block: "center", behavior: "smooth" });
+};
+function drawCard(){
+  const d = drill, box = $("#wCard");
+  if (d.i >= d.q.length) {
+    box.innerHTML = `<p class="dq kor">수고했어요! 🎉</p><p>외운 단어 ${d.known}개는 단어장에서 뺐고, 아직 모르는 ${d.again}개는 남겨 두었습니다.</p><div class="row"><button class="btn acc" type="button" data-dagain>한 번 더</button><button class="btn" type="button" data-dend>마치기</button></div>`;
+    return renderWords();
+  }
+  const x = d.q[d.i], front = d.rev ? `<p class="dq kor">${esc(x.meaning || "(뜻 없음)")}</p>` : `<p class="dq" ${vLang(x)}>${esc(x.word)}</p>`;
+  const back = `<div class="da"><p class="dq ${d.rev ? "" : "kor"}" ${d.rev ? vLang(x) : ""}>${esc(d.rev ? x.word : x.meaning || "(뜻 없음)")}</p>
+    <p class="muted">${[x.ipa && (x.lang === "en" ? "[" + x.ipa + "]" : x.ipa), x.pron].filter(Boolean).map(esc).join(" · ")}</p>
+    ${x.sentence ? `<p class="wd-s" style="text-align:left">${esc(x.sentence)}</p>` : ""}${x.ref ? `<p class="dp">${esc(x.ref)}</p>` : ""}</div>`;
+  box.innerHTML = `<p class="dp">${d.i + 1} / ${d.q.length} · ${LANG_NM[x.lang]}</p>${front}
+    ${d.shown ? back + `<div class="row"><button class="btn acc" type="button" data-dknow>외웠어요 (단어장에서 빼기)</button><button class="btn" type="button" data-dagain1>아직 몰라요 (다시 보기)</button></div>`
+      : `<div class="row"><button class="say" type="button" data-dsay>🔊</button><button class="btn acc" type="button" data-dshow>${d.rev ? "단어 보기" : "뜻 보기"}</button></div>`}
+    <div class="row"><button class="linkbtn sm" type="button" data-dend>연습 그만하기</button></div>`;
+  if (!d.rev && !d.shown && x.lang === "en") say(x.key, "en-US", 0.8);
+}
+$("#wCard").onclick = async e => {
+  const d = drill; if (!d) return; const x = d.q[d.i], t = e.target;
+  if (t.closest("[data-dsay]")) return say(x.lang === "en" ? x.key : x.word, TTS_LANG[x.lang], x.lang === "en" ? 0.8 : 0.75);
+  if (t.closest("[data-dshow]")) { d.shown = true; if (d.rev && x.lang === "en") say(x.key, "en-US", 0.8); return drawCard(); }
+  if (t.closest("[data-dknow]")) { d.known++; await delWord(x, true); d.q = d.q.filter((y, k) => k <= d.i || y !== x); d.i++; d.shown = false; renderWords(); return drawCard(); }
+  if (t.closest("[data-dagain1]")) {
+    d.again++; const now = new Date().toISOString();
+    sb.from("vocab").update({ miss: x.miss + 1, seen: x.seen + 1, last_seen: now }).eq("id", x.id).then(() => {});
+    x.miss++; x.seen++; x.last_seen = now;
+    if (d.q.filter(y => y === x).length < 2) d.q.push(x);
+    d.i++; d.shown = false; return drawCard();
+  }
+  if (t.closest("[data-dagain]")) return $("#wDrill").click();
+  if (t.closest("[data-dend]")) { drill = null; $("#wCard").hidden = true; renderWords(); }
+};
+
+/* ---------- 내 말씀 ---------- */
+let favDirty = true, favs = [];
+const favRef = f => `${BOOKS[f.book-1][0]} ${f.chapter}:${f.v1}${f.v2 > f.v1 ? "-" + f.v2 : ""}`;
+async function favText(f, en){ const bk = await (en ? getEn(f.book) : getBook(f.book)); return (bk[f.chapter-1] || []).slice(f.v1 - 1, f.v2).join(" "); }
+async function loadFav(){
+  await ensureBooks();
+  if (favDirty) {
+    const { data, error } = await sb.from("fav_verses").select("*").order("created_at", { ascending: false });
+    if (error) { $("#fList").innerHTML = `<li class="msg err">불러오지 못했습니다: ${esc(error.message)}</li>`; return; }
+    favs = data || []; favDirty = false;
+    for (const f of favs) f.ko = await favText(f, false);
+  }
+  if ($("#fEn").checked) for (const f of favs) if (f.en == null) f.en = await favText(f, true).catch(() => "");
+  pickFav(); renderFav();
+}
+function pickFav(){
+  const box = $("#fPick"); box.hidden = favs.length < 2; if (box.hidden) return;
+  const f = favs[Math.floor(Math.random() * favs.length)];
+  box.innerHTML = `<div class="sm muted">오늘 마음에 새길 내 말씀</div><p class="fv">“${esc(f.ko)}”</p><div class="row" style="margin-top:0"><b class="sm">${esc(favRef(f))}</b><button class="btn sm" type="button" id="fPickNext">다른 말씀</button></div>`;
+  $("#fPickNext").onclick = pickFav;
+}
+function renderFav(){
+  const q = $("#fFind").value.trim(), en = $("#fEn").checked;
+  const l = favs.filter(f => !q || (f.ko + " " + f.note + " " + favRef(f) + " " + (f.en || "")).includes(q));
+  $("#fList").innerHTML = l.map(f => `<li data-id="${f.id}">
+      <div class="author"><b style="color:var(--accent)">${esc(favRef(f))}</b><span>· ${fmtDate(f.created_at)}</span></div>
+      <div class="fv-k">${esc(f.ko)}</div>${en && f.en ? `<div class="fv-e">${esc(f.en)}</div>` : ""}
+      ${f.note ? `<p class="body sm" style="margin-top:6px">📝 ${esc(f.note)}</p>` : ""}
+      <div class="acts"><button class="btn sm" type="button" data-fnote>${f.note ? "메모 고치기" : "메모 쓰기"}</button><button class="btn sm" type="button" data-fread>앞뒤 읽기</button><a class="btn sm" href="#study-${f.book}-${f.chapter}-${f.v1}">원어 · 주석</a><button class="btn sm" type="button" data-fcopy>복사</button><button class="btn sm warn" type="button" data-fdel>지우기</button></div>
+    </li>`).join("") || `<li class="muted sm">${favs.length ? "찾는 말씀이 없습니다." : "아직 저장한 말씀이 없습니다. 나의 큐티 › 말씀 읽기에서 구절을 누르고 ‘♡ 내 말씀에 저장’을 눌러 보세요."}</li>`;
+}
+$("#fFind").oninput = renderFav;
+$("#fEn").onchange = loadFav;
+$("#fList").onclick = async e => {
+  const li = e.target.closest("li[data-id]"); if (!li) return;
+  const f = favs.find(x => String(x.id) === li.dataset.id); if (!f) return; const t = e.target;
+  if (t.closest("[data-fread]")) { location.hash = "#qt"; await initReader(); await openReader(f.book, f.chapter); rSel = [f.v1, f.v2]; markSel(); const x = document.querySelector(`#rText li[data-v="${f.v1}"]`); if (x) { $("#rText").scrollTop = x.offsetTop - $("#rText").offsetTop; $("#qtReader").scrollIntoView({ block: "start" }); } return; }
+  if (t.closest("[data-fcopy]")) { try { await navigator.clipboard.writeText(`${f.ko}\n(${favRef(f)})`); toast("복사했습니다"); } catch { toast("복사하지 못했습니다"); } return; }
+  if (t.closest("[data-fnote]")) {
+    if (li.querySelector(".fnote")) return li.querySelector(".fnote").remove();
+    li.insertAdjacentHTML("beforeend", `<div class="fnote" style="margin-top:8px"><textarea rows="3" maxlength="2000" placeholder="이 말씀이 왜 마음에 닿았는지 적어 보세요">${esc(f.note)}</textarea><div class="row"><button class="btn sm acc" type="button" data-fsave>저장</button></div></div>`);
+    return li.querySelector(".fnote textarea").focus();
+  }
+  if (t.closest("[data-fsave]")) {
+    const note = li.querySelector(".fnote textarea").value.trim();
+    const { error } = await sb.from("fav_verses").update({ note }).eq("id", f.id);
+    if (error) return toast("저장하지 못했습니다: " + error.message);
+    f.note = note; renderFav(); return toast("메모를 저장했습니다");
+  }
+  const del = t.closest("[data-fdel]");
+  if (del) {
+    if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+    const { error } = await sb.from("fav_verses").delete().eq("id", f.id);
+    if (error) return toast("지우지 못했습니다: " + error.message);
+    favs = favs.filter(x => x !== f); pickFav(); renderFav(); toast("지웠습니다");
+  }
+};
+
+/* ---------- 모임방 (팀 회의 기록) ---------- */
+let teams = [], tCur = null, tNotes = [], tEdit = null, tNames = new Map();
+async function loadTeams(){
+  const { data, error } = await sb.from("teams").select("id,name").order("id");
+  if (error) { $("#tList").innerHTML = `<li class="msg err">불러오지 못했습니다: ${esc(error.message)}</li>`; return; }
+  teams = data || [];
+  if (!teams.length) { $("#tTabs").innerHTML = ""; $("#tForm").hidden = true; $("#tList").innerHTML = '<li class="muted sm">아직 들어간 모임방이 없습니다. 담임목사님께 팀에 넣어 달라고 말씀해 주세요.</li>'; return; }
+  $("#tForm").hidden = false;
+  if (!teams.some(t => t.id === tCur)) { let last = null; try { last = +localStorage.getItem("thc-team"); } catch {} tCur = teams.some(t => t.id === last) ? last : teams[0].id; }
+  $("#tTabs").innerHTML = teams.map(t => `<button type="button" data-tt="${t.id}" class="${t.id === tCur ? "on" : ""}">${esc(t.name)}</button>`).join("");
+  if (!$("#tDate").value) $("#tDate").value = kstToday();
+  await openTeam();
+}
+async function openTeam(){
+  const [mem, notes] = await Promise.all([
+    sb.from("team_members").select("user_id").eq("team_id", tCur),
+    sb.from("team_notes").select("*").eq("team_id", tCur).order("meet_date", { ascending: false }).order("created_at", { ascending: false }).limit(100)
+  ]);
+  tNotes = notes.data || [];
+  const ids = [...new Set([...(mem.data || []).map(x => x.user_id), ...tNotes.map(n => n.user_id), ...tNotes.map(n => n.updated_by).filter(Boolean)])];
+  const need = ids.filter(id => !tNames.has(id));
+  if (need.length) { const { data } = await sb.from("profiles").select("id,nickname").in("id", need); (data || []).forEach(p => tNames.set(p.id, p.nickname)); }
+  const nm = id => tNames.get(id) || "성도";
+  $("#tMembers").textContent = (mem.data || []).length ? "함께하는 성도: " + (mem.data || []).map(x => nm(x.user_id)).join(", ") : "";
+  $("#tList").innerHTML = tNotes.map(n => `<li data-id="${n.id}">
+      <div class="author"><span class="badge">${fmtDate(n.meet_date)}</span><span>${esc(nm(n.user_id))}${n.updated_at ? ` · ${esc(nm(n.updated_by))}님이 ${ago(n.updated_at)} 고침` : ""}</span></div>
+      <h3>${esc(n.title)}</h3>
+      ${n.attendees ? `<p class="sm muted">참석: ${esc(n.attendees)}</p>` : ""}
+      <div class="body" style="margin-top:6px">${esc(n.body)}</div>
+      <div class="acts"><button class="btn sm" type="button" data-tedit>고치기</button>${n.user_id === user.id || profile?.is_admin ? '<button class="btn sm warn" type="button" data-tdel>지우기</button>' : ""}</div>
+    </li>`).join("") || '<li class="muted sm">아직 회의 기록이 없습니다. 첫 기록을 남겨 보세요.</li>';
+}
+$("#tTabs").onclick = e => { const b = e.target.closest("[data-tt]"); if (!b) return; tCur = +b.dataset.tt; try { localStorage.setItem("thc-team", tCur); } catch {} document.querySelectorAll("#tTabs [data-tt]").forEach(x => x.classList.toggle("on", x === b)); tForm(null); openTeam(); };
+function tForm(n){
+  tEdit = n ? n.id : null;
+  $("#tFormTitle").textContent = n ? "회의 기록 고치기" : "회의 기록 쓰기";
+  $("#tDate").value = n ? n.meet_date : kstToday(); $("#tTitle").value = n?.title || ""; $("#tWho").value = n?.attendees || ""; $("#tBody").value = n?.body || "";
+  $("#tCancel").hidden = !n; $("#tMsg").textContent = "";
+}
+$("#tCancel").onclick = () => tForm(null);
+$("#tForm").onsubmit = async e => {
+  e.preventDefault();
+  const row = { meet_date: $("#tDate").value || kstToday(), title: $("#tTitle").value.trim(), attendees: $("#tWho").value.trim(), body: $("#tBody").value.trim() };
+  const m = (t, err) => { $("#tMsg").textContent = t; $("#tMsg").className = err ? "msg err" : "msg"; };
+  if (!row.title) return m("제목을 적어 주세요.", true);
+  if (!row.body) return m("회의 내용을 적어 주세요.", true);
+  const { error } = tEdit ? await sb.from("team_notes").update({ ...row, updated_at: new Date().toISOString(), updated_by: user.id }).eq("id", tEdit)
+                          : await sb.from("team_notes").insert({ ...row, team_id: tCur });
+  if (error) return m("저장하지 못했습니다: " + error.message, true);
+  toast(tEdit ? "고쳤습니다" : "저장했습니다"); tForm(null); openTeam();
+};
+$("#tList").onclick = async e => {
+  const li = e.target.closest("li[data-id]"); if (!li) return;
+  const n = tNotes.find(x => String(x.id) === li.dataset.id); if (!n) return;
+  if (e.target.closest("[data-tedit]")) { tForm(n); return $("#tForm").scrollIntoView({ block: "start", behavior: "smooth" }); }
+  const del = e.target.closest("[data-tdel]");
+  if (del) {
+    if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+    const { error } = await sb.from("team_notes").delete().eq("id", n.id);
+    if (error) return toast("지우지 못했습니다: " + error.message);
+    toast("지웠습니다"); openTeam();
+  }
+};
+
+/* ---------- 관리: 홈페이지 관리 맡기기 · 모임방 ---------- */
+const AREA_NM = { prayer: "기도제목", news: "알려드려요", sermons: "설교" };
+let allPeople = [];
+async function people(){ if (!allPeople.length) { const { data } = await sb.from("profiles").select("id,nickname").order("nickname"); allPeople = data || []; } return allPeople; }
+const pName = id => allPeople.find(p => p.id === id)?.nickname || "성도";
+async function loadEditors(){
+  const [ps, { data, error }] = await Promise.all([people(), sb.from("site_editors").select("user_id,area,created_at").order("created_at")]);
+  if (error) { $("#edList").innerHTML = `<li class="msg err">불러오지 못했습니다 (Supabase에 새 표를 만들어야 합니다)</li>`; return; }
+  $("#edWho").innerHTML = '<option value="">성도 고르기</option>' + ps.map(p => `<option value="${p.id}">${esc(p.nickname)}</option>`).join("");
+  $("#edList").innerHTML = (data || []).map(x => `<li><span class="who"><b>${esc(pName(x.user_id))}</b> — ${AREA_NM[x.area]}</span><button class="btn sm warn" type="button" data-edrm="${x.user_id}" data-area="${x.area}">그만 맡기기</button></li>`).join("") || '<li class="muted sm">아직 맡긴 성도가 없습니다.</li>';
+}
+$("#edAdd").onclick = async () => {
+  const uid = $("#edWho").value, area = $("#edArea").value;
+  if (!uid) return amsg("#edMsg", "성도를 골라 주세요.", true);
+  const { error } = await sb.from("site_editors").insert({ user_id: uid, area });
+  if (error && error.code !== "23505") return amsg("#edMsg", "맡기지 못했습니다: " + error.message, true);
+  amsg("#edMsg", `${pName(uid)}님에게 ${AREA_NM[area]} 고치기를 맡겼습니다. 그 성도가 성도마당을 새로 열면 ‘관리’ 메뉴가 보입니다.`); loadEditors();
+};
+$("#edList").onclick = async e => {
+  const b = e.target.closest("[data-edrm]"); if (!b) return;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 그만 맡깁니다"; return; }
+  const { error } = await sb.from("site_editors").delete().eq("user_id", b.dataset.edrm).eq("area", b.dataset.area);
+  if (error) return amsg("#edMsg", "바꾸지 못했습니다: " + error.message, true);
+  loadEditors();
+};
+async function loadTeamAdm(){
+  const [ps, t, m] = await Promise.all([people(), sb.from("teams").select("id,name").order("id"), sb.from("team_members").select("team_id,user_id")]);
+  if (t.error) { $("#tmAdm").innerHTML = `<li class="msg err">불러오지 못했습니다 (Supabase에 새 표를 만들어야 합니다)</li>`; return; }
+  const opts = '<option value="">성도 고르기</option>' + ps.map(p => `<option value="${p.id}">${esc(p.nickname)}</option>`).join("");
+  $("#tmAdm").innerHTML = (t.data || []).map(x => { const ms = (m.data || []).filter(y => y.team_id === x.id);
+    return `<li class="card" style="padding:12px 14px" data-team="${x.id}"><b>${esc(x.name)}</b> · ${ms.length}명
+      <div class="row" style="margin-top:6px">${ms.map(y => `<span class="badge">${esc(pName(y.user_id))} <button class="linkbtn" type="button" data-tmrm="${y.user_id}" aria-label="빼기">✕</button></span>`).join("") || '<span class="muted sm">아직 아무도 없습니다</span>'}</div>
+      <div class="row"><select data-tmwho>${opts}</select><button class="btn sm acc" type="button" data-tmadd>넣기</button><button class="btn sm warn" type="button" data-tmdel>팀 지우기</button></div></li>`; }).join("") || '<li class="muted sm">아직 만든 팀이 없습니다.</li>';
+}
+$("#tmAdd").onclick = async () => {
+  const name = $("#tmName").value.trim(); if (!name) return amsg("#tmMsg", "팀 이름을 적어 주세요.", true);
+  const { error } = await sb.from("teams").insert({ name });
+  if (error) return amsg("#tmMsg", error.code === "23505" ? "같은 이름의 팀이 있습니다." : "만들지 못했습니다: " + error.message, true);
+  $("#tmName").value = ""; amsg("#tmMsg", "팀을 만들었습니다. 성도를 넣어 주세요."); loadTeamAdm();
+};
+$("#tmAdm").onclick = async e => {
+  const li = e.target.closest("[data-team]"); if (!li) return; const tid = +li.dataset.team, t = e.target;
+  if (t.closest("[data-tmadd]")) {
+    const uid = li.querySelector("[data-tmwho]").value; if (!uid) return toast("성도를 골라 주세요");
+    const { error } = await sb.from("team_members").insert({ team_id: tid, user_id: uid });
+    if (error && error.code !== "23505") return toast("넣지 못했습니다: " + error.message);
+    toast(pName(uid) + "님을 넣었습니다"); return loadTeamAdm();
+  }
+  const rm = t.closest("[data-tmrm]");
+  if (rm) { const { error } = await sb.from("team_members").delete().eq("team_id", tid).eq("user_id", rm.dataset.tmrm); if (error) return toast("빼지 못했습니다: " + error.message); return loadTeamAdm(); }
+  const del = t.closest("[data-tmdel]");
+  if (del) {
+    if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "회의 기록도 모두 지워집니다. 한 번 더 누르면 지웁니다"; return; }
+    const { error } = await sb.from("teams").delete().eq("id", tid);
+    if (error) return toast("지우지 못했습니다: " + error.message);
+    toast("팀을 지웠습니다"); loadTeamAdm();
+  }
+};
 
 /* ---------- 교회 공간 사용 ---------- */
 const SP_FROM = 5, SP_TO = 24, WD = "일월화수목금토";
