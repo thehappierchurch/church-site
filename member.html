@@ -505,7 +505,8 @@ footer a{color:var(--muted)}
         <textarea id="qBody" rows="5"></textarea></div>
       <div class="field"><label for="qQuestion">의문점 <span class="opt">(선택)</span></label>
         <p class="hint">잘 이해되지 않거나 더 알고 싶은 부분을 적어 두세요.</p>
-        <textarea id="qQuestion" rows="2"></textarea></div>
+        <textarea id="qQuestion" rows="2"></textarea>
+        <div class="row" style="margin-top:6px;align-items:center;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" id="askAi">💬 Claude에게 물어보기</button><span class="hint" style="margin:0">본문과 의문점을 담은 질문이 복사되고 Claude가 새 창으로 열립니다. 본인의 무료 Claude 계정으로 묻기 때문에 교회 비용은 들지 않습니다(처음 한 번 가입 필요). 답은 참고로 보시고, 더 궁금하면 목사님께 여쭤 보세요.</span></div></div>
       <div class="field"><label for="qApply">적용 및 실천 계획 <span class="opt">(선택)</span></label>
         <p class="hint">“네 마음을 다하고 목숨을 다하고 뜻을 다하여 주 너의 하나님을 사랑하라” (마태복음 22:37) — 오늘 말씀대로 살기 위해 실천할 한 가지를 적어 보세요.</p>
         <textarea id="qApply" rows="3"></textarea></div>
@@ -2653,6 +2654,35 @@ $("#spForm").addEventListener("submit", async e => {
   msg(days.length > 1 ? "4주 동안 매주 등록했습니다." : "등록했습니다."); $("#spMemo").value = "";
   spSel = day; if (day < spWeekStart || day > addDays(spWeekStart, 6)) spWeekStart = day; loadSpace();
 });
+
+/* ---------- 큐티 의문점: 본인 Claude 계정으로 묻기 ---------- */
+async function passageText(ref){
+  try {
+    await ensureBooks();
+    const m = String(ref || "").trim().match(/^([1-3]?\s*[가-힣]+)\s*(\d+)(?:\s*[:장]\s*(\d+)(?:절)?(?:\s*[-~]\s*(\d+))?)?/);
+    if (!m) return "";
+    const nm = m[1].replace(/\s/g, ""), bi = BOOKS.findIndex(b => b[0] === nm) + 1 || BOOKS.findIndex(b => b[0].startsWith(nm)) + 1;
+    if (!bi) return "";
+    const ch = (await getBook(bi))[+m[2] - 1]; if (!ch) return "";
+    const v1 = m[3] ? +m[3] : 1, v2 = m[4] ? +m[4] : (m[3] ? v1 : ch.length);
+    return ch.slice(v1 - 1, Math.min(v2, v1 + 29)).map((t, i) => `${v1 + i} ${t}`).join("\n");
+  } catch { return ""; }
+}
+$("#askAi").onclick = async () => {
+  const ref = $("#qPassage").value.trim(), q = $("#qQuestion").value.trim();
+  if (!q) { toast("먼저 의문점을 적어 주세요"); $("#qQuestion").focus(); return; }
+  const w = window.open("about:blank", "_blank");
+  const text = ref ? await passageText(ref) : "";
+  const prompt = `저는 대한예수교장로회(백석) 더행복한교회 성도입니다. 큐티(말씀 묵상)를 하다가 생긴 의문이 있습니다.\n\n` +
+    (ref ? `[오늘 읽은 본문] ${ref}\n${text ? text + "\n" : ""}\n` : "") +
+    (($("#qBody").value.trim()) ? `[제가 느낀 점]\n${$("#qBody").value.trim()}\n\n` : "") +
+    `[의문점]\n${q}\n\n다음 기준으로 답해 주세요.\n- 개혁주의 정통 신학(웨스트민스터 신앙고백, 대·소요리문답)에 근거해 주세요.\n- 먼저 본문의 문맥(앞뒤 흐름, 역사적 배경)을 설명해 주세요.\n- 근거가 되는 성경 구절을 함께 알려 주세요.\n- 신학자들 사이에 해석이 나뉘는 부분은 그렇다고 밝혀 주세요.\n- 신앙을 막 시작한 사람도 이해할 수 있게 쉬운 말로, 따뜻하게 답해 주세요.`;
+  try { await navigator.clipboard.writeText(prompt); } catch {}
+  const url = "https://claude.ai/new?q=" + encodeURIComponent(prompt);
+  const go = url.length < 7000 ? url : "https://claude.ai/new";
+  if (w) w.location.href = go; else location.href = go;
+  toast(url.length < 7000 ? "Claude 창에 질문이 들어가 있어요. 보내기를 누르세요 (안 들어가 있으면 붙여 넣기)" : "질문을 복사했어요. 열린 Claude 창에 붙여 넣고 보내세요");
+};
 
 /* ---------- 메뉴 묶음 (말씀 · 나눔 · 기도 · 교회 · 관리) ---------- */
 const NAV = {
