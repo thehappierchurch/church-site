@@ -189,6 +189,27 @@ td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
 .acct .k{font-size:13px;color:var(--muted)}
 .acct .n{font-family:var(--serif);font-size:21px;font-weight:700;margin-block:6px;font-variant-numeric:tabular-nums;user-select:all}
 .copy{font-size:13px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer;font-family:inherit}
+.cal2{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;font-size:13px}
+.cal2 b{text-align:center;color:var(--muted);font-weight:500;padding:4px 0}
+.cal2 .d{min-height:74px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:4px 5px;overflow:hidden}
+.cal2 .d.o{background:none;border-color:transparent}
+.cal2 .d.t{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cal2 .d .n{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cal2 .d.sun .n{color:#B4463C}
+.cal2 .d i{display:block;font-style:normal;font-size:11.5px;line-height:1.35;background:var(--tint);color:var(--accent);border-radius:3px;padding:1px 4px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.calnav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.calnav h2{font-size:21px;white-space:nowrap}
+.calnav .btn{white-space:nowrap;padding:8px 14px}
+.bul{border-top:1px solid var(--ink)}
+.bul details{border-bottom:1px solid var(--line);padding-block:14px}
+.bul summary{cursor:pointer;font-family:var(--serif);font-size:19px;font-weight:700}
+.bul img{display:block;width:100%;height:auto;border-radius:6px;margin-top:12px;border:1px solid var(--line)}
+.ncform{max-width:560px}
+.ncform .chk{display:flex;gap:8px;align-items:flex-start;font-size:14px;color:var(--muted);margin-top:10px}
+.ncform .chk input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+.giveqr{display:block;width:150px;height:150px;margin-top:12px;border-radius:6px;background:#fff;image-rendering:pixelated}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+@media (max-width:560px){.cal2 .d{min-height:56px}.cal2 .d i{font-size:10px}}
 .quote{margin-top:40px;text-align:center;font-family:var(--serif);font-size:18px;color:var(--muted)}
 
 /* map */
@@ -327,6 +348,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
             <dt>문의</dt><dd><a class="chat" href="#" target="_blank" rel="noopener">카카오톡 오픈채팅방 →</a></dd>
             <dt>카페</dt><dd><a class="cafe" href="#" target="_blank" rel="noopener">네이버 교회 카페 →</a></dd>
             <dt>설립</dt><dd>2022년 3월 12일</dd>
+            <dt>등록</dt><dd><a href="#newcomer">새가족 등록하기 →</a></dd>
           </dl>
         </div>
       </div>
@@ -561,9 +583,50 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
     <div class="phead"><h1>헌금안내</h1><div class="en">Offering</div></div>
     <div class="acct">
       <div class="box"><div class="k">온라인 헌금 계좌</div><div class="n" id="acctNum"></div><div class="meta" id="acctOwner"></div><div style="margin-top:14px"><button class="copy" id="copyBtn" type="button">계좌번호 복사</button></div></div>
+      <div class="box"><div class="k">온라인 헌금 (QR)</div><p style="margin-top:8px;font-size:15px">주보의 ‘온라인 헌금’ QR과 같은 곳으로 연결됩니다.</p><a class="btn acc" href="http://aq.gy/f/oLlwV" target="_blank" rel="noopener" style="margin-top:12px">온라인 헌금하기</a><img class="giveqr" src="data:image/png;base64,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" alt="온라인 헌금 QR 코드" width="150" height="150"></div>
       <div class="box"><div class="k">헌금 안내</div><p style="margin-top:8px;font-size:15px">입금하실 때 <b>이름 + 헌금종류</b>를 적어주세요.<br><span class="meta">예) 홍길동감사, 홍길동십일조</span></p><p style="margin-top:10px;font-size:15px">문의는 교회 오픈채팅방으로 해주세요.</p></div>
     </div>
     <p class="quote">“각각 그 마음에 정한 대로 할 것이요 인색함으로나 억지로 하지 말지니<br>하나님은 즐겨 내는 자를 사랑하시느니라” (고린도후서 9:7)</p>
+  </div>
+</section>
+
+<!-- CALENDAR -->
+<section class="page" data-page="calendar">
+  <div class="wrap">
+    <div class="phead"><h1>교회 일정</h1><div class="en">Church Calendar</div></div>
+    <div class="calnav"><button class="btn" type="button" id="calPrev" style="color:var(--ink)">◀ 이전</button><h2 id="calTitle"></h2><button class="btn" type="button" id="calNext" style="color:var(--ink)">다음 ▶</button></div>
+    <div class="cal2" id="calGrid"></div>
+    <div class="block-h" style="margin-top:40px"><h2>다가오는 일정</h2></div>
+    <ul class="list" id="calUp"><li><span class="t meta">불러오는 중…</span></li></ul>
+    <p class="note">정기 예배: 주일 오전 10:30 · 주일 오후 1:00 · 수요 저녁 7:00 · 금요 저녁 7:00</p>
+  </div>
+</section>
+
+<!-- BULLETIN -->
+<section class="page" data-page="bulletin">
+  <div class="wrap">
+    <div class="phead"><h1>주보</h1><div class="en">Weekly Bulletin</div></div>
+    <div class="bul" id="bulList"></div>
+  </div>
+</section>
+
+<!-- NEWCOMER -->
+<section class="page" data-page="newcomer">
+  <div class="wrap">
+    <div class="phead"><h1>새가족 등록</h1><div class="en">Welcome</div></div>
+    <div class="visit" style="margin-bottom:28px"><h3>더행복한교회에 오신 것을 환영합니다</h3><p>이름과 연락처를 남겨 주시면 담임목사가 따뜻하게 연락드리겠습니다. 처음이라 낯설어도 괜찮습니다.</p></div>
+    <form class="aform ncform" id="ncForm" novalidate>
+      <label for="ncName">이름 <b>*</b></label><input id="ncName" type="text" maxlength="40" autocomplete="name">
+      <label for="ncPhone">연락처 <b>*</b></label><input id="ncPhone" type="tel" maxlength="30" autocomplete="tel" placeholder="010-0000-0000">
+      <label for="ncHow">어떻게 알게 되셨나요?</label>
+      <select id="ncHow"><option value="">선택 안 함</option><option>가족·지인 소개</option><option>지나가다가</option><option>인터넷 검색</option><option>커피 전도</option><option>‘들어볼까’ 캠페인</option><option>기타</option></select>
+      <label for="ncMsg">하고 싶은 말 · 기도 제목</label><textarea id="ncMsg" rows="4" maxlength="1000"></textarea>
+      <div class="hp" aria-hidden="true"><label>비워 두세요<input id="ncHp" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <label class="chk"><input type="checkbox" id="ncAgree"><span>연락을 위해 이름·연락처를 받는 것에 동의합니다. 담임목사·관리자만 보며, 1년이 지나거나 요청하시면 지웁니다. (<a href="member.html#privacy">개인정보처리방침</a>)</span></label>
+      <p class="ferr" id="ncErr" hidden></p>
+      <div><button class="btn acc" type="submit" id="ncSubmit">등록하기</button></div>
+    </form>
+    <div class="visit" id="ncDone" hidden><h3>등록해 주셔서 감사합니다 🙏</h3><p>곧 연락드리겠습니다. 주일 오전 10시 30분 예배에서 뵙기를 기대합니다.</p></div>
   </div>
 </section>
 
@@ -647,10 +710,10 @@ const PAGE_SRC = "\u003ctitle>더행복한교회\u003c/title>\n\u003cmeta name=\
 
 const MENU = [
   {t:"Home", p:"home"},
-  {t:"교회소개", sub:[["섬기는이","pastor"],["비전과 목표","vision"],["예배안내","worship"],["오시는길","location"]]},
+  {t:"교회소개", sub:[["섬기는이","pastor"],["비전과 목표","vision"],["예배안내","worship"],["오시는길","location"],["새가족 등록","newcomer"]]},
   {t:"설교말씀", sub:[["주일설교","sermons"],["말씀 요약","summary"]]},
   {t:"교회생활", sub:[["경건 규칙","rules"],["기도제목","prayer"],["선교후원","mission"]]},
-  {t:"교회소식", sub:[["알려드려요","news"]]},
+  {t:"교회소식", sub:[["알려드려요","news"],["교회 일정","calendar"],["주보","bulletin"]]},
   {t:"헌금안내", sub:[["헌금안내","offering"]]}
 ];
 const $ = s => document.querySelector(s);
@@ -735,6 +798,50 @@ function renderPrayer(d){
   const pr = (blk || []).find(b => b.key === "prayer"); if (pr) renderPrayer(pr.data);
   renderPublic();
 })();
+/* 교회 일정 · 주보 · 새가족 등록 (성도마당 '관리'에서 올린 내용) */
+const SB_URL = "https://jdgyvvjpkklyrxxgxtav.supabase.co", SB_KEY = "sb_publishable_Mx9v3fHWJhiDXva59qA6lA_8N7zEDQV";
+const sbGet = q => fetch(SB_URL + "/rest/v1/" + q, { headers: { apikey: SB_KEY } }).then(r => r.ok ? r.json() : null).catch(() => null);
+const kst = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 10);
+let calM = kst().slice(0, 7), calRows = null;
+async function renderCal(){
+  if (!calRows) calRows = await sbGet("church_calendar?select=day,time,title,place,memo&order=day,time") || [];
+  const [y, m] = calM.split("-").map(Number), first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay(), days = new Date(Date.UTC(y, m, 0)).getUTCDate(), t = kst();
+  $("#calTitle").textContent = `${y}년 ${m}월`;
+  let h = "일월화수목금토".split("").map(d => `<b>${d}</b>`).join("") + '<div class="d o"></div>'.repeat(first);
+  for (let d = 1; d <= days; d++) { const k = `${calM}-${String(d).padStart(2, "0")}`, ev = calRows.filter(x => x.day === k), wd = (first + d - 1) % 7;
+    h += `<div class="d${k === t ? " t" : ""}${wd === 0 ? " sun" : ""}"><span class="n">${d}</span>${ev.map(x => `<i title="${esc((x.time ? x.time + " " : "") + x.title + (x.place ? " · " + x.place : ""))}">${esc(x.title)}</i>`).join("")}</div>`; }
+  $("#calGrid").innerHTML = h;
+  const up = calRows.filter(x => x.day >= t).slice(0, 12);
+  $("#calUp").innerHTML = up.map(x => `<li><span class="t">${esc(x.title)}${x.place ? ` <span class="meta">· ${esc(x.place)}</span>` : ""}${x.memo ? `<br><span class="meta">${esc(x.memo)}</span>` : ""}</span><span class="d">${fmtDate(x.day)}${x.time ? " " + esc(x.time) : ""}</span></li>`).join("") || `<li><span class="t meta">등록된 일정이 없습니다.</span></li>`;
+}
+$("#calPrev").onclick = () => { const [y, m] = calM.split("-").map(Number); calM = new Date(Date.UTC(y, m - 2, 1)).toISOString().slice(0, 7); renderCal(); };
+$("#calNext").onclick = () => { const [y, m] = calM.split("-").map(Number); calM = new Date(Date.UTC(y, m, 1)).toISOString().slice(0, 7); renderCal(); };
+const BUL_SEED = [{ day: "2026-10-11", title: "주보", urls: ["bulletins/2026-10-11.jpg"] }];
+let bulDone = false;
+async function renderBul(){
+  if (bulDone) return; bulDone = true;
+  const rows = (await sbGet("bulletins?select=day,title,paths&order=day.desc&limit=60") || []).map(x => ({ day: x.day, title: x.title, urls: (x.paths || []).map(p => SB_URL + "/storage/v1/object/public/bulletins/" + p.split("/").map(encodeURIComponent).join("/")) }));
+  const all = [...rows, ...BUL_SEED.filter(s => !rows.some(r => r.day === s.day))].sort((a, b) => b.day.localeCompare(a.day));
+  $("#bulList").innerHTML = all.map((b, i) => `<details${i === 0 ? " open" : ""}><summary>${fmtDate(b.day)} ${esc(b.title || "주보")}</summary>${b.urls.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="${fmtDate(b.day)} 주보" loading="lazy"></a>`).join("")}</details>`).join("") || `<p class="meta">올린 주보가 없습니다.</p>`;
+}
+addEventListener("hashchange", () => { const p = location.hash.slice(1); if (p === "calendar") renderCal(); if (p === "bulletin") renderBul(); });
+if (location.hash === "#calendar") renderCal(); if (location.hash === "#bulletin") renderBul();
+$("#ncForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const err = t => { $("#ncErr").textContent = t; $("#ncErr").hidden = !t; };
+  const row = { name: $("#ncName").value.trim(), phone: $("#ncPhone").value.trim(), how: $("#ncHow").value, message: $("#ncMsg").value.trim() };
+  if ($("#ncHp").value) return;
+  if (!row.name) return err("이름을 적어 주세요.");
+  if (row.phone.replace(/[^0-9]/g, "").length < 9) return err("연락처를 확인해 주세요.");
+  if (!$("#ncAgree").checked) return err("연락처를 받는 것에 동의해 주셔야 등록할 수 있습니다.");
+  err(""); $("#ncSubmit").disabled = true;
+  try {
+    const r = await fetch(SB_URL + "/rest/v1/newcomers", { method: "POST", body: JSON.stringify(row), headers: { apikey: SB_KEY, "Content-Type": "application/json", Prefer: "return=minimal" } });
+    if (!r.ok) throw 0;
+    $("#ncForm").hidden = true; $("#ncDone").hidden = false; TRK("newcomer", "newcomer", "등록");
+  } catch { err("등록하지 못했습니다. 잠시 뒤 다시 눌러 주시거나 교회 오픈채팅방으로 연락 주세요."); }
+  $("#ncSubmit").disabled = false;
+});
 /* 영상 썸네일을 누르면 홈페이지 안에서 바로 재생 */
 document.addEventListener("click", e => {
   const a = e.target.closest("a.thumb"), id = a && ytId(a.getAttribute("href"));
