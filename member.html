@@ -528,12 +528,38 @@ footer a{color:var(--muted)}
   <section class="page" data-page="admin">
     <div class="phead"><h1>관리</h1><p>목사님·관리자만 보이는 화면입니다.</p></div>
     <div class="card form" style="margin-bottom:16px">
-      <h2 class="h">설교 영상 링크</h2>
-      <p class="hint">유튜브에 설교 영상이 올라가면, 유튜브 앱의 <b>공유 → 링크 복사</b>로 주소를 복사해 아래 칸에 붙여 넣고 저장하세요. 홈페이지 설교 화면에 바로 영상이 나옵니다(새로고침).</p>
-      <ul class="slots" id="vidList"><li class="muted sm">불러오는 중…</li></ul>
-      <details style="margin-top:8px"><summary class="sm">목록에 없는 날짜에 넣기</summary>
-        <div class="row"><input id="vidDate" type="date"><input id="vidUrl" type="text" placeholder="https://youtu.be/…" style="flex:1;min-width:14em"><button class="btn acc sm" type="button" id="vidAdd">저장</button></div>
-      </details>
+      <h2 class="h">홈페이지 고치기 — 설교</h2>
+      <p class="hint">여기서 저장하면 홈페이지 ‘설교말씀’과 첫 화면에 <b>바로</b> 반영됩니다. 영상이 나중에 올라가면 ‘고치기’를 눌러 유튜브 링크만 넣으세요 (유튜브 앱 공유 → 링크 복사).</p>
+      <ul class="slots" id="serList"><li class="muted sm">불러오는 중…</li></ul>
+      <div class="field" style="margin-top:8px"><b id="serFormTitle" class="sm">새 설교 등록</b></div>
+      <div class="two">
+        <div><label for="serDate">날짜</label><input id="serDate" type="date"></div>
+        <div><label for="serPassage">본문</label><input id="serPassage" type="text" maxlength="80" placeholder="예) 사사기 20:8-28"></div>
+      </div>
+      <div class="field"><label for="serTitle">제목</label><input id="serTitle" type="text" maxlength="120"></div>
+      <div class="field"><label for="serYt">유튜브 링크 <span class="opt">(선택)</span></label><input id="serYt" type="text" placeholder="https://youtu.be/…"></div>
+      <div class="field"><label for="serSum">말씀 요약 <span class="opt">(선택 · 빈 줄로 문단 구분)</span></label><textarea id="serSum" rows="6"></textarea></div>
+      <div class="row"><button class="btn acc" type="button" id="serSave">저장</button><button class="btn" type="button" id="serNew" hidden>새로 쓰기</button></div>
+      <p class="msg" id="serMsg"></p>
+    </div>
+    <div class="card form" style="margin-bottom:16px">
+      <h2 class="h">홈페이지 고치기 — 알려드려요</h2>
+      <p class="hint">첫 화면 ‘알려드려요’와 교회소식에 바로 반영됩니다. 최근 날짜가 위에 나옵니다.</p>
+      <ul class="slots" id="newsAdm"><li class="muted sm">불러오는 중…</li></ul>
+      <div class="row" style="margin-top:8px">
+        <select id="nwCat"><option>안내</option><option>모집</option><option>행사</option><option>기도</option><option>전도</option><option>소식</option><option>권면</option></select>
+        <input id="nwDate" type="date">
+      </div>
+      <div class="row"><input id="nwText" type="text" maxlength="300" placeholder="알릴 내용" style="flex:1;min-width:14em"><button class="btn acc sm" type="button" id="nwSave">등록</button><button class="btn sm" type="button" id="nwNew" hidden>취소</button></div>
+      <p class="msg" id="nwMsg"></p>
+    </div>
+    <div class="card form" style="margin-bottom:16px">
+      <h2 class="h">홈페이지 고치기 — 기도제목</h2>
+      <p class="hint">교회생활 › 기도제목 화면에 바로 반영됩니다. 한 줄에 하나씩 적으세요.</p>
+      <div class="field"><label for="prWeekly">이번 주 함께 기도해요</label><textarea id="prWeekly" rows="3"></textarea></div>
+      <div id="prSecs"></div>
+      <div class="row"><button class="btn sm" type="button" id="prAdd">+ 기도 묶음 추가</button><button class="btn acc" type="button" id="prSave">저장</button></div>
+      <p class="msg" id="prMsg"></p>
     </div>
     <div class="card" style="margin-bottom:16px">
       <h2 class="h">최근 올라온 글 살펴보기</h2>
@@ -1256,7 +1282,7 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadGroups(); loadVideos(); loadPlanAdmin(); await loadMembers(); loadMod();
+  loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); await loadMembers(); loadMod();
 }
 /* 분기별 통독 범위 관리 */
 const BOOK_ALIAS = { "요한서신": [62, 63, 64], "사무엘상하": [9, 10], "사무엘상·하": [9, 10], "열왕기상하": [11, 12], "열왕기상·하": [11, 12], "역대상하": [13, 14], "역대상·하": [13, 14], "고린도전후서": [46, 47], "데살로니가전후서": [52, 53], "디모데전후서": [54, 55], "베드로전후서": [60, 61], "모세오경": [1, 2, 3, 4, 5], "소선지서": [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] };
@@ -1288,38 +1314,87 @@ $("#planSave").onclick = async () => {
   if (error) return msg("저장하지 못했습니다: " + error.message, true);
   msg("저장했습니다. 나의 큐티 화면에 바로 반영됩니다."); for (const x in schedCache) delete schedCache[x]; loadPlanAdmin();
 };
-/* 설교 영상 링크 */
+/* 홈페이지 고치기 (설교 · 알려드려요 · 기도제목) — Supabase에 저장, 홈페이지가 바로 불러옴 */
 const YT_RE = /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//;
-async function loadVideos(){
-  let sermons = [];
-  try { const t = await (await fetch("./?x=" + Date.now())).text(); const m = /\nconst DATA = (\{.*\});\n/.exec(t); if (m) sermons = JSON.parse(m[1]).sermons || []; } catch {}
-  const { data } = await sb.from("sermon_videos").select("sermon_date,youtube").order("sermon_date", { ascending: false }).limit(60);
-  const map = Object.fromEntries((data || []).map(x => [x.sermon_date, x.youtube]));
-  const rows = sermons.map(s => ({ date: s.date, title: s.title, fixed: s.youtube || "" }));
-  for (const d of Object.keys(map)) if (!rows.some(r => r.date === d)) rows.push({ date: d, title: "", fixed: "" });
-  rows.sort((a, b) => b.date.localeCompare(a.date));
-  $("#vidList").innerHTML = rows.slice(0, 12).map(r => `<li data-vd="${esc(r.date)}"><span class="tm">${fmtDate(r.date)}</span><span class="who">${esc(r.title || "")}${r.fixed ? ' <span class="badge">영상 있음</span>' : ""}</span>
-      ${r.fixed ? "" : `<input type="text" class="vurl" value="${esc(map[r.date] || "")}" placeholder="유튜브 링크 붙여넣기" style="flex:1 1 100%;font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:6px"><button class="btn acc sm" type="button" data-vsave>저장</button>${map[r.date] ? '<button class="btn sm warn" type="button" data-vdel>지우기</button>' : ""}`}</li>`).join("") || '<li class="muted sm">등록된 설교가 없습니다.</li>';
+const amsg = (id, t, err) => { $(id).textContent = t; $(id).className = err ? "msg err" : "msg"; };
+let serRows = [], serEdit = null;
+async function loadSermonsAdm(){
+  const { data } = await sb.from("site_sermons").select("date,title,passage,youtube,summary").order("date", { ascending: false }).limit(30);
+  serRows = data || [];
+  $("#serList").innerHTML = serRows.slice(0, 12).map(r => `<li><span class="tm">${fmtDate(r.date)}</span><span class="who">${esc(r.title)} ${r.youtube ? '<span class="badge">영상</span>' : '<span class="badge hid">영상 없음</span>'}</span><button class="btn sm" type="button" data-sedit="${r.date}">고치기</button><button class="btn sm warn" type="button" data-sdel="${r.date}">지우기</button></li>`).join("") || '<li class="muted sm">등록된 설교가 없습니다.</li>';
+  if (!serEdit && !$("#serDate").value) { const d = new Date(Date.now() + 9 * 3600e3); d.setUTCDate(d.getUTCDate() + (7 - d.getUTCDay()) % 7); $("#serDate").value = d.toISOString().slice(0, 10); }
 }
-async function saveVideo(date, url){
-  url = url.trim();
-  if (!YT_RE.test(url)) return toast("유튜브 링크(https://youtu.be/… 또는 https://www.youtube.com/…)를 넣어 주세요");
-  const { error } = await sb.from("sermon_videos").upsert({ sermon_date: date, youtube: url, updated_at: new Date().toISOString() });
-  if (error) return toast("저장하지 못했습니다: " + error.message);
-  toast("저장했습니다. 홈페이지에 바로 나옵니다"); loadVideos();
+function serForm(r){
+  serEdit = r ? r.date : null;
+  $("#serFormTitle").textContent = r ? `${fmtDate(r.date)} 설교 고치기` : "새 설교 등록";
+  $("#serDate").value = r ? r.date : ""; $("#serTitle").value = r?.title || ""; $("#serPassage").value = r?.passage || ""; $("#serYt").value = r?.youtube || ""; $("#serSum").value = r?.summary || "";
+  $("#serNew").hidden = !r; amsg("#serMsg", "");
+  if (!r) loadSermonsAdm(); else $("#serTitle").scrollIntoView({ behavior: "smooth", block: "center" });
 }
-$("#vidList").addEventListener("click", async e => {
-  const li = e.target.closest("li[data-vd]"); if (!li) return;
-  if (e.target.closest("[data-vsave]")) return saveVideo(li.dataset.vd, li.querySelector(".vurl").value);
-  const del = e.target.closest("[data-vdel]");
-  if (del) {
-    if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
-    const { error } = await sb.from("sermon_videos").delete().eq("sermon_date", li.dataset.vd);
-    if (error) return toast("지우지 못했습니다: " + error.message);
-    toast("지웠습니다"); loadVideos();
-  }
+$("#serList").addEventListener("click", async e => {
+  const ed = e.target.closest("[data-sedit]"); if (ed) return serForm(serRows.find(r => r.date === ed.dataset.sedit));
+  const del = e.target.closest("[data-sdel]"); if (!del) return;
+  if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+  const { error } = await sb.from("site_sermons").delete().eq("date", del.dataset.sdel);
+  if (error) return toast("지우지 못했습니다: " + error.message);
+  toast("지웠습니다"); loadSermonsAdm();
 });
-$("#vidAdd").onclick = () => { if (!$("#vidDate").value) return toast("날짜를 골라 주세요"); saveVideo($("#vidDate").value, $("#vidUrl").value); };
+$("#serNew").onclick = () => serForm(null);
+$("#serSave").onclick = async () => {
+  const row = { date: $("#serDate").value, title: $("#serTitle").value.trim(), passage: $("#serPassage").value.trim(), youtube: $("#serYt").value.trim(), summary: $("#serSum").value.trim(), updated_at: new Date().toISOString() };
+  if (!row.date || !row.title) return amsg("#serMsg", "날짜와 제목을 넣어 주세요.", true);
+  if (row.youtube && !YT_RE.test(row.youtube)) return amsg("#serMsg", "유튜브 링크는 https://youtu.be/… 또는 https://www.youtube.com/… 형태여야 합니다.", true);
+  const { error } = await sb.from("site_sermons").upsert(row);
+  if (error) return amsg("#serMsg", "저장하지 못했습니다: " + error.message, true);
+  if (serEdit && serEdit !== row.date) await sb.from("site_sermons").delete().eq("date", serEdit);
+  toast("저장했습니다. 홈페이지에 바로 나옵니다"); serForm(null);
+};
+
+let newsRows = [], newsEdit = null;
+async function loadNewsAdm(){
+  const { data } = await sb.from("site_news").select("id,cat,text,date").order("date", { ascending: false }).order("id").limit(40);
+  newsRows = data || [];
+  if (!$("#nwDate").value) $("#nwDate").value = kstToday();
+  $("#newsAdm").innerHTML = newsRows.map(r => `<li><span class="who"><span class="badge">${esc(r.cat)}</span>${esc(r.text)} <span class="muted sm">${fmtDate(r.date)}</span></span><button class="btn sm" type="button" data-nedit2="${r.id}">고치기</button><button class="btn sm warn" type="button" data-ndel2="${r.id}">지우기</button></li>`).join("") || '<li class="muted sm">알릴 내용이 없습니다.</li>';
+}
+function newsForm(r){
+  newsEdit = r ? r.id : null;
+  $("#nwCat").value = r?.cat || "안내"; $("#nwText").value = r?.text || ""; $("#nwDate").value = r?.date || kstToday();
+  $("#nwSave").textContent = r ? "고쳐 저장" : "등록"; $("#nwNew").hidden = !r; amsg("#nwMsg", "");
+}
+$("#newsAdm").addEventListener("click", async e => {
+  const ed = e.target.closest("[data-nedit2]"); if (ed) return newsForm(newsRows.find(r => String(r.id) === ed.dataset.nedit2));
+  const del = e.target.closest("[data-ndel2]"); if (!del) return;
+  if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+  const { error } = await sb.from("site_news").delete().eq("id", del.dataset.ndel2);
+  if (error) return toast("지우지 못했습니다: " + error.message);
+  toast("지웠습니다"); loadNewsAdm();
+});
+$("#nwNew").onclick = () => newsForm(null);
+$("#nwSave").onclick = async () => {
+  const row = { cat: $("#nwCat").value, text: $("#nwText").value.trim(), date: $("#nwDate").value || kstToday() };
+  if (!row.text) return amsg("#nwMsg", "알릴 내용을 적어 주세요.", true);
+  const { error } = newsEdit ? await sb.from("site_news").update(row).eq("id", newsEdit) : await sb.from("site_news").insert(row);
+  if (error) return amsg("#nwMsg", "저장하지 못했습니다: " + error.message, true);
+  toast("저장했습니다. 홈페이지에 바로 나옵니다"); newsForm(null); loadNewsAdm();
+};
+
+const lines = t => t.split(/\n/).map(x => x.trim()).filter(Boolean);
+function prSecHtml(x){ return `<div class="card prsec" style="padding:12px;margin-bottom:8px"><div class="row" style="margin-top:0"><input type="text" class="prt" maxlength="60" placeholder="묶음 제목 (예: 수험생들을 위한 간구)" value="${esc(x?.title || "")}" style="flex:1;min-width:12em"><button class="btn sm warn" type="button" data-prdel>묶음 지우기</button></div><textarea class="pri" rows="4" placeholder="한 줄에 기도제목 하나씩" style="margin-top:6px">${esc((x?.items || []).join("\n"))}</textarea></div>`; }
+async function loadPrayerAdm(){
+  const { data } = await sb.from("site_blocks").select("data").eq("key", "prayer").maybeSingle();
+  const d = data?.data || { weekly: [], sections: [] };
+  $("#prWeekly").value = (d.weekly || []).join("\n");
+  $("#prSecs").innerHTML = (d.sections || []).map(prSecHtml).join("");
+}
+$("#prAdd").onclick = () => $("#prSecs").insertAdjacentHTML("beforeend", prSecHtml(null));
+$("#prSecs").addEventListener("click", e => { const b = e.target.closest("[data-prdel]"); if (!b) return; if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 지웁니다"; return; } b.closest(".prsec").remove(); });
+$("#prSave").onclick = async () => {
+  const data = { weekly: lines($("#prWeekly").value), sections: [...document.querySelectorAll("#prSecs .prsec")].map(el => ({ title: el.querySelector(".prt").value.trim(), items: lines(el.querySelector(".pri").value) })).filter(x => x.title && x.items.length) };
+  const { error } = await sb.from("site_blocks").upsert({ key: "prayer", data, updated_at: new Date().toISOString() });
+  if (error) return amsg("#prMsg", "저장하지 못했습니다: " + error.message, true);
+  amsg("#prMsg", "저장했습니다. 홈페이지 기도제목 화면에 바로 나옵니다."); loadPrayerAdm();
+};
 $("#exBtn").onclick = async () => {
   const msg = (t, err) => { $("#exMsg").textContent = t; $("#exMsg").className = err ? "msg err" : "msg"; };
   msg("묵상을 모으는 중입니다…");

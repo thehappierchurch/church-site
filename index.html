@@ -493,12 +493,12 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 <section class="page" data-page="prayer">
   <div class="wrap">
     <div class="phead"><h1>기도제목</h1><div class="en">Prayer</div></div>
-    <div class="visit" style="margin-bottom:40px">
+    <div class="visit" id="prayerWeekly" style="margin-bottom:40px">
       <h3>이번 주 함께 기도해요</h3>
       <p>중간고사를 치르는 학생들과 고3 수험생들을 위해 기도해 주세요.</p>
       <p style="margin-top:6px">10월 ‘전도의 달’ 커피 전도를 위해 함께 기도해 주세요.</p>
     </div>
-    <div class="grid2">
+    <div class="grid2" id="prayerSections">
       <div>
         <div class="block-h"><h2>수험생들을 위한 간구</h2></div>
         <ul class="list">
@@ -647,7 +647,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
   <div class="wrap">
     <div class="fn">대한예수교장로회(백석) 더행복한교회</div>
     <div>주소 <span data-f="address"></span> · <a class="chat" href="#" target="_blank" rel="noopener">오픈채팅방</a> · <a class="cafe" href="#" target="_blank" rel="noopener">네이버 카페</a> · <a class="yt" href="#" target="_blank" rel="noopener">유튜브</a></div>
-    <div>담임목사 <span data-f="pastor"></span> · 설립 2022. 3. 12 · © 2026 더행복한교회 · <a href="#admin" class="adminlink">관리자</a></div>
+    <div>담임목사 <span data-f="pastor"></span> · 설립 2022. 3. 12 · © 2026 더행복한교회 · <a href="member.html#admin" class="adminlink">관리자</a></div>
   </div>
 </footer>
 
@@ -703,9 +703,9 @@ function thumb(s, cap){
   const img = id ? `<img src="https://i.ytimg.com/vi/${id}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">` : "";
   return `<a class="thumb" href="${href}" target="_blank" rel="noopener">${img}<span class="play"></span>${cap ? `<span class="cap">${cap}</span>` : ""}</a>`;
 }
-const VID = {};
+const VID = {}, LIVE = { news: null, sermons: null };
 function renderPublic(){
-  const sermons = DATA.sermons.map(s => !s.youtube && VID[s.date] ? { ...s, youtube: VID[s.date] } : s).sort(byDate), news = [...DATA.news].sort(byDate);
+  const sermons = (LIVE.sermons || DATA.sermons).map(s => !s.youtube && VID[s.date] ? { ...s, youtube: VID[s.date] } : s).sort(byDate), news = [...(LIVE.news || DATA.news)].sort(byDate);
   const row = n => `<li><span class="t hang"><span class="tag">${esc(n.cat)}</span><span>${esc(n.text)}</span></span><span class="d">${fmtDate(n.date)}</span></li>`;
   $("#homeNews").innerHTML = news.slice(0,4).map(row).join("") || `<li><span class="t meta">등록된 소식이 없습니다.</span></li>`;
   $("#newsList").innerHTML = news.map(row).join("") || `<li><span class="t meta">등록된 소식이 없습니다.</span></li>`;
@@ -737,14 +737,28 @@ function renderPublic(){
 }
 renderPublic();
 
-/* 설교 영상 링크: 성도마당 '관리'에서 넣은 링크를 불러와 반영 */
+/* 알려드려요 · 설교 · 기도제목: 성도마당 '관리'에서 고친 내용을 불러와 반영 (배포 없이 바로 바뀜) */
+function renderPrayer(d){
+  const w = $("#prayerWeekly"), s = $("#prayerSections");
+  if (!w || !s || !d) return;
+  w.hidden = !(d.weekly && d.weekly.length);
+  w.innerHTML = `<h3>이번 주 함께 기도해요</h3>` + (d.weekly || []).map((t, i) => `<p${i ? ' style="margin-top:6px"' : ""}>${esc(t)}</p>`).join("");
+  s.innerHTML = (d.sections || []).map(x => `<div><div class="block-h"><h2>${esc(x.title)}</h2></div><ul class="list">${(x.items || []).map(t => `<li><span class="t">${esc(t)}</span></li>`).join("")}</ul></div>`).join("");
+}
 (async () => {
-  try {
-    const r = await fetch("https://jdgyvvjpkklyrxxgxtav.supabase.co/rest/v1/sermon_videos?select=sermon_date,youtube", { headers: { apikey: "sb_publishable_Mx9v3fHWJhiDXva59qA6lA_8N7zEDQV" } });
-    if (!r.ok) return;
-    for (const x of await r.json()) VID[x.sermon_date] = x.youtube;
-    renderPublic();
-  } catch {}
+  const U = "https://jdgyvvjpkklyrxxgxtav.supabase.co/rest/v1/", H = { headers: { apikey: "sb_publishable_Mx9v3fHWJhiDXva59qA6lA_8N7zEDQV" } };
+  const get = q => fetch(U + q, H).then(r => r.ok ? r.json() : null).catch(() => null);
+  const [news, ser, vid, blk] = await Promise.all([
+    get("site_news?select=cat,text,date&order=date.desc,id.asc"),
+    get("site_sermons?select=date,title,passage,youtube,summary"),
+    get("sermon_videos?select=sermon_date,youtube"),
+    get("site_blocks?select=key,data")
+  ]);
+  if (Array.isArray(news)) LIVE.news = news;
+  if (Array.isArray(ser) && ser.length) LIVE.sermons = ser;
+  for (const x of vid || []) VID[x.sermon_date] = x.youtube;
+  const pr = (blk || []).find(b => b.key === "prayer"); if (pr) renderPrayer(pr.data);
+  renderPublic();
 })();
 /* 영상 썸네일을 누르면 홈페이지 안에서 바로 재생 */
 document.addEventListener("click", e => {
