@@ -807,7 +807,7 @@ async function refreshRelay(){
   const [last, stats, recent, mine] = await Promise.all([
     sb.from("relay_view").select("book,chapter,verse,nickname,created_at").order("book", { ascending: false }).order("chapter", { ascending: false }).order("verse", { ascending: false }).limit(1),
     sb.rpc("relay_stats"),
-    sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,photo_id").order("created_at", { ascending: false }).limit(80),
+    sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,photo_id,cafe_name").order("created_at", { ascending: false }).limit(80),
     sb.from("relay_verses").select("verse", { count: "exact", head: true }).eq("user_id", user.id)
   ]);
   const l = last.data && last.data[0];
@@ -823,7 +823,8 @@ async function refreshRelay(){
   for (const r of (recent.data || [])) {
     const g = groups[groups.length - 1];
     if (r.photo_id && g && g.photo_id === r.photo_id) { g.items.push(r); continue; }
-    groups.push({ photo_id: r.photo_id, items: [r] });
+    if (r.cafe_name && g && g.cafe === r.cafe_name && g.items[0].book === r.book) { g.items.push(r); continue; }
+    groups.push({ photo_id: r.photo_id, cafe: r.cafe_name, items: [r] });
   }
   feedGroups = groups;
   await loadPhotos();
@@ -835,6 +836,8 @@ function renderFeed(){
     if (g.photo_id) {
       const ph = photoCache.get(g.photo_id), u = ph && urlCache.get(ph.path);
       return `<li data-go="${a.book},${a.chapter},${a.verse}"><div class="fmeta"><b>${esc(z.nickname)}</b> · ${ph ? esc(rangeText(ph)) : refOf({ b: a.book, c: a.chapter, v: a.verse })} · ${ago(z.created_at)} <span class="badge">📷 손글씨</span></div>${u ? `<img class="fphoto" src="${esc(u)}" alt="손글씨 필사 사진" loading="lazy">` : ""}</li>`; }
+    if (g.cafe) { const lo = g.items.reduce((m, r) => (r.chapter * 1000 + r.verse < m.chapter * 1000 + m.verse ? r : m)), hi = g.items.reduce((m, r) => (r.chapter * 1000 + r.verse > m.chapter * 1000 + m.verse ? r : m));
+      return `<li data-go="${lo.book},${lo.chapter},${lo.verse}"><div class="fmeta"><b>${esc(z.nickname)}</b> · ${refOf({ b: lo.book, c: lo.chapter, v: lo.verse })}${hi !== lo ? ` ~ ${hi.chapter}:${hi.verse}` : ""} · ${ago(z.created_at)} <span class="badge">네이버 카페</span></div></li>`; }
     return `<li data-go="${z.book},${z.chapter},${z.verse}"><div class="fmeta"><b>${esc(z.nickname)}</b> · ${refOf({ b: z.book, c: z.chapter, v: z.verse })} · ${ago(z.created_at)}</div><div class="ftext">${esc(z.content)}</div></li>`; }).join("");
   $("#recentList").innerHTML = html || `<li class="muted sm">아직 아무도 쓰지 않았습니다. 첫 절을 써 주세요!</li>`;
   $("#moreFeed").hidden = feedGroups.length <= feedShown;
@@ -846,7 +849,7 @@ async function openChapter(b, c, v){
   $("#selBook").value = b;
   $("#selCh").innerHTML = BOOKS[b-1][1].map((_,i) => `<option value="${i+1}">${i+1}장</option>`).join("");
   $("#selCh").value = c;
-  const { data } = await sb.from("relay_view").select("verse,user_id,nickname,content,created_at,photo_id").eq("book", b).eq("chapter", c);
+  const { data } = await sb.from("relay_view").select("verse,user_id,nickname,content,created_at,photo_id,cafe_name").eq("book", b).eq("chapter", c);
   rows = new Map((data || []).map(r => [r.verse, r]));
   if (v == null) { v = 1; const n = chLen(b, c); while (v <= n && rows.has(v)) v++; if (v > n) v = 1; }
   cur.v = v;
@@ -869,7 +872,7 @@ async function showVerse(){
   const r = rows.get(cur.v);
   $("#writeArea").hidden = !!r; $("#doneArea").hidden = !r;
   if (r) {
-    $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} ${r.photo_id ? "종이에 손으로 쓰셨습니다 📷" : "쓰셨습니다"}`;
+    $("#doneBy").innerHTML = `<b>${esc(r.nickname)}</b>님이 ${ago(r.created_at)} ${r.photo_id ? "종이에 손으로 쓰셨습니다 📷" : r.cafe_name ? "네이버 카페 ‘성경 필사’에 쓰셨습니다" : "쓰셨습니다"}`;
     $("#doneText").textContent = r.content; $("#doneText").hidden = !r.content;
     $("#donePhotoLink").hidden = true;
     if (r.photo_id) showPhotoFor(r.photo_id);
@@ -880,7 +883,7 @@ async function showVerse(){
   $("#verseGrid").innerHTML = Array.from({length:n}, (_,i) => { const w = rows.get(i+1);
     return `<button type="button" data-v="${i+1}" class="${w ? (w.photo_id ? 'done photo' : w.user_id === user.id ? 'done mine' : 'done') : ''} ${i+1===cur.v?'cur':''}" title="${w ? esc(w.nickname) + '님' : '비어 있음'}" aria-label="${i+1}절${w ? ' (' + esc(w.nickname) + ')' : ''}">${i+1}</button>`; }).join("");
   const list = [...rows.values()].sort((a,b) => a.verse - b.verse);
-  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${r.photo_id ? '<span class="muted">(손글씨 사진)</span>' : esc(r.content)} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
+  $("#chapterList").innerHTML = list.map(r => `<li value="${r.verse}">${r.photo_id ? '<span class="muted">(손글씨 사진)</span>' : r.content ? esc(r.content) : '<span class="muted">(네이버 카페 필사)</span>'} <span class="who">— ${esc(r.nickname)}</span></li>`).join("") || `<li class="muted" style="list-style:none">이 장은 아직 아무도 쓰지 않았습니다.</li>`;
 }
 $("#verseGrid").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (b) { cur.v = +b.dataset.v; showVerse(); if (!rows.has(cur.v)) $("#typeBox").focus(); } });
 $("#resumeBtn").onclick = async () => { await refreshRelay(); await go(nextPos); $("#typeBox").focus(); };
@@ -1510,7 +1513,7 @@ async function loadMod(){
   const items = [];
   const want = k => modType === "all" || modType === k;
   const jobs = [];
-  if (want("relay")) jobs.push(sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,user_id").is("photo_id", null).order("created_at", { ascending: false }).limit(30).then(r => (r.data || []).forEach(x => items.push({ k: "relay", t: x.created_at, who: x.nickname, uid: x.user_id, ref: refOf({ b: x.book, c: x.chapter, v: x.verse }), text: x.content, key: `${x.book},${x.chapter},${x.verse}` }))));
+  if (want("relay")) jobs.push(sb.from("relay_view").select("book,chapter,verse,nickname,content,created_at,user_id").is("photo_id", null).is("cafe_name", null).order("created_at", { ascending: false }).limit(30).then(r => (r.data || []).forEach(x => items.push({ k: "relay", t: x.created_at, who: x.nickname, uid: x.user_id, ref: refOf({ b: x.book, c: x.chapter, v: x.verse }), text: x.content, key: `${x.book},${x.chapter},${x.verse}` }))));
   if (want("photo")) jobs.push(sb.from("relay_photos_view").select("*").order("created_at", { ascending: false }).limit(15).then(async r => {
     const list = r.data || []; if (!list.length) return;
     const { data: urls } = await sb.storage.from("relay-photos").createSignedUrls(list.map(p => p.path), 3600);
