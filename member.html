@@ -53,6 +53,19 @@ nav ul{list-style:none;margin:0;padding:0;display:flex;gap:2px;overflow-x:auto;s
 nav ul::-webkit-scrollbar{display:none}
 nav a{display:block;padding:12px 14px;font-size:15px;font-weight:500;text-decoration:none;white-space:nowrap;color:var(--muted);border-bottom:2px solid transparent}
 nav a.on{color:var(--ink);border-bottom-color:var(--ink)}
+nav .snav{border-top:0;background:var(--tint);border-radius:8px;margin:0 0 8px;padding:0 4px}
+nav .snav a{padding:9px 12px;font-size:14px;border-bottom:0;border-radius:6px}
+nav .snav a.on{color:var(--accent-ink);background:var(--accent)}
+.btn.rec{background:var(--warn);border-color:var(--warn);color:#fff}
+.vlist2{list-style:none;margin:12px 0 0;padding:0;border-top:1px solid var(--ink)}
+.vlist2 li{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid var(--line)}
+.vlist2 .vt{flex:1;min-width:14em;font-family:var(--serif);font-size:17px;line-height:1.8}
+.vlist2 .vt b{font-family:var(--sans);font-size:12px;color:var(--accent);margin-right:6px}
+.vlist2 .va{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.vlist2 li.has .vt b::after{content:" 🔊"}
+.vlist2 li.playing{background:color-mix(in srgb,var(--gold) 18%,transparent);border-radius:6px}
+.recbox{position:sticky;bottom:12px;z-index:15;box-shadow:0 6px 24px rgba(0,0,0,.12);margin-top:12px}
+.recbox .verse{margin-bottom:8px}
 nav a.home{margin-left:auto;font-weight:400;font-size:14px}
 a:focus-visible,button:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 main{padding-block:32px 80px;min-height:70vh}
@@ -341,20 +354,14 @@ footer a{color:var(--muted)}
     <div class="who" id="who"></div>
   </div>
   <div class="wrap">
-    <nav aria-label="성도마당 메뉴"><ul>
-      <li><a href="#write" data-p="write">성경 필사</a></li>
-      <li><a href="#study" data-p="study">말씀 공부</a></li>
-      <li><a href="#qt" data-p="qt">나의 큐티</a></li>
-      <li><a href="#words" data-p="words">단어장</a></li>
-      <li><a href="#fav" data-p="fav">내 말씀</a></li>
-      <li><a href="#share" data-p="share">묵상 나눔</a></li>
-      <li><a href="#pray" data-p="pray">기도</a></li>
-      <li><a href="#team" data-p="team" id="teamTab" hidden>모임방</a></li>
-      <li><a href="#space" data-p="space">교회 공간</a></li>
-      <li><a href="#public" data-p="public">성도 묵상</a></li>
-      <li><a href="#admin" data-p="admin" id="adminTab" hidden>관리</a></li>
+    <nav aria-label="성도마당 메뉴"><ul id="gNav">
+      <li><a href="#write" data-g="word">말씀</a></li>
+      <li><a href="#share" data-g="share">나눔</a></li>
+      <li><a href="#pray" data-g="pray">기도</a></li>
+      <li><a href="#space" data-g="church">교회</a></li>
+      <li><a href="#admin" data-g="admin" id="adminTab" hidden>관리</a></li>
       <li><a href="./" class="home">← 홈페이지</a></li>
-    </ul></nav>
+    </ul><ul id="sNav" class="snav" hidden></ul></nav>
   </div>
 </header>
 
@@ -407,13 +414,14 @@ footer a{color:var(--muted)}
         <button class="btn" type="button" id="pCancel">닫기</button>
       </div>
     </form>
-    <div class="verse" id="verseBox"><span class="ref" id="verseRef"></span><span id="verseText">불러오는 중…</span><br><a class="slink" id="studyLink" href="#study">원어 · 해설 보기 →</a></div>
+    <div class="verse" id="verseBox"><span class="ref" id="verseRef"></span><span id="verseText">불러오는 중…</span><br><a class="slink" id="studyLink" href="#study">원어 · 해설 보기 →</a> <a class="slink" id="voiceLink" href="#voice" style="margin-left:12px">🎙 이 절 목소리로 읽기 →</a></div>
     <div id="writeArea">
-      <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장하고 다음 절로 넘어갑니다)</label>
+      <label for="typeBox" class="sm muted">위 말씀을 그대로 따라 써 보세요 (Enter를 누르면 저장하고 다음 절로 넘어갑니다). 손으로 치기 어려우시면 ‘🎙 말로 쓰기’를 누르고 소리 내어 읽으세요</label>
       <textarea id="typeBox" class="typed" rows="3" autocomplete="off" spellcheck="false"></textarea>
       <div class="check" id="checkMsg" aria-live="polite"></div>
       <div class="row">
         <button class="btn acc" type="button" id="saveVerse">저장하고 다음 절</button>
+        <button class="btn" type="button" id="dictBtn" title="소리 내어 읽으면 글자로 받아 적습니다">🎙 말로 쓰기</button>
         <button class="btn sm" type="button" id="prevVerse">이전 절</button>
         <button class="btn sm" type="button" id="nextVerse">다음 절</button>
       </div>
@@ -515,6 +523,28 @@ footer a{color:var(--muted)}
       </div>
     </form>
     <ul class="notes" id="myNotes"></ul>
+  </section>
+
+  <!-- 목소리 성경 -->
+  <section class="page" data-page="voice">
+    <div class="phead"><h1>목소리 성경</h1><p>온 교회가 한 절씩 소리 내어 읽어 녹음합니다. 빈 절의 ‘🎙 이 절 읽고 녹음’을 눌러 읽어 주세요. 모인 목소리는 ‘이 장 이어 듣기’로 한 장씩 들을 수 있습니다.</p></div>
+    <p class="sm muted" id="vStat"></p>
+    <p class="blocked" id="vNoRec" hidden>이 브라우저에서는 녹음이 되지 않습니다. 듣기는 할 수 있어요. 녹음은 휴대폰의 크롬·사파리나 컴퓨터의 크롬에서 해 주세요.</p>
+    <div class="pick"><select id="vBook" aria-label="책 선택"></select><select id="vCh" aria-label="장 선택"></select><button class="btn acc sm" type="button" id="vPlayAll">▶ 이 장 이어 듣기</button></div>
+    <p class="sm muted" id="vChInfo"></p>
+    <div class="card recbox" id="vRecBox" hidden>
+      <div class="verse"><span class="ref" id="vRecRef"></span><span id="vRecText"></span></div>
+      <p class="msg" id="vRecMsg"></p>
+      <div class="row" style="margin-top:0">
+        <button class="btn acc" type="button" id="vRecStart">● 녹음 시작</button>
+        <button class="btn rec" type="button" id="vRecStop" hidden>■ 멈추기</button>
+        <button class="btn" type="button" id="vRecHear" hidden>▶ 들어 보기</button>
+        <button class="btn acc" type="button" id="vRecSave" hidden>저장하기</button>
+        <button class="btn sm" type="button" id="vRecCancel">닫기</button>
+      </div>
+    </div>
+    <ol class="vlist2" id="vList"></ol>
+    <p class="sm muted" style="margin-top:14px">녹음은 로그인한 성도만 듣고 남길 수 있습니다. 내가 녹음한 절은 언제든 직접 지울 수 있습니다.</p>
   </section>
 
   <!-- 묵상 나눔 -->
@@ -750,6 +780,30 @@ footer a{color:var(--muted)}
       <ul id="grpList" class="plain"></ul>
       <p class="msg" id="grpMsg"></p>
     </div>
+    <div class="card" style="margin-top:16px">
+      <h2 class="h">새가족 등록 명단</h2>
+      <p class="hint">홈페이지 ‘새가족 등록’에서 처음 오신 분이 남긴 연락처입니다. 연락을 드린 뒤 ‘연락했어요’를 눌러 두세요. 관리자만 볼 수 있습니다.</p>
+      <ul class="modlist" id="ncList"><li class="muted sm">불러오는 중…</li></ul>
+    </div>
+    <div class="card form" style="margin-top:16px">
+      <h2 class="h">교회 일정</h2>
+      <p class="hint">여기 적은 일정이 홈페이지 ‘교회소식 › 교회 일정’ 달력에 바로 나옵니다.</p>
+      <div class="two"><div><label for="evDay">날짜</label><input id="evDay" type="date"></div><div><label for="evTime">시간 <span class="opt">(선택)</span></label><input id="evTime" type="text" maxlength="30" placeholder="예) 오후 2:30"></div></div>
+      <div class="two"><div><label for="evTitle">일정 이름</label><input id="evTitle" type="text" maxlength="80" placeholder="예) 추수감사 주일 예배"></div><div><label for="evPlace">장소 <span class="opt">(선택)</span></label><input id="evPlace" type="text" maxlength="60"></div></div>
+      <div class="field"><label for="evMemo">메모 <span class="opt">(선택)</span></label><input id="evMemo" type="text" maxlength="200"></div>
+      <div class="row"><button class="btn acc" type="button" id="evSave">일정 추가</button></div>
+      <p class="msg" id="evMsg"></p>
+      <ul class="slots" id="evList"></ul>
+    </div>
+    <div class="card form" style="margin-top:16px">
+      <h2 class="h">주보 올리기</h2>
+      <p class="hint">주보를 사진(앞·뒤 여러 장 가능)으로 올리면 홈페이지 ‘교회소식 › 주보’에 날짜별로 쌓입니다.</p>
+      <div class="two"><div><label for="buDay">주일 날짜</label><input id="buDay" type="date"></div><div><label for="buTitle">제목 <span class="opt">(선택)</span></label><input id="buTitle" type="text" maxlength="60" placeholder="예) 추수감사 주일"></div></div>
+      <div class="field"><label for="buFiles">주보 사진</label><input id="buFiles" type="file" accept="image/*" multiple></div>
+      <div class="row"><button class="btn acc" type="button" id="buSave">주보 올리기</button></div>
+      <p class="msg" id="buMsg"></p>
+      <ul class="slots" id="buList"></ul>
+    </div>
   </section>
 
   <!-- 내 정보 -->
@@ -780,7 +834,8 @@ footer a{color:var(--muted)}
     <h2>1. 수집하는 항목과 방법</h2>
     <ul>
       <li>카카오 로그인 시 카카오로부터 받는 정보: 닉네임(필수), 프로필 사진(선택), 카카오계정 이메일(선택)</li>
-      <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글, 단어장에 넣은 단어, 저장한 말씀과 메모, 모임방 회의 기록</li>
+      <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글, 단어장에 넣은 단어, 저장한 말씀과 메모, 모임방 회의 기록, ‘목소리 성경’에 직접 녹음한 목소리</li>
+      <li>새가족 등록(홈페이지): 처음 오신 분이 직접 적는 이름, 연락처, 알게 된 경로, 남기는 말 — 로그인 없이 받으며 담임목사·관리자만 볼 수 있습니다</li>
       <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
       <li>방문 기록: 홈페이지와 성도마당에서 본 화면, 누른 설교 영상, 방문 시각, 접속 기기 종류(휴대폰/PC), 들어온 경로. 로그인하지 않은 방문자는 이름 없이 브라우저에 저장된 임의 번호로만 집계합니다.</li>
     </ul>
@@ -793,9 +848,9 @@ footer a{color:var(--muted)}
       <li>방문 통계: 어떤 말씀과 소식이 도움이 되는지 살펴 교회 사역에 반영 (담임목사·관리자만 볼 수 있음)</li>
     </ul>
     <h2>3. 보유 기간</h2>
-    <p>방문 기록은 1년이 지나면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
+    <p>방문 기록은 1년이 지나면 지웁니다. 새가족 등록 정보는 등록 후 1년이 지나거나 본인이 요청하면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
-    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
+    <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, ‘목소리 성경’ 녹음은 로그인한 성도에게 녹음한 사람 이름과 함께 들리며, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
     <h2>4-1. 만 14세 미만 아동</h2>
     <p>만 14세 미만 아동은 법정대리인(부모님)의 동의를 받은 뒤 이용할 수 있습니다. 동의 없이 가입한 사실을 알게 되면 해당 정보를 지체 없이 삭제합니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
@@ -853,7 +908,6 @@ function renderWho(){
     <a href="#me" class="btn sm">내 정보</a><button class="btn sm" type="button" id="logoutBtn">로그아웃</button>`;
   $("#logoutBtn").onclick = logout;
   $("#adminTab").hidden = !(profile?.is_admin || profile?.areas?.length);
-  $("#teamTab").hidden = !(profile?.is_admin || profile?.teams?.length);
   $("#blockedBar").hidden = !profile?.is_blocked;
 }
 
@@ -874,7 +928,7 @@ function route(){
   const needLogin = !user && !PUBLIC_PAGES.includes(p);
   $("#gate").hidden = !needLogin;
   document.querySelectorAll("section.page").forEach(s => s.classList.toggle("active", !needLogin && s.dataset.page === p));
-  document.querySelectorAll("nav a[data-p]").forEach(a => a.classList.toggle("on", a.dataset.p === p));
+  navRender(p);
   if (p === "public") loadPublic(true);
   if (p === "study") initStudy(sref);
   trk("m-" + p);
@@ -889,6 +943,7 @@ function route(){
   if (p === "words") loadWords();
   if (p === "fav") loadFav();
   if (p === "team") loadTeams();
+  if (p === "voice") initVoice();
   window.scrollTo(0,0);
 }
 addEventListener("hashchange", route);
@@ -1730,7 +1785,7 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   const a = profile.areas || [];
@@ -1995,6 +2050,7 @@ $("#nameForm").addEventListener("submit", async e => {
 $("#leaveBtn").addEventListener("click", async e => {
   const t = e.currentTarget;
   if (!t.dataset.armed) { t.dataset.armed = 1; t.textContent = "한 번 더 누르면 탈퇴됩니다"; return; }
+  try { const { data: vf } = await sb.from("voice_verses").select("path").eq("user_id", user.id); if (vf?.length) await sb.storage.from("voice-verses").remove(vf.map(x => x.path)); } catch {}
   const { error } = await sb.rpc("delete_my_account");
   if (error) { toast("탈퇴하지 못했습니다: " + error.message); return; }
   await sb.auth.signOut(); alert("탈퇴가 완료되었습니다. 그동안 함께해 주셔서 감사합니다."); location.href = "./";
@@ -2598,9 +2654,236 @@ $("#spForm").addEventListener("submit", async e => {
   spSel = day; if (day < spWeekStart || day > addDays(spWeekStart, 6)) spWeekStart = day; loadSpace();
 });
 
+/* ---------- 메뉴 묶음 (말씀 · 나눔 · 기도 · 교회 · 관리) ---------- */
+const NAV = {
+  word: [["write", "성경 필사"], ["voice", "목소리 성경"], ["study", "말씀 공부"], ["qt", "나의 큐티"], ["words", "단어장"], ["fav", "내 말씀"]],
+  share: [["share", "묵상 나눔"], ["public", "성도 묵상"]],
+  pray: [["pray", "기도"]],
+  church: [["space", "교회 공간"], ["team", "모임방"]],
+  admin: [["admin", "관리"]]
+};
+function navRender(p){
+  const canTeam = !!(profile?.is_admin || profile?.teams?.length);
+  const g = Object.keys(NAV).find(k => NAV[k].some(x => x[0] === p));
+  document.querySelectorAll("#gNav a[data-g]").forEach(a => a.classList.toggle("on", a.dataset.g === g));
+  const items = g ? NAV[g].filter(x => x[0] !== "team" || canTeam) : [];
+  $("#sNav").hidden = items.length < 2;
+  $("#sNav").innerHTML = items.map(([k, t]) => `<li><a href="#${k}" class="${k === p ? "on" : ""}">${t}</a></li>`).join("");
+}
+
+/* ---------- 말로 쓰기 (받아쓰기 필사) ---------- */
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let dict8 = null;
+if (!SR) $("#dictBtn").hidden = true;
+$("#dictBtn").onclick = () => {
+  if (dict8) { dict8.stop(); return; }
+  const r = new SR(); dict8 = r;
+  r.lang = "ko-KR"; r.interimResults = true; r.continuous = true;
+  const base = $("#typeBox").value.trim();
+  $("#dictBtn").textContent = "■ 그만 말하기"; $("#dictBtn").classList.add("rec");
+  $("#checkMsg").textContent = "말씀을 또박또박 읽어 주세요. 다 읽으면 ‘그만 말하기’를 누르세요."; $("#checkMsg").className = "check";
+  r.onresult = e => {
+    let t = ""; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+    $("#typeBox").value = (base ? base + " " : "") + t.trim();
+    $("#typeBox").dispatchEvent(new Event("input"));
+  };
+  r.onerror = e => { if (e.error === "not-allowed" || e.error === "service-not-allowed") toast("마이크 사용을 허락해 주세요 (주소창 옆 자물쇠 → 마이크 허용)"); else if (e.error !== "no-speech" && e.error !== "aborted") toast("받아쓰지 못했습니다: " + e.error); };
+  r.onend = () => { dict8 = null; $("#dictBtn").textContent = "🎙 말로 쓰기"; $("#dictBtn").classList.remove("rec"); $("#typeBox").focus(); };
+  try { r.start(); } catch { r.onend(); }
+};
+
+/* ---------- 목소리 성경 (절마다 녹음해 함께 읽는 성경) ---------- */
+let vCur = { b: 1, c: 1 }, vRows = new Map(), vNames = new Map(), voiceReady = false, vRec = null, vPlay = null;
+const VOICE_MIME = ["audio/webm;codecs=opus", "audio/mp4", "audio/webm", "audio/ogg;codecs=opus"].find(m => window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || "";
+async function initVoice(){
+  await ensureBooks();
+  if (!voiceReady) {
+    voiceReady = true;
+    $("#vBook").innerHTML = BOOKS.map((b, i) => `<option value="${i + 1}">${b[0]}</option>`).join("");
+    $("#vBook").onchange = () => openVoice(+$("#vBook").value, 1);
+    $("#vCh").onchange = () => openVoice(vCur.b, +$("#vCh").value);
+    if (!window.MediaRecorder || !navigator.mediaDevices) $("#vNoRec").hidden = false;
+    const want = sessionStorage.getItem("thc-voice-go"); sessionStorage.removeItem("thc-voice-go");
+    if (want) { const [b, c, v] = want.split(",").map(Number); await openVoice(b, c); return startRec(v); }
+    const { data } = await sb.from("voice_verses").select("book,chapter").order("created_at", { ascending: false }).limit(1);
+    await openVoice(data?.[0]?.book || 1, data?.[0]?.chapter || 1);
+  } else openVoice(vCur.b, vCur.c);
+  const st = await sb.from("voice_verses").select("user_id", { count: "exact" }).limit(1000);
+  if (st.error) { $("#vStat").innerHTML = `<span class="msg err">목소리 성경을 쓰려면 교회 관리자가 데이터베이스 설정을 먼저 해야 합니다.</span>`; return; }
+  $("#vStat").textContent = `지금까지 ${num(st.count || 0)}절이 녹음되었고, ${new Set((st.data || []).map(x => x.user_id)).size}명의 성도님이 함께 읽었습니다.`;
+}
+async function openVoice(b, c){
+  stopVoice(); vCur = { b, c };
+  $("#vBook").value = b;
+  $("#vCh").innerHTML = BOOKS[b - 1][1].map((_, i) => `<option value="${i + 1}">${i + 1}장</option>`).join("");
+  $("#vCh").value = c;
+  const [book, res] = await Promise.all([getBook(b), sb.from("voice_verses").select("id,verse,user_id,path,secs,created_at").eq("book", b).eq("chapter", c)]);
+  vRows = new Map((res.data || []).map(r => [r.verse, r]));
+  const ids = [...new Set((res.data || []).map(r => r.user_id))].filter(id => !vNames.has(id));
+  if (ids.length) { const { data } = await sb.from("profiles").select("id,nickname").in("id", ids); (data || []).forEach(p => vNames.set(p.id, p.nickname)); }
+  const n = vRows.size, all = book[c - 1].length;
+  $("#vChInfo").textContent = `${BOOKS[b - 1][0]} ${c}장 · ${all}절 중 ${n}절 녹음됨`;
+  $("#vPlayAll").disabled = !n;
+  $("#vList").innerHTML = book[c - 1].map((t, i) => { const v = i + 1, r = vRows.get(v);
+    return `<li data-v="${v}" class="${r ? "has" : ""}"><div class="vt"><b>${v}</b>${esc(t)}</div><div class="va">${r
+      ? `<button class="btn sm acc" type="button" data-vplay>▶ 듣기</button><span class="sm muted">${esc(vNames.get(r.user_id) || "성도")}님${r.secs ? ` · ${Math.round(r.secs)}초` : ""}</span>${r.user_id === user.id || profile?.is_admin ? `<button class="btn sm warn" type="button" data-vdel>지우기</button>` : ""}`
+      : `<button class="btn sm" type="button" data-vrec>🎙 이 절 읽고 녹음</button>`}</div></li>`; }).join("");
+}
+async function voiceUrls(list){
+  const { data } = await sb.storage.from("voice-verses").createSignedUrls(list.map(r => r.path), 3600);
+  const m = new Map((data || []).map(x => [x.path, x.signedUrl])); return list.map(r => m.get(r.path));
+}
+function stopVoice(){ if (vPlay) { vPlay.stop = true; vPlay.audio?.pause(); vPlay = null; } document.querySelectorAll("#vList li.playing").forEach(x => x.classList.remove("playing")); $("#vPlayAll").textContent = "▶ 이 장 이어 듣기"; }
+async function playVoice(from){
+  stopVoice();
+  const list = [...vRows.values()].filter(r => r.verse >= (from || 1)).sort((a, b) => a.verse - b.verse);
+  if (!list.length) return;
+  const urls = await voiceUrls(list), me = vPlay = { stop: false, audio: new Audio() };
+  $("#vPlayAll").textContent = "■ 멈추기";
+  for (let i = 0; i < list.length && !me.stop; i++) {
+    const li = document.querySelector(`#vList li[data-v="${list[i].verse}"]`);
+    document.querySelectorAll("#vList li.playing").forEach(x => x.classList.remove("playing")); li?.classList.add("playing");
+    li?.scrollIntoView({ block: "center", behavior: "smooth" });
+    me.audio.src = urls[i]; if (!urls[i]) continue;
+    await new Promise(ok => { me.audio.onended = ok; me.audio.onerror = ok; me.audio.play().catch(ok); const t = setInterval(() => { if (me.stop) { clearInterval(t); ok(); } }, 300); me.audio.addEventListener("ended", () => clearInterval(t), { once: true }); });
+  }
+  if (vPlay === me) stopVoice();
+}
+$("#vPlayAll").onclick = () => vPlay ? stopVoice() : playVoice(1);
+$("#vList").addEventListener("click", async e => {
+  const li = e.target.closest("li[data-v]"); if (!li) return; const v = +li.dataset.v, r = vRows.get(v);
+  if (e.target.closest("[data-vplay]")) { stopVoice(); const [u] = await voiceUrls([r]); if (!u) return toast("소리 파일을 불러오지 못했습니다"); const a = new Audio(u); vPlay = { stop: false, audio: a }; li.classList.add("playing"); a.onended = () => stopVoice(); a.play().catch(() => toast("재생하지 못했습니다")); return; }
+  if (e.target.closest("[data-vrec]")) return startRec(v);
+  const del = e.target.closest("[data-vdel]");
+  if (del) {
+    if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+    const { error } = await sb.from("voice_verses").delete().eq("id", r.id);
+    if (error) return toast("지우지 못했습니다: " + error.message);
+    await sb.storage.from("voice-verses").remove([r.path]); toast("지웠습니다"); openVoice(vCur.b, vCur.c);
+  }
+});
+/* 녹음 */
+async function startRec(v){
+  if (!VOICE_MIME || !navigator.mediaDevices) return toast("이 브라우저에서는 녹음할 수 없습니다. 휴대폰의 크롬이나 사파리로 열어 주세요.");
+  if (profile?.is_blocked) return toast("글쓰기가 제한된 계정입니다.");
+  stopVoice(); closeRec();
+  const text = (await getBook(vCur.b))[vCur.c - 1][v - 1];
+  vRec = { v, chunks: [], blob: null, secs: 0 };
+  $("#vRecRef").textContent = `${BOOKS[vCur.b - 1][0]} ${vCur.c}:${v}`;
+  $("#vRecText").textContent = text;
+  $("#vRecMsg").textContent = "‘녹음 시작’을 누르고 위 말씀을 천천히 읽어 주세요."; $("#vRecMsg").className = "msg";
+  recButtons("ready"); $("#vRecBox").hidden = false; $("#vRecBox").scrollIntoView({ block: "center", behavior: "smooth" });
+}
+function recButtons(state){
+  $("#vRecStart").hidden = state === "rec"; $("#vRecStart").textContent = state === "done" ? "● 다시 녹음" : "● 녹음 시작";
+  $("#vRecStop").hidden = state !== "rec"; $("#vRecHear").hidden = $("#vRecSave").hidden = state !== "done";
+}
+function closeRec(){ if (vRec?.mr && vRec.mr.state === "recording") vRec.mr.stop(); vRec?.stream?.getTracks().forEach(t => t.stop()); vRec = null; $("#vRecBox").hidden = true; }
+$("#vRecStart").onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    const mr = new MediaRecorder(stream, { mimeType: VOICE_MIME, audioBitsPerSecond: 48000 });
+    Object.assign(vRec, { stream, mr, chunks: [], t0: Date.now() });
+    mr.ondataavailable = e => e.data.size && vRec.chunks.push(e.data);
+    mr.onstop = () => { stream.getTracks().forEach(t => t.stop()); if (!vRec) return; vRec.secs = (Date.now() - vRec.t0) / 1000; vRec.blob = new Blob(vRec.chunks, { type: VOICE_MIME.split(";")[0] }); recButtons("done");
+      $("#vRecMsg").textContent = `${Math.round(vRec.secs)}초 녹음했습니다. 들어 보시고 괜찮으면 저장해 주세요.`; };
+    mr.start(); recButtons("rec"); $("#vRecMsg").textContent = "녹음 중… 다 읽으면 ‘멈추기’를 누르세요. (최대 90초)";
+    vRec.timer = setTimeout(() => mr.state === "recording" && mr.stop(), 90000);
+  } catch { $("#vRecMsg").textContent = "마이크를 쓸 수 없습니다. 마이크 사용을 허락해 주세요 (주소창 옆 자물쇠 → 마이크 허용)."; $("#vRecMsg").className = "msg err"; }
+};
+$("#vRecStop").onclick = () => { clearTimeout(vRec?.timer); if (vRec?.mr?.state === "recording") vRec.mr.stop(); };
+$("#vRecHear").onclick = () => { if (vRec?.blob) new Audio(URL.createObjectURL(vRec.blob)).play(); };
+$("#vRecCancel").onclick = closeRec;
+$("#vRecSave").onclick = async () => {
+  const r = vRec; if (!r?.blob) return;
+  if (r.secs < 1) return toast("녹음이 너무 짧습니다. 다시 녹음해 주세요.");
+  $("#vRecSave").disabled = true; $("#vRecMsg").textContent = "저장하는 중…";
+  const type = r.blob.type || "audio/webm", ext = type.includes("mp4") ? "m4a" : type.includes("ogg") ? "ogg" : "webm";
+  const path = `${user.id}/${vCur.b}-${vCur.c}-${r.v}-${Date.now()}.${ext}`;
+  try {
+    const up = await sb.storage.from("voice-verses").upload(path, r.blob, { contentType: type });
+    if (up.error) throw up.error;
+    const ins = await sb.from("voice_verses").insert({ book: vCur.b, chapter: vCur.c, verse: r.v, path, secs: Math.round(r.secs * 10) / 10 });
+    if (ins.error) { await sb.storage.from("voice-verses").remove([path]); if (ins.error.code === "23505") { toast("방금 다른 성도님이 이 절을 녹음했어요"); closeRec(); return openVoice(vCur.b, vCur.c); } throw ins.error; }
+    const next = r.v < BOOKS[vCur.b - 1][1][vCur.c - 1] ? r.v + 1 : null;
+    toast("녹음을 저장했습니다. 감사합니다!"); closeRec(); await openVoice(vCur.b, vCur.c);
+    if (next && !vRows.has(next)) startRec(next);
+  } catch (err) { $("#vRecMsg").textContent = "저장하지 못했습니다: " + (err.message || err); $("#vRecMsg").className = "msg err"; }
+  $("#vRecSave").disabled = false;
+};
+$("#voiceLink").onclick = e => { e.preventDefault(); sessionStorage.setItem("thc-voice-go", `${cur.b},${cur.c},${cur.v}`); voiceReady = false; location.hash = "#voice"; };
+
+/* ---------- 관리: 새가족 · 교회 일정 · 주보 ---------- */
+async function loadNewcomers(){
+  const { data, error } = await sb.from("newcomers").select("*").order("created_at", { ascending: false }).limit(100);
+  if (error) { $("#ncList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  $("#ncList").innerHTML = (data || []).map(n => `<li data-id="${n.id}"><div class="mtxt"><b>${esc(n.name)}</b> · <a href="tel:${esc(n.phone.replace(/[^0-9+]/g, ""))}">${esc(n.phone)}</a>${n.contacted ? ' <span class="badge">연락함</span>' : ' <span class="badge hid">새로 옴</span>'}
+      <span class="mmeta">${new Date(n.created_at).toLocaleString("ko-KR")}${n.how ? " · " + esc(n.how) : ""}</span>${n.message ? `<span style="display:block;margin-top:4px">${esc(n.message)}</span>` : ""}</div>
+      <div class="acts"><button class="btn sm" type="button" data-ncok="${n.contacted ? 0 : 1}">${n.contacted ? "연락 전으로" : "연락했어요"}</button><button class="btn sm warn" type="button" data-ncdel>지우기</button></div></li>`).join("") || '<li class="muted sm">아직 등록한 새가족이 없습니다.</li>';
+}
+$("#ncList").addEventListener("click", async e => {
+  const li = e.target.closest("li[data-id]"); if (!li) return; const id = +li.dataset.id;
+  const ok = e.target.closest("[data-ncok]"); if (ok) { await sb.from("newcomers").update({ contacted: ok.dataset.ncok === "1" }).eq("id", id); return loadNewcomers(); }
+  const del = e.target.closest("[data-ncdel]");
+  if (del) { if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; } await sb.from("newcomers").delete().eq("id", id); loadNewcomers(); }
+});
+async function loadCalAdm(){
+  if (!$("#evDay").value) $("#evDay").value = kstToday();
+  const { data, error } = await sb.from("church_calendar").select("*").gte("day", addDays(kstToday(), -30)).order("day").order("time");
+  if (error) { $("#evList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  $("#evList").innerHTML = (data || []).map(x => `<li data-id="${x.id}"><span class="tm">${fmtDate(x.day)}${x.time ? " " + esc(x.time) : ""}</span><span class="who"><b>${esc(x.title)}</b>${x.place ? " · " + esc(x.place) : ""}${x.memo ? ` <span class="muted sm">${esc(x.memo)}</span>` : ""}</span><button class="btn sm warn" type="button" data-evdel>지우기</button></li>`).join("") || '<li class="muted sm">등록된 일정이 없습니다.</li>';
+}
+$("#evSave").onclick = async () => {
+  const row = { day: $("#evDay").value, time: $("#evTime").value.trim(), title: $("#evTitle").value.trim(), place: $("#evPlace").value.trim(), memo: $("#evMemo").value.trim() };
+  if (!row.day || !row.title) return amsg("#evMsg", "날짜와 일정 이름을 넣어 주세요.", true);
+  const { error } = await sb.from("church_calendar").insert(row);
+  if (error) return amsg("#evMsg", "저장하지 못했습니다: " + error.message, true);
+  ["#evTime", "#evTitle", "#evPlace", "#evMemo"].forEach(k => $(k).value = ""); amsg("#evMsg", "저장했습니다. 홈페이지 ‘교회 일정’에 바로 나옵니다."); loadCalAdm();
+};
+$("#evList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-evdel]"); if (!b) return;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 지웁니다"; return; }
+  await sb.from("church_calendar").delete().eq("id", b.closest("li").dataset.id); loadCalAdm();
+});
+async function loadBulAdm(){
+  if (!$("#buDay").value) { const d = new Date(Date.now() + 9 * 3600e3); d.setUTCDate(d.getUTCDate() - d.getUTCDay()); $("#buDay").value = d.toISOString().slice(0, 10); }
+  const { data, error } = await sb.from("bulletins").select("*").order("day", { ascending: false }).limit(30);
+  if (error) { $("#buList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  $("#buList").innerHTML = (data || []).map(x => `<li data-day="${x.day}"><span class="tm">${fmtDate(x.day)}</span><span class="who">${esc(x.title || "주보")} · 사진 ${(x.paths || []).length}장</span><button class="btn sm warn" type="button" data-budel>지우기</button></li>`).join("") || '<li class="muted sm">올린 주보가 없습니다.</li>';
+}
+async function shrinkTo(file, max){
+  const bmp = await createImageBitmap(file, { imageOrientation: "from-image" }), k = Math.min(1, max / Math.max(bmp.width, bmp.height));
+  const c = document.createElement("canvas"); c.width = Math.round(bmp.width * k); c.height = Math.round(bmp.height * k);
+  c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height); return new Promise(r => c.toBlob(r, "image/jpeg", 0.85));
+}
+$("#buSave").onclick = async () => {
+  const day = $("#buDay").value, files = [...$("#buFiles").files];
+  if (!day || !files.length) return amsg("#buMsg", "주일 날짜와 주보 사진을 골라 주세요.", true);
+  $("#buSave").disabled = true; amsg("#buMsg", "올리는 중…");
+  try {
+    const paths = [];
+    for (const [i, f] of files.entries()) {
+      const path = `${day}/${Date.now()}-${i + 1}.jpg`, blob = await shrinkTo(f, 2400);
+      const up = await sb.storage.from("bulletins").upload(path, blob, { contentType: "image/jpeg" }); if (up.error) throw up.error; paths.push(path);
+    }
+    const old = await sb.from("bulletins").select("paths").eq("day", day).maybeSingle();
+    const { error } = await sb.from("bulletins").upsert({ day, title: $("#buTitle").value.trim() || "주보", paths: [...(old.data?.paths || []), ...paths] });
+    if (error) throw error;
+    $("#buFiles").value = ""; $("#buTitle").value = ""; amsg("#buMsg", "올렸습니다. 홈페이지 ‘주보’에 바로 나옵니다."); loadBulAdm();
+  } catch (err) { amsg("#buMsg", "올리지 못했습니다: " + (err.message || err), true); }
+  $("#buSave").disabled = false;
+};
+$("#buList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-budel]"); if (!b) return;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 지웁니다"; return; }
+  const day = b.closest("li").dataset.day, { data } = await sb.from("bulletins").select("paths").eq("day", day).maybeSingle();
+  if (data?.paths?.length) await sb.storage.from("bulletins").remove(data.paths);
+  await sb.from("bulletins").delete().eq("day", day); loadBulAdm();
+});
+
 /* ---------- 방문 통계 ---------- */
 const PAGE_KO = { home: "홈 첫 화면", pastor: "섬기는이", vision: "비전과 목표", worship: "예배안내", location: "오시는길", sermons: "주일설교", summary: "말씀 요약", rules: "경건 규칙", prayer: "기도제목", mission: "선교후원", news: "알려드려요", offering: "헌금안내",
-  "m-write": "성도마당 · 성경 필사", "m-study": "성도마당 · 말씀 공부", "m-qt": "성도마당 · 나의 큐티", "m-share": "성도마당 · 묵상 나눔", "m-pray": "성도마당 · 기도", "m-space": "성도마당 · 교회 공간", "m-public": "성도마당 · 성도 묵상", "m-me": "성도마당 · 내 정보", "m-privacy": "성도마당 · 개인정보처리방침" };
+  "m-write": "성도마당 · 성경 필사", "m-study": "성도마당 · 말씀 공부", "m-qt": "성도마당 · 나의 큐티", "m-share": "성도마당 · 묵상 나눔", "m-pray": "성도마당 · 기도", "m-space": "성도마당 · 교회 공간", "m-public": "성도마당 · 성도 묵상", "m-me": "성도마당 · 내 정보", "m-voice": "성도마당 · 목소리 성경", "m-words": "성도마당 · 단어장", "m-fav": "성도마당 · 내 말씀", "m-team": "성도마당 · 모임방", calendar: "교회 일정", bulletin: "주보", newcomer: "새가족 등록", "m-privacy": "성도마당 · 개인정보처리방침" };
 const KIND_KO = { video: "영상", sermon: "말씀 요약", study: "말씀 공부" };
 const rankHtml = (rows, label, n = r => r.n) => { const max = Math.max(1, ...rows.map(n)); return rows.map(r => `<li><span class="nm">${label(r)}</span><span class="n">${num(n(r))}</span><span class="bar"><i style="width:${n(r) / max * 100}%"></i></span></li>`).join("") || '<li class="muted sm">아직 기록이 없습니다.</li>'; };
 async function loadStats(){
