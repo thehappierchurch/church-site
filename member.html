@@ -204,6 +204,24 @@ footer a{color:var(--muted)}
 .cal span.on{background:var(--accent);color:var(--accent-ink)}
 .cal span.now{outline:2px solid var(--gold)}
 .opts{display:grid;gap:6px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+.tile{background:var(--tint);border-radius:8px;padding:10px 12px}
+.tile .k{font-size:12.5px;color:var(--muted)}
+.tile .v{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink)}
+.sh{font-size:14.5px;margin:16px 0 6px}
+.dbars{display:flex;align-items:flex-end;gap:2px;height:90px;border-bottom:1px solid var(--line);padding-top:4px}
+.dbars i{flex:1;min-width:2px;background:var(--accent);border-radius:3px 3px 0 0;position:relative}
+.dbars i:hover{opacity:.75}
+.dlab{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:2px}
+.two-col{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 24px}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.rank li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;font-size:14px}
+.rank li .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank li .n{font-variant-numeric:tabular-nums;color:var(--muted)}
+.rank li .bar{grid-column:1/-1;height:4px;background:var(--tint);border-radius:2px;overflow:hidden}
+.rank li .bar i{display:block;height:100%;background:var(--accent);border-radius:2px}
+.evlist{list-style:none;margin:6px 0 4px;padding:8px 10px;background:var(--tint);border-radius:6px;font-size:13.5px;display:grid;gap:3px;flex-basis:100%}
 .swk-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
 .swk-nav .btn{white-space:nowrap}
 .swk-nav b{font-size:14px;text-align:center}
@@ -527,6 +545,20 @@ footer a{color:var(--muted)}
   <!-- 관리 -->
   <section class="page" data-page="admin">
     <div class="phead"><h1>관리</h1><p>목사님·관리자만 보이는 화면입니다.</p></div>
+    <div class="card" style="margin-bottom:16px" id="statCard">
+      <div class="swk-nav"><h2 class="h" style="margin:0">방문 통계</h2><select id="stDays"><option value="7">최근 7일</option><option value="30" selected>최근 30일</option><option value="90">최근 90일</option><option value="365">최근 1년</option></select></div>
+      <div class="tiles" id="stTiles"></div>
+      <h3 class="sh">날마다 방문자</h3><div class="dbars" id="stDaily"></div>
+      <div class="two-col">
+        <div><h3 class="sh">많이 본 화면</h3><ul class="rank" id="stPages"></ul></div>
+        <div><h3 class="sh">많이 본 설교 · 영상 · 말씀</h3><ul class="rank" id="stItems"></ul></div>
+        <div><h3 class="sh">로그인 성도 성별</h3><ul class="rank" id="stGender"></ul><p class="sm muted">성도가 ‘내 정보’에서 직접 고른 경우만 집계됩니다.</p></div>
+        <div><h3 class="sh">기기 · 들어온 경로</h3><ul class="rank" id="stDevice"></ul><ul class="rank" id="stRefs" style="margin-top:8px"></ul></div>
+      </div>
+      <h3 class="sh">최근 다녀간 성도 <span class="sm muted">(이름을 누르면 본 화면이 보입니다)</span></h3>
+      <ul class="slots" id="stRecent"></ul>
+      <p class="sm muted" style="margin-top:8px">로그인하지 않은 방문자는 이름 없이 숫자로만 셉니다. 방문 기록은 1년 뒤 자동으로 지워집니다.</p>
+    </div>
     <div class="card form" style="margin-bottom:16px">
       <h2 class="h">홈페이지 고치기 — 설교</h2>
       <p class="hint">여기서 저장하면 홈페이지 ‘설교말씀’과 첫 화면에 <b>바로</b> 반영됩니다. 영상이 나중에 올라가면 ‘고치기’를 눌러 유튜브 링크만 넣으세요 (유튜브 앱 공유 → 링크 복사).</p>
@@ -609,6 +641,11 @@ footer a{color:var(--muted)}
       <div class="row" style="margin-top:0"><button class="btn acc" type="submit">이름 저장</button></div>
       <p class="msg" id="nickMsg"></p>
     </form>
+    <div class="card form" style="margin-top:16px">
+      <label for="gender">성별 <span class="opt">(선택 · 교회 통계에만 쓰이고 다른 성도에게는 보이지 않습니다)</span></label>
+      <div class="row" style="margin-top:0"><select id="gender"><option value="">선택 안 함</option><option value="f">여성</option><option value="m">남성</option></select><button class="btn sm" type="button" id="genderSave">저장</button></div>
+      <p class="msg" id="genderMsg"></p>
+    </div>
     <div class="card" style="margin-top:16px">
       <h3 style="font-size:18px">회원 탈퇴</h3>
       <p class="muted sm" style="margin-top:6px">탈퇴하면 필사 기록과 큐티 글이 모두 지워지며 되돌릴 수 없습니다.</p>
@@ -624,6 +661,8 @@ footer a{color:var(--muted)}
     <ul>
       <li>카카오 로그인 시 카카오로부터 받는 정보: 닉네임(필수), 프로필 사진(선택), 카카오계정 이메일(선택)</li>
       <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글</li>
+      <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
+      <li>방문 기록: 홈페이지와 성도마당에서 본 화면, 누른 설교 영상, 방문 시각, 접속 기기 종류(휴대폰/PC), 들어온 경로. 로그인하지 않은 방문자는 이름 없이 브라우저에 저장된 임의 번호로만 집계합니다.</li>
     </ul>
     <h2>2. 이용 목적</h2>
     <ul>
@@ -631,9 +670,10 @@ footer a{color:var(--muted)}
       <li>성경 필사 진도 저장, 큐티 기록 보관, 묵상 나눔 게시 시 작성자 표시</li>
       <li>‘교회 묵상집에 실어도 좋아요’에 동의한 묵상의 묵상집(책) 제작</li>
       <li>기도 모임 안에서 기도 여부·연속 기록·응원 표시</li>
+      <li>방문 통계: 어떤 말씀과 소식이 도움이 되는지 살펴 교회 사역에 반영 (담임목사·관리자만 볼 수 있음)</li>
     </ul>
     <h2>3. 보유 기간</h2>
-    <p>회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
+    <p>방문 기록은 1년이 지나면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
     <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다.</p>
     <h2>4-1. 만 14세 미만 아동</h2>
@@ -708,11 +748,12 @@ function route(){
   document.querySelectorAll("nav a[data-p]").forEach(a => a.classList.toggle("on", a.dataset.p === p));
   if (p === "public") loadPublic(true);
   if (p === "study") initStudy(sref);
+  trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
-  if (p === "me") $("#nick").value = profile?.nickname || "";
+  if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; }); }
   if (p === "pray") loadPray();
   if (p === "space") loadSpace();
   if (p === "admin") { if (profile?.is_admin) initAdmin(); else location.hash = "#write"; }
@@ -1282,7 +1323,7 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); await loadMembers(); loadMod();
 }
 /* 분기별 통독 범위 관리 */
 const BOOK_ALIAS = { "요한서신": [62, 63, 64], "사무엘상하": [9, 10], "사무엘상·하": [9, 10], "열왕기상하": [11, 12], "열왕기상·하": [11, 12], "역대상하": [13, 14], "역대상·하": [13, 14], "고린도전후서": [46, 47], "데살로니가전후서": [52, 53], "디모데전후서": [54, 55], "베드로전후서": [60, 61], "모세오경": [1, 2, 3, 4, 5], "소선지서": [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] };
@@ -1711,6 +1752,7 @@ async function openPanel(li){
   const p = li.querySelector(".spanel");
   if (!p.hidden) { p.hidden = true; li.classList.remove("open"); return; }
   li.classList.add("open"); p.hidden = false;
+  trk("m-study", "study", `${BOOKS[sCur.b-1][0]} ${sCur.c}:${li.dataset.v}`);
   const v = +li.dataset.v, { b, c } = sCur, ot = b <= 39, notes = sNotes.filter(x => x.v_from <= v && v <= x.v_to);
   p.innerHTML = `<div class="sec"><h3>원어 <small>${ot ? "히브리어" : "헬라어"} · 단어를 누르면 뜻이 나옵니다</small></h3>
       <div class="orig ${ot ? "heb" : "grk"}" ${ot ? 'dir="rtl" lang="he"' : 'lang="grc"'}><span class="muted sm">원문을 불러오는 중…</span></div><div class="wcard" hidden></div></div>
@@ -1855,6 +1897,52 @@ $("#spForm").addEventListener("submit", async e => {
   msg(days.length > 1 ? "4주 동안 매주 등록했습니다." : "등록했습니다."); $("#spMemo").value = "";
   spSel = day; if (day < spWeekStart || day > addDays(spWeekStart, 6)) spWeekStart = day; loadSpace();
 });
+
+/* ---------- 방문 통계 ---------- */
+const PAGE_KO = { home: "홈 첫 화면", pastor: "섬기는이", vision: "비전과 목표", worship: "예배안내", location: "오시는길", sermons: "주일설교", summary: "말씀 요약", rules: "경건 규칙", prayer: "기도제목", mission: "선교후원", news: "알려드려요", offering: "헌금안내",
+  "m-write": "성도마당 · 성경 필사", "m-study": "성도마당 · 말씀 공부", "m-qt": "성도마당 · 나의 큐티", "m-share": "성도마당 · 묵상 나눔", "m-pray": "성도마당 · 기도", "m-space": "성도마당 · 교회 공간", "m-public": "성도마당 · 성도 묵상", "m-me": "성도마당 · 내 정보", "m-privacy": "성도마당 · 개인정보처리방침" };
+const KIND_KO = { video: "영상", sermon: "말씀 요약", study: "말씀 공부" };
+const rankHtml = (rows, label, n = r => r.n) => { const max = Math.max(1, ...rows.map(n)); return rows.map(r => `<li><span class="nm">${label(r)}</span><span class="n">${num(n(r))}</span><span class="bar"><i style="width:${n(r) / max * 100}%"></i></span></li>`).join("") || '<li class="muted sm">아직 기록이 없습니다.</li>'; };
+async function loadStats(){
+  const days = +$("#stDays").value;
+  sb.rpc("admin_prune_events");
+  const { data: d, error } = await sb.rpc("admin_stats", { days });
+  if (error || !d) { $("#stTiles").innerHTML = `<p class="muted sm">통계를 불러오지 못했습니다.</p>`; return; }
+  $("#stTiles").innerHTML = [["방문자", d.visitors], ["화면 본 횟수", d.views], ["다녀간 성도(로그인)", d.members], ["영상 재생", d.videos]].map(([k, v]) => `<div class="tile"><div class="k">${k}</div><div class="v">${num(v)}</div></div>`).join("");
+  const map = Object.fromEntries((d.daily || []).map(x => [x.d, x])), list = [];
+  for (let i = days - 1; i >= 0; i--) { const k = addDays(kstToday(), -i); list.push([k, map[k]?.u || 0, map[k]?.v || 0]); }
+  const mx = Math.max(1, ...list.map(x => x[1]));
+  $("#stDaily").innerHTML = list.map(([k, u, v]) => `<i style="height:${Math.max(u ? 4 : 0, u / mx * 100)}%" title="${fmtDate(k)} · 방문자 ${u}명 · 화면 ${v}회"></i>`).join("");
+  document.querySelectorAll("#statCard .dlab").forEach(x => x.remove());
+  $("#stDaily").insertAdjacentHTML("afterend", `<div class="dlab"><span>${fmtDate(list[0][0])}</span><span>오늘</span></div>`);
+  $("#stPages").innerHTML = rankHtml(d.pages || [], r => esc(PAGE_KO[r.page] || r.page || "기타"));
+  $("#stItems").innerHTML = rankHtml(d.items || [], r => `<span class="badge">${KIND_KO[r.kind] || r.kind}</span>${esc(r.item)}`);
+  const g = d.gender || {};
+  $("#stGender").innerHTML = rankHtml([{ k: "여성", n: g.f || 0 }, { k: "남성", n: g.m || 0 }, { k: "고르지 않음", n: g.none || 0 }], r => r.k);
+  const dv = d.device || {};
+  $("#stDevice").innerHTML = rankHtml([{ k: "휴대폰", n: dv.m || 0 }, { k: "PC", n: dv.p || 0 }].filter(x => x.n), r => r.k);
+  $("#stRefs").innerHTML = (d.refs || []).length ? rankHtml(d.refs, r => esc(r.ref)) : "";
+  $("#stRecent").innerHTML = (d.recent || []).map(r => `<li data-uid="${r.user_id}"><span class="tm">${ago(r.last)}</span><span class="who"><button type="button" class="linkbtn" data-ev="${r.user_id}"><b>${esc(r.nickname)}</b></button>${r.gender ? ` <span class="muted sm">${r.gender === "f" ? "여" : "남"}</span>` : ""} <span class="muted sm">· ${r.days}일 방문 · 화면 ${num(r.n)}회</span></span></li>`).join("") || '<li class="muted sm">로그인한 성도의 방문 기록이 아직 없습니다.</li>';
+}
+$("#stDays").onchange = loadStats;
+$("#stRecent").addEventListener("click", async e => {
+  const b = e.target.closest("[data-ev]"); if (!b) return;
+  const li = b.closest("li"), old = li.querySelector(".evlist"); if (old) return old.remove();
+  const { data } = await sb.rpc("admin_member_events", { uid: b.dataset.ev, lim: 40 });
+  li.insertAdjacentHTML("beforeend", `<ul class="evlist">${(data || []).map(x => `<li><span class="muted">${new Date(x.at).toLocaleString("ko-KR", { month: "numeric", day: "numeric", hour: "numeric", minute: "2-digit" })}</span> · ${esc(PAGE_KO[x.page] || x.page)}${x.item ? ` · <span class="badge">${KIND_KO[x.kind] || x.kind}</span>${esc(x.item)}` : ""}</li>`).join("") || "<li>기록 없음</li>"}</ul>`);
+});
+$("#genderSave").onclick = async () => {
+  const v = $("#gender").value || null;
+  const { error } = await sb.from("member_info").upsert({ user_id: user.id, gender: v, updated_at: new Date().toISOString() });
+  $("#genderMsg").textContent = error ? "저장하지 못했습니다." : "저장했습니다."; $("#genderMsg").className = error ? "msg err" : "msg";
+};
+/* 성도마당 방문 기록 */
+const trkVid = (() => { try { let v = localStorage.getItem("thc-vid"); if (!v) { v = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("thc-vid", v); } return v; } catch { return "s" + Math.random().toString(36).slice(2, 14); } })();
+const trkDev = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? "m" : "p";
+function trk(page, kind = "view", item = ""){
+  if (navigator.webdriver || page === "m-admin") return;
+  sb.from("site_events").insert({ vid: trkVid, page, kind, item: String(item || "").slice(0, 200), device: trkDev, user_id: user?.id || null }).then(() => {}, () => {});
+}
 
 /* ---------- 시작 ---------- */
 (async () => {

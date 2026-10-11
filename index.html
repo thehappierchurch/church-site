@@ -781,6 +781,29 @@ $("#copyBtn").addEventListener("click", async e => {
 });
 
 /* ---------- routing ---------- */
+/* 방문 통계 — 관리자만 봅니다 (개인정보처리방침 참고) */
+const TRK = (() => {
+  if (navigator.webdriver) return () => {};
+  let vid = "";
+  try { vid = localStorage.getItem("thc-vid") || ""; if (!vid) { vid = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("thc-vid", vid); } } catch { vid = "s" + Math.random().toString(36).slice(2, 14); }
+  let ref = ""; try { const h = new URL(document.referrer).hostname; if (h && h !== location.hostname) ref = h.replace(/^www\./, "").slice(0, 100); } catch {}
+  const device = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? "m" : "p";
+  const sess = () => { try { const k = Object.keys(localStorage).find(k => /^sb-.*-auth-token$/.test(k)); const v = k && JSON.parse(localStorage.getItem(k)); return v && v.access_token && v.expires_at * 1000 > Date.now() + 60000 ? v : null; } catch { return null; } };
+  let first = true;
+  return (page, kind = "view", item = "") => {
+    const s = sess(), body = { vid, page: String(page).slice(0, 40), kind, item: String(item || "").trim().slice(0, 200), ref: first ? ref : "", device };
+    if (s && s.user) body.user_id = s.user.id;
+    first = false;
+    fetch("https://jdgyvvjpkklyrxxgxtav.supabase.co/rest/v1/site_events", { method: "POST", keepalive: true, body: JSON.stringify(body),
+      headers: Object.assign({ apikey: "sb_publishable_Mx9v3fHWJhiDXva59qA6lA_8N7zEDQV", "Content-Type": "application/json", Prefer: "return=minimal" }, s ? { Authorization: "Bearer " + s.access_token } : {}) }).catch(() => {});
+  };
+})();
+document.addEventListener("click", e => {
+  const a = e.target.closest("a.thumb, a[href*='youtu']"); if (!a) return;
+  const box = a.closest(".scard, #homeSermon, details");
+  TRK((location.hash || "#home").slice(1), "video", box?.querySelector("h3, h2")?.textContent || "유튜브 채널");
+}, true);
+document.addEventListener("click", e => { const sm = e.target.closest("#summaryList summary"); if (sm && !sm.parentElement.open) TRK("summary", "sermon", sm.querySelector("h2")?.textContent); });
 function route(){
   let p = (location.hash || "#home").slice(1);
   if (!document.querySelector(`[data-page="${p}"]`)) p = "home";
@@ -791,6 +814,7 @@ function route(){
   $("#subNavWrap").hidden = !m || !m.sub;
   if (m && m.sub) $("#subNav").innerHTML = m.sub.map(s => `<li><a href="#${s[1]}" class="${s[1]===p?'on':''}">${s[0]}</a></li>`).join("");
   window.scrollTo(0,0);
+  if (p !== "admin") TRK(p);
 }
 addEventListener("hashchange", route);
 route();
