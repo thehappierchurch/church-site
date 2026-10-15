@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2F5D55">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="더행복한교회">
 <title>성도마당 | 더행복한교회</title>
 <meta name="description" content="더행복한교회 성도마당 - 성경 필사, 큐티 기록, 묵상 나눔">
 <meta name="robots" content="noindex">
@@ -259,6 +266,13 @@ footer a{color:var(--muted)}
 #spForm input[type=time]{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px}
 .reader{margin-bottom:16px}
 .tq{background:var(--tint);border-radius:8px;padding:12px 14px;margin-bottom:12px}
+.dnav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.dnav input{flex:1;min-width:9.5em}.dnav .btn{min-width:40px;padding-inline:10px}.dnav .dow{font-weight:700;color:var(--accent);min-width:2.2em}
+.btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.atabs{display:flex;flex-wrap:wrap;gap:6px;position:sticky;top:0;z-index:12;background:var(--bg);padding:8px 0 10px;margin-bottom:8px;border-bottom:1px solid var(--line)}
+.atabs button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer}
+.atabs button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.atabs button b{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--warn);color:#fff;font-size:11px;line-height:18px;text-align:center}
+section[data-page="admin"] > .card.tabhide{display:none!important}
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
 .tq-v{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.5}
 .plan{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
@@ -497,7 +511,7 @@ footer a{color:var(--muted)}
     </div>
     <form class="card form" id="qtForm" novalidate>
       <div class="two">
-        <div><label for="qDate">읽은 날짜</label><input id="qDate" type="date"></div>
+        <div><label for="qDate">읽은 날짜</label><div class="dnav"><button class="btn sm" type="button" id="qPrev" aria-label="전날">◀</button><input id="qDate" type="date"><button class="btn sm" type="button" id="qNext" aria-label="다음 날">▶</button><span class="dow" id="qDow"></span><button class="btn sm" type="button" id="qTodayBtn">오늘</button></div></div>
         <div><label for="qPassage">읽은 본문 <b class="req">*</b></label><input id="qPassage" type="text" placeholder="예) 시편 23:1-6"></div>
       </div>
       <div class="field"><label for="qBody">느낀 점 <b class="req">*</b></label>
@@ -1233,15 +1247,16 @@ async function todayQt(date){
 }
 async function renderToday(){
   const d = $("#qDate").value || kstToday(), { plan, item, done } = await todayQt(d);
-  const box = $("#qtToday"), m = +d.slice(5, 7), day = +d.slice(8, 10);
-  if (!plan) { box.innerHTML = `<span class="muted sm">${m}월 ${day}일 — 이번 분기 큐티 범위가 아직 정해지지 않았습니다. 자유롭게 본문을 골라 묵상해 주세요.</span>`; return; }
+  const box = $("#qtToday"), m = +d.slice(5, 7), day = +d.slice(8, 10), dw = "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()];
+  if (!plan) { box.innerHTML = `<span class="muted sm">${m}월 ${day}일(${dw}) — 이번 분기 큐티 범위가 아직 정해지지 않았습니다. 자유롭게 본문을 골라 묵상해 주세요.</span>`; return; }
   box.innerHTML = item
-    ? `<div class="tq-k">${m}월 ${day}일 큐티 본문</div><div class="tq-v">${refText(item)}</div>
-       <div class="row" style="margin-top:6px"><button class="btn acc sm" type="button" id="tqRead">본문 읽기</button><button class="btn sm" type="button" id="tqUse">읽은 본문에 넣기</button></div>`
-    : `<div class="tq-k">${m}월 ${day}일</div><div class="tq-v" style="font-size:16px">${done ? "이번 분기 범위를 모두 마쳤습니다. 지난 본문 중 마음에 남은 곳을 다시 묵상해 보세요." : ""}</div>`;
+    ? `<div class="tq-k">${m}월 ${day}일(${dw}) 큐티 본문</div><div class="tq-v">${refText(item)}</div>
+       <div class="row" style="margin-top:6px"><button class="btn acc sm" type="button" id="tqRead">본문 읽기</button><button class="btn sm" type="button" id="tqSay">🔊 읽어 주기</button><button class="btn sm" type="button" id="tqUse">읽은 본문에 넣기</button></div>`
+    : `<div class="tq-k">${m}월 ${day}일(${dw})</div><div class="tq-v" style="font-size:16px">${done ? "이번 분기 범위를 모두 마쳤습니다. 지난 본문 중 마음에 남은 곳을 다시 묵상해 보세요." : ""}</div>`;
   if (item) {
     $("#tqRead").onclick = async () => { await openReader(item[0], item[1]); rSel = [item[2], item[3]]; markSel(); const li = document.querySelector(`#rText li[data-v="${item[2]}"]`); if (li) $("#rText").scrollTop = li.offsetTop - $("#rText").offsetTop; };
     $("#tqUse").onclick = () => { $("#qPassage").value = refText(item); toast("읽은 본문에 넣었습니다"); };
+    $("#tqSay").onclick = () => sayQt(item);
   }
 }
 async function initReader(){
@@ -1253,7 +1268,11 @@ async function initReader(){
     $("#qtPlan").hidden = false;
     $("#qtPlan").innerHTML = `<span class="pl">이번 분기 통독 · ${esc(plan[0])}</span>` + plan[1].map(b => `<button class="btn sm" type="button" data-rb="${b}">${BOOKS[b-1][0]}</button>`).join("");
   }
-  $("#qDate").addEventListener("change", renderToday);
+  $("#qDate").addEventListener("change", () => { stopQtSay(); renderToday(); showDow(); });
+  const shiftQ = n => { const d = new Date(($("#qDate").value || kstToday()) + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); $("#qDate").value = d.toISOString().slice(0, 10); $("#qDate").dispatchEvent(new Event("change")); };
+  $("#qPrev").onclick = () => shiftQ(-1); $("#qNext").onclick = () => shiftQ(1);
+  $("#qTodayBtn").onclick = () => { $("#qDate").value = kstToday(); $("#qDate").dispatchEvent(new Event("change")); };
+  showDow();
   renderToday();
   $("#qtPlan").onclick = e => { const x = e.target.closest("[data-rb]"); if (x) openReader(+x.dataset.rb, 1); };
   $("#rBook").onchange = () => openReader(+$("#rBook").value, 1);
@@ -1785,10 +1804,12 @@ $("#morePublic").onclick = () => { pubPage++; loadPublic(false); };
 /* ---------- 관리 ---------- */
 function loadScript(src){ return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 async function initAdmin(){
+  adminTabs();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
   loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
+  $("#aTabs")?.remove();
   const a = profile.areas || [];
   document.querySelector('section[data-page="admin"] .phead p').textContent = "맡겨 주신 부분(" + a.map(x => AREA_NM[x]).join(", ") + ")을 고치면 홈페이지에 바로 반영됩니다.";
   document.querySelectorAll('section[data-page="admin"] > .card').forEach(c => { c.hidden = !(c.dataset.area && a.includes(c.dataset.area)); });
@@ -2684,6 +2705,46 @@ $("#askAi").onclick = async () => {
   toast(url.length < 7000 ? "Claude 창에 질문이 들어가 있어요. 보내기를 누르세요 (안 들어가 있으면 붙여 넣기)" : "질문을 복사했어요. 열린 Claude 창에 붙여 넣고 보내세요");
 };
 
+/* ---------- 큐티 본문 읽어 주기 (운전 중에도 듣기) ---------- */
+function showDow(){ const d = $("#qDate").value; $("#qDow").textContent = d ? "(" + "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()] + ")" : ""; }
+let qtSaying = false;
+function stopQtSay(){ qtSaying = false; if (canSpeak) speechSynthesis.cancel(); const b = $("#tqSay"); if (b) { b.textContent = "🔊 읽어 주기"; b.classList.remove("on"); } }
+async function sayQt(item){
+  if (!canSpeak) return toast("이 기기에서는 읽어 주기를 쓸 수 없습니다");
+  if (qtSaying) return stopQtSay();
+  stopSpeak(); qtSaying = true;
+  const b = $("#tqSay"); b.textContent = "■ 그만 듣기"; b.classList.add("on");
+  const [bk, c, v1, v2] = item, ch = (await getBook(bk))[c - 1], v = pickVoice("ko-KR");
+  const parts = [`${BOOKS[bk - 1][0]} ${c}장 ${v1}절${v2 > v1 ? "부터 " + v2 + "절" : ""} 말씀입니다.`];
+  for (let i = v1; i <= v2; i++) parts.push(ch[i - 1]);
+  parts.forEach((t, i) => { const u = new SpeechSynthesisUtterance(t); u.lang = "ko-KR"; if (v) u.voice = v; u.rate = 0.95;
+    if (i === parts.length - 1) u.onend = () => { if (qtSaying) stopQtSay(); };
+    speechSynthesis.speak(u); });
+  toast("말씀을 읽어 드립니다. 운전 중에는 화면을 보지 마시고 들으세요.");
+}
+
+/* ---------- 관리 화면 묶음 탭 ---------- */
+const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
+function adminTabOf(c){
+  const h = (c.querySelector("h2")?.textContent || "") + (c.id || "");
+  if (/statCard|방문 통계|새가족|생일/.test(h)) return "now";
+  if (/홈페이지 고치기|교회 일정|주보/.test(h)) return "site";
+  if (/회원|살펴보기|맡기기|모임방|기도 모임|교인/.test(h)) return "people";
+  return "word";
+}
+function adminTabs(){
+  const sec = document.querySelector('section[data-page="admin"]'); if (!sec || $("#aTabs")) return;
+  const bar = document.createElement("div"); bar.className = "atabs"; bar.id = "aTabs";
+  bar.innerHTML = ATABS.map(([k, t]) => `<button type="button" data-t="${k}">${t}</button>`).join("");
+  sec.querySelector(".phead").after(bar);
+  const show = k => { try { localStorage.setItem("thc-atab", k); } catch {}
+    bar.querySelectorAll("button").forEach(x => x.classList.toggle("on", x.dataset.t === k));
+    sec.querySelectorAll(":scope > .card").forEach(c => c.classList.toggle("tabhide", k !== "all" && adminTabOf(c) !== k)); };
+  bar.onclick = e => { const x = e.target.closest("button[data-t]"); if (x) show(x.dataset.t); };
+  let k = "now"; try { k = localStorage.getItem("thc-atab") || "now"; } catch {}
+  show(k);
+}
+
 /* ---------- 메뉴 묶음 (말씀 · 나눔 · 기도 · 교회 · 관리) ---------- */
 const NAV = {
   word: [["write", "성경 필사"], ["voice", "목소리 성경"], ["study", "말씀 공부"], ["qt", "나의 큐티"], ["words", "단어장"], ["fav", "내 말씀"]],
@@ -2972,5 +3033,6 @@ function trk(page, kind = "view", item = ""){
   });
 })();
 </script>
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));</script>
 </body>
 </html>

@@ -3,6 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#2F5D55">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="더행복한교회">
 <meta name="naver-site-verification" content="f87a9415ca01451370b4dc9bb92bff6282571728" />
 <meta name="google-site-verification" content="X32LQNGSm5syEu3dI1kvPGCyioWjLHUlcOWDm3JqAyE" />
 <title>더행복한교회 | 대한예수교장로회 · 서울 성북구</title>
@@ -362,6 +369,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
             <dt>설립</dt><dd>2022년 3월 12일</dd>
             <dt>등록</dt><dd><a href="#newcomer">새가족 등록하기 →</a></dd>
             <dt>질문</dt><dd><a href="#faq">신앙에 대해 궁금한 점 →</a></dd>
+            <dt>앱</dt><dd><a href="#app">휴대폰에 교회 앱 설치하기 →</a></dd>
           </dl>
         </div>
       </div>
@@ -696,6 +704,19 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
   </div>
 </section>
 
+<!-- APP -->
+<section class="page" data-page="app">
+  <div class="wrap">
+    <div class="phead"><h1>교회 앱 설치</h1><div class="en">Install the App</div></div>
+    <div class="visit" style="margin-bottom:24px"><h3>홈 화면에 더행복한교회 앱을 놓아 두세요</h3><p>앱스토어에서 따로 받을 필요 없이, 지금 보시는 홈페이지를 휴대폰 홈 화면에 앱처럼 설치할 수 있습니다. 아이콘을 누르면 주소창 없이 바로 열리고, 성도마당 로그인도 그대로 유지됩니다.</p>
+      <p style="margin-top:14px"><button class="btn acc" type="button" id="appInstall" hidden>📱 지금 앱 설치하기</button></p><p class="meta" id="appDone" hidden>이미 앱으로 열려 있습니다. 감사합니다!</p></div>
+    <div class="faq">
+      <details open><summary>갤럭시 · 안드로이드 휴대폰</summary><div class="a"><p>1. <b>크롬(Chrome)</b>이나 <b>삼성 인터넷</b>으로 thehappierchurch.kr 을 엽니다. (카카오톡 안에서 열렸다면 오른쪽 위 ⋮ → ‘다른 브라우저로 열기’)</p><p>2. 위의 ‘지금 앱 설치하기’ 버튼이 보이면 누르세요. 버튼이 없으면 오른쪽 위 ⋮(크롬) 또는 아래 ≡(삼성 인터넷) 메뉴에서 <b>‘앱 설치’</b> 또는 <b>‘홈 화면에 추가’</b>를 누릅니다.</p></div></details>
+      <details open><summary>아이폰 · 아이패드</summary><div class="a"><p>1. <b>사파리(Safari)</b>로 thehappierchurch.kr 을 엽니다. (카카오톡 안에서 열렸다면 아래쪽 ⋯ 또는 공유 → ‘Safari로 열기’)</p><p>2. 아래쪽 가운데 <b>공유 버튼(네모에 위쪽 화살표)</b>을 누르고, 목록을 내려 <b>‘홈 화면에 추가’</b> → 오른쪽 위 <b>‘추가’</b>를 누릅니다.</p></div></details>
+    </div>
+  </div>
+</section>
+
 <!-- ADMIN -->
 <section class="page" data-page="admin">
   <div class="wrap">
@@ -879,7 +900,7 @@ function feasts(y){
   const L = [[D(1, 1), "신년 감사"], [D(1, 6), "주현절"], [add(E, -46), "사순절 시작 (재의 수요일)"], [add(E, -7), "종려주일 · 고난주간 시작"], [add(E, -2), "성금요일"], [E, "부활절"],
     [sunOnOrAfter(D(5, 1)), "어린이주일"], [add(sunOnOrAfter(D(5, 1)), 7), "어버이주일"], [add(E, 39), "예수 승천일"], [add(E, 49), "성령강림절"], [add(E, 56), "삼위일체주일"],
     [sunOnOrAfter(D(7, 1)), "맥추감사주일"], [add(D(10, 31), -D(10, 31).getUTCDay()), "종교개혁기념주일"], [D(10, 31), "종교개혁일"], [add(sunOnOrAfter(D(11, 1)), 14), "추수감사주일"],
-    [add(sunOnOrAfter(D(11, 27)), 0), "대림절 시작"], [D(12, 24), "성탄 전야"], [D(12, 25), "성탄절"], [D(12, 31), "송구영신 예배"], [D(3, 12), "교회 창립 기념일"]];
+    [add(sunOnOrAfter(D(11, 27)), 0), "대림절 시작"], [D(12, 24), "성탄 전야"], [D(12, 25), "성탄절"], [D(12, 31), "송구영신 예배"], [D(3, 12), y > 2022 ? `교회 창립 ${y - 2022}주년` : "교회 창립"]];
   return L.map(([dt, title]) => ({ day: iso(dt), title, feast: true }));
 }
 async function renderCal(){
@@ -903,6 +924,11 @@ async function renderBul(){
   const all = [...rows, ...BUL_SEED.filter(s => !rows.some(r => r.day === s.day))].sort((a, b) => b.day.localeCompare(a.day));
   $("#bulList").innerHTML = all.map((b, i) => `<details${i === 0 ? " open" : ""}><summary>${fmtDate(b.day)} ${esc(b.title || "주보")}</summary>${b.urls.map(u => `<a href="${esc(u)}" target="_blank" rel="noopener"><img src="${esc(u)}" alt="${fmtDate(b.day)} 주보" loading="lazy"></a>`).join("")}</details>`).join("") || `<p class="meta">올린 주보가 없습니다.</p>`;
 }
+/* 앱 설치 (홈 화면에 추가) */
+let appPrompt = null;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); appPrompt = e; $("#appInstall").hidden = false; });
+$("#appInstall").onclick = async () => { if (!appPrompt) return; appPrompt.prompt(); await appPrompt.userChoice.catch(() => {}); appPrompt = null; $("#appInstall").hidden = true; };
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("#appDone").hidden = false;
 addEventListener("hashchange", () => { const p = location.hash.slice(1); if (p === "calendar") renderCal(); if (p === "bulletin") renderBul(); });
 if (location.hash === "#calendar") renderCal(); if (location.hash === "#bulletin") renderBul();
 $("#ncForm").addEventListener("submit", async e => {
@@ -1114,5 +1140,6 @@ $("#saveBtn").addEventListener("click", async () => {
 })();
 </script>
 
+<script>if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));</script>
 </body>
 </html>
