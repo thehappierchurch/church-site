@@ -4,13 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#2F5D55">
+<meta name="theme-color" content="#1F6FD1">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="더행복한교회">
 <title>성도마당 | 더행복한교회</title>
+<meta name="description" content="더행복한교회 성도마당 — 매일 큐티, 함께 쓰는 성경 필사, 목소리 성경, 기도 모임, 말씀 공부(영어·원어·주석)">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="더행복한교회">
+<meta property="og:title" content="더행복한교회 성도마당 — 말씀 · 큐티 · 기도">
+<meta property="og:description" content="매일 큐티와 성경 필사, 함께 기도하는 더행복한교회 성도들의 온라인 마당">
+<meta property="og:url" content="https://thehappierchurch.kr/member.html">
+<meta property="og:image" content="https://thehappierchurch.kr/icon-512.png">
+<meta property="og:locale" content="ko_KR">
 <meta name="description" content="더행복한교회 성도마당 - 성경 필사, 큐티 기록, 묵상 나눔">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,16 +26,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+Hebrew&family=Noto+Serif:wght@400&display=swap">
 <style>
 :root{
-  --bg:#FBFBF9; --surface:#FFFFFF; --tint:#EEF3F1;
-  --ink:#1D2322; --muted:#68716F; --line:#E2E6E4;
-  --accent:#2F5D55; --accent-ink:#FFFFFF; --gold:#B8914A; --brand:#1B2A5C;
+  --bg:#F7FBFF; --surface:#FFFFFF; --tint:#EAF4FF;
+  --ink:#1B2533; --muted:#5B6B7E; --line:#DCE7F3;
+  --accent:#1F6FD1; --accent-ink:#FFFFFF; --gold:#B7791F; --brand:#163E86;
   --ok:#2F7D55; --warn:#B4463C; --kakao:#FEE500; --kakao-ink:#191600;
   --serif:"Gowun Batang","Noto Serif KR",Georgia,serif;
   --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
+  :root[data-theme="dark-auto"]{
     color-scheme:dark;
     --bg:#121615; --surface:#191E1D; --tint:#1F2826;
     --ink:#E9EDEB; --muted:#9BA5A2; --line:#2B3331;
@@ -48,6 +56,17 @@ a{color:inherit}
 h1,h2,h3{font-family:var(--serif);line-height:1.35;margin:0;text-wrap:balance}
 p{margin:0}
 [hidden]{display:none!important}
+.tdq{border-left:4px solid var(--accent);margin-bottom:14px}.tdq .tq-v{font-size:22px}
+.steps{list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.steps a{display:flex;flex-direction:column;gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px 14px 58px;position:relative;min-height:74px;box-shadow:0 2px 10px rgba(31,111,209,.06)}
+.steps a:hover{border-color:var(--accent)}
+.steps b{position:absolute;left:14px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:16px}
+.steps span{font-weight:700;font-size:17px}.steps small{color:var(--muted);font-size:13px}
+.tdh{font-size:18px;margin:26px 0 10px}
+.tiles2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.tiles2 a{display:flex;flex-direction:column;gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;min-height:96px}
+.tiles2 a:hover{border-color:var(--accent);background:var(--tint)}
+.tiles2 i{font-style:normal;font-size:22px}.tiles2 b{font-size:16px}.tiles2 small{color:var(--muted);font-size:12.5px;line-height:1.5}
 .wrap{max-width:900px;margin:0 auto;padding-inline:16px}
 header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
@@ -376,6 +395,12 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .orig .w.on small{color:var(--accent)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
+
+/* 하늘 블루 · 밝고 경쾌하게 (2026-10-16) */
+.card{border-radius:14px;box-shadow:0 2px 10px rgba(31,111,209,.06)}
+.btn{border-radius:999px}
+.btn.acc{box-shadow:0 2px 8px rgba(31,111,209,.25)}
+.visit,.tq,.box{border-radius:14px}
 </style>
 </head>
 <body>
@@ -386,6 +411,7 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
   </div>
   <div class="wrap">
     <nav aria-label="성도마당 메뉴"><ul id="gNav">
+      <li><a href="#today" data-g="home">오늘</a></li>
       <li><a href="#write" data-g="word">말씀</a></li>
       <li><a href="#share" data-g="share">나눔</a></li>
       <li><a href="#pray" data-g="pray">기도</a></li>
@@ -419,6 +445,32 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
     <p class="sm" style="margin:16px 0 0">처음 로그인하면 <a href="#privacy">개인정보처리방침</a>에 따른 수집·이용 동의를 한 번 받습니다.</p>
     <p class="msg err" id="loginErr"></p>
   </div>
+
+  <!-- 오늘 (성도마당 첫 화면) -->
+  <section class="page" data-page="today">
+    <div class="phead"><h1>오늘의 신앙생활</h1><p>말씀 읽기 → 마음에 닿은 것 기록하기 → 기도하기. 하루 세 걸음이면 충분합니다.</p></div>
+    <div class="card tdq" id="tdQt"><span class="muted sm">오늘의 큐티 본문을 불러오는 중…</span></div>
+    <ol class="steps">
+      <li><a href="#qt"><b>1</b><span>오늘의 말씀 읽기</span><small>큐티 본문을 읽거나 들어요</small></a></li>
+      <li><a href="#qt" data-focus="qBody"><b>2</b><span>느낀 점 기록하기</span><small>마음에 닿은 구절 한 줄이면 돼요</small></a></li>
+      <li><a href="#pray"><b>3</b><span>기도하기</span><small>기도 체크하고 서로 응원해요</small></a></li>
+    </ol>
+    <h2 class="tdh">나의 신앙생활</h2>
+    <div class="tiles2">
+      <a href="#write"><i>✍️</i><b>성경 필사</b><small>온 교회가 한 절씩 이어 쓰기</small></a>
+      <a href="#voice"><i>🎙</i><b>목소리 성경</b><small>한 절씩 읽고 녹음</small></a>
+      <a href="#share"><i>💬</i><b>묵상 나눔</b><small>성도들의 묵상 읽기</small></a>
+      <a href="#pray"><i>🙏</i><b>함께 기도</b><small>기도 모임 · 기도 짝</small></a>
+      <a href="./#sermons"><i>▶️</i><b>설교 다시 보기</b><small>주일 설교 · 말씀 요약</small></a>
+      <a href="#space"><i>⛪</i><b>교회 공간</b><small>공간 사용 등록</small></a>
+    </div>
+    <h2 class="tdh">더 깊은 말씀 공부</h2>
+    <div class="tiles2">
+      <a href="#study"><i>📖</i><b>말씀 공부</b><small>영어 성경 · 원어 · 옛 주석</small></a>
+      <a href="#words"><i>🔤</i><b>단어장</b><small>모르는 단어 외우기</small></a>
+      <a href="#fav"><i>⭐</i><b>내 말씀</b><small>좋아하는 구절 모음</small></a>
+    </div>
+  </section>
 
   <!-- 성경 필사 -->
   <section class="page" data-page="write">
@@ -493,7 +545,7 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 
   <!-- 말씀 공부 -->
   <section class="page" data-page="study">
-    <div class="phead"><h1>말씀 공부</h1><p>구절을 누르면 영어 성경, 히브리어·헬라어 원어 단어의 뜻과 발음, 믿을 만한 옛 주석을 볼 수 있습니다. 모르는 단어는 단어장에 넣어 외워 보세요.</p></div>
+    <div class="phead"><h1>말씀 공부</h1><p>구절을 누르면 영어 성경, 히브리어·헬라어 원어 단어의 뜻과 발음, 믿을 만한 옛 주석을 볼 수 있습니다. 모르는 단어는 단어장에 넣어 외워 보세요.</p><p class="sm muted" style="margin-top:6px">※ 원어 풀이와 옛 주석은 공부를 돕는 <b>참고 자료</b>입니다. 교회의 해석과 다를 수 있으니 궁금한 점은 담임목사에게 물어 주세요.</p></div>
     <div class="pick"><select id="sBook" aria-label="책 선택"></select><select id="sCh" aria-label="장 선택"></select></div>
     <ol class="slist" id="sList"></ol>
     <details class="chapterText"><summary>자료 출처와 저작권</summary>
@@ -980,7 +1032,7 @@ $("#loginBtn").addEventListener("click", async () => {
   const { error } = await sb.auth.signInWithOAuth({ provider: "kakao", options: { redirectTo: location.origin + location.pathname } });
   if (error) $("#loginErr").textContent = "로그인을 시작하지 못했습니다: " + error.message;
 });
-async function logout(){ await sb.auth.signOut(); location.hash = "#write"; location.reload(); }
+async function logout(){ await sb.auth.signOut(); location.hash = "#today"; location.reload(); }
 
 function renderWho(){
   if (!user) { $("#who").innerHTML = ""; return; }
@@ -1005,9 +1057,9 @@ async function loadProfile(){
 /* ---------- 라우팅 ---------- */
 const loaded = {};
 function route(){
-  let p = (location.hash || "#write").slice(1), sref = null;
+  let p = (location.hash || "#today").slice(1), sref = null;
   const sm = /^study-(\d+)-(\d+)-(\d+)$/.exec(p); if (sm) { p = "study"; sref = sm.slice(1).map(Number); }
-  if (!document.querySelector(`section[data-page="${p}"]`)) p = "write";
+  if (!document.querySelector(`section[data-page="${p}"]`)) p = "today";
   const needLogin = !user && !PUBLIC_PAGES.includes(p);
   $("#gate").hidden = !needLogin;
   document.querySelectorAll("section.page").forEach(s => s.classList.toggle("active", !needLogin && s.dataset.page === p));
@@ -1017,6 +1069,7 @@ function route(){
   trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
+  if (p === "today") renderTodayHome();
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); }); }
@@ -2780,7 +2833,7 @@ const GOOGLE_LOGIN = false;   // Supabase에서 Google 로그인을 켠 뒤 true
 const ROLE_NM = { guest: "가입자", member: "교인", officer: "중직자" };
 const PROV_NM = { kakao: "카카오", google: "Google", email: "이메일" };
 if (GOOGLE_LOGIN) $("#googleBtn").hidden = false;
-const EMAIL_LOGIN = false;   // Supabase에서 이메일 가입을 켠 뒤 true로 바꿉니다
+const EMAIL_LOGIN = true;    // Supabase에서 이메일 가입을 켠 뒤 true로 바꿉니다
 if (EMAIL_LOGIN) { $("#eOr").hidden = false; $("#eForm").hidden = false; }
 $("#googleBtn").onclick = async () => { const { error } = await sb.auth.signInWithOAuth({ provider: "google", options: { redirectTo: location.origin + location.pathname } }); if (error) $("#loginErr").textContent = "로그인을 시작하지 못했습니다: " + error.message; };
 let eSignup = false;
@@ -2874,15 +2927,27 @@ async function loadBdayAdm(){
   $("#bdList").innerHTML = (data || []).map(x => `<li><span class="tm">${x.mm}월 ${x.dd}일</span><span class="who"><b>${esc(x.nickname)}</b>${x.title ? " " + esc(x.title) : ""}</span></li>`).join("") || '<li class="muted sm">이 달에 생일을 알려 준 성도가 없습니다.</li>';
 }
 
+/* ---------- 오늘 (성도마당 첫 화면) ---------- */
+async function renderTodayHome(){
+  await ensureBooks();
+  const d = kstToday(), { plan, item } = await todayQt(d), m = +d.slice(5, 7), day = +d.slice(8, 10), dw = "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()];
+  const box = $("#tdQt");
+  if (!item) { box.innerHTML = `<div class="tq-k">${m}월 ${day}일(${dw})</div><div class="tq-v" style="font-size:17px">오늘은 자유롭게 본문을 골라 묵상해 보세요.</div><div class="row" style="margin-top:8px"><a class="btn acc sm" href="#qt">나의 큐티 쓰기</a></div>`; return; }
+  box.innerHTML = `<div class="tq-k">${m}월 ${day}일(${dw}) 오늘의 큐티 본문 ${plan ? "· " + esc(plan[0]) : ""}</div><div class="tq-v">${refText(item)}</div>
+    <div class="row" style="margin-top:8px"><a class="btn acc sm" href="#qt">📖 본문 읽고 큐티 쓰기</a><button class="btn sm" type="button" id="tdSay">🔊 읽어 주기</button></div>`;
+  $("#tdSay").onclick = e => sayQt(item, e.currentTarget);
+}
+document.addEventListener("click", e => { const a = e.target.closest(".steps a[data-focus]"); if (a) setTimeout(() => $("#" + a.dataset.focus)?.focus(), 600); });
+
 /* ---------- 큐티 본문 읽어 주기 (운전 중에도 듣기) ---------- */
 function showDow(){ const d = $("#qDate").value; $("#qDow").textContent = d ? "(" + "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()] + ")" : ""; }
 let qtSaying = false;
-function stopQtSay(){ qtSaying = false; if (canSpeak) speechSynthesis.cancel(); const b = $("#tqSay"); if (b) { b.textContent = "🔊 읽어 주기"; b.classList.remove("on"); } }
-async function sayQt(item){
+function stopQtSay(){ qtSaying = false; if (canSpeak) speechSynthesis.cancel(); document.querySelectorAll("#tqSay,#tdSay").forEach(b => { b.textContent = "🔊 읽어 주기"; b.classList.remove("on"); }); }
+async function sayQt(item, btn){
   if (!canSpeak) return toast("이 기기에서는 읽어 주기를 쓸 수 없습니다");
   if (qtSaying) return stopQtSay();
   stopSpeak(); qtSaying = true;
-  const b = $("#tqSay"); b.textContent = "■ 그만 듣기"; b.classList.add("on");
+  const b = btn || $("#tqSay"); if (b) { b.textContent = "■ 그만 듣기"; b.classList.add("on"); }
   const [bk, c, v1, v2] = item, ch = (await getBook(bk))[c - 1], v = pickVoice("ko-KR");
   const parts = [`${BOOKS[bk - 1][0]} ${c}장 ${v1}절${v2 > v1 ? "부터 " + v2 + "절" : ""} 말씀입니다.`];
   for (let i = v1; i <= v2; i++) parts.push(ch[i - 1]);
@@ -2916,6 +2981,7 @@ function adminTabs(){
 
 /* ---------- 메뉴 묶음 (말씀 · 나눔 · 기도 · 교회 · 관리) ---------- */
 const NAV = {
+  home: [["today", "오늘"]],
   word: [["write", "성경 필사"], ["voice", "목소리 성경"], ["study", "말씀 공부"], ["qt", "나의 큐티"], ["words", "단어장"], ["fav", "내 말씀"]],
   share: [["share", "묵상 나눔"]],
   pray: [["pray", "기도"]],
@@ -3194,7 +3260,7 @@ function trk(page, kind = "view", item = ""){
   const { data: { session } } = await sb.auth.getSession();
   user = session?.user || null;
   if (user) await loadProfile();
-  if (/access_token|error/.test(location.hash)) history.replaceState(null, "", location.pathname + "#write");
+  if (/access_token|error/.test(location.hash)) history.replaceState(null, "", location.pathname + "#today");
   renderWho(); route(); if (user) checkConsent();
   sb.auth.onAuthStateChange(async (ev, s) => {
     if (ev === "PASSWORD_RECOVERY") setTimeout(newPassword, 300);
