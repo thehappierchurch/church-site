@@ -310,13 +310,14 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 /* 휴대폰에서 읽기 좋게 (2026-10-17): 낱말 중간에서 줄이 꺾이지 않게, 글자 크기·간격 정리 */
 body{word-break:keep-all;overflow-wrap:break-word}
 h1,h2,h3,.verse,.vision-lead,.visit p,.pillar .h{text-wrap:balance}
+.nw{white-space:nowrap}
 p,li,dd{text-wrap:pretty}
 @media (max-width:560px){
   body{font-size:17px;line-height:1.8}
   .wrap{padding-inline:20px}
   .hero .wrap{padding-block:56px 52px}
   .hero .eyebrow{font-size:12.5px;letter-spacing:.06em;line-height:1.6}
-  .hero h1{font-size:30px;line-height:1.4;margin-top:12px}
+  .hero h1{font-size:29px;line-height:1.42;margin-top:12px}
   .hero .verse{font-size:17px;line-height:1.75;margin-top:18px}
   .hero .verse br,.hero .welcome br{display:none}
   .hero .welcome{font-size:15.5px}
@@ -368,10 +369,10 @@ p,li,dd{text-wrap:pretty}
     <canvas id="light" aria-hidden="true"></canvas>
     <div class="wrap">
       <div class="eyebrow">대한예수교장로회(백석) · 설립 2022. 3. 12</div>
-      <h1>하나님께서 기뻐하시는 교회,<br>세상에 빛과 소금이 되는 공동체</h1>
-      <p class="verse">“사랑하는 자여 네 영혼이 잘됨 같이<br>네가 범사에 잘되고 강건하기를 내가 간구하노라”</p>
+      <h1><span class="nw">하나님께서</span> <span class="nw">기뻐하시는 교회,</span><br><span class="nw">세상에 빛과 소금이</span> <span class="nw">되는 공동체</span></h1>
+      <p class="verse">“사랑하는 자여 네 영혼이 잘됨 같이 <br>네가 범사에 잘되고 강건하기를 내가 간구하노라”</p>
       <p class="ref">요한3서 1:2</p>
-      <p class="welcome">복음 안에서 함께 예배하고, 말씀으로 자라며, 사랑으로 이웃을 섬기는 교회입니다.<br>처음 오시는 분도 편안한 마음으로 오세요.</p>
+      <p class="welcome">복음 안에서 함께 예배하고, 말씀으로 자라며, 사랑으로 이웃을 섬기는 교회입니다. <br>처음 오시는 분도 편안한 마음으로 오세요.</p>
       <div class="cta"><a class="btn solid" href="#worship">예배 안내</a><a class="btn" href="#location">오시는 길</a><a class="btn" href="#app" id="heroApp">📱 교회 앱 받기</a></div>
     </div>
   </div>
