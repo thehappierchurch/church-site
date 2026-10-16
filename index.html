@@ -23,6 +23,7 @@
 <meta property="og:description" content="하나님께서 기뻐하시는 교회, 세상에 빛과 소금이 되는 공동체. 서울 성북구 도봉로 31, 2층">
 <meta property="og:url" content="https://thehappierchurch.kr/">
 <meta property="og:locale" content="ko_KR">
+<meta property="og:image" content="https://thehappierchurch.kr/icon-512.png">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Church","name":"더행복한교회","alternateName":"대한예수교장로회(백석) 더행복한교회","url":"https://thehappierchurch.kr/","address":{"@type":"PostalAddress","streetAddress":"도봉로 31, 2층","addressLocality":"성북구","addressRegion":"서울특별시","addressCountry":"KR"},"foundingDate":"2022-03-12"}</script>
 <style>:root{color-scheme:only light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 </style>
@@ -307,6 +308,18 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 .campaign.solo{grid-template-columns:1fr;background:var(--tint);border-radius:8px;padding:32px;text-align:center}
 .campaign.solo .campaign-txt>div:last-child{justify-content:center}
 /* 하늘 블루 · 밝고 경쾌하게 (2026-10-16) */
+.hero .welcome{margin-top:18px;font-size:15.5px;line-height:1.7;color:#F4F8FF;opacity:.95}
+.fv{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;background:var(--tint);border-radius:14px;padding:22px}
+.fvl{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.fvl li{padding-left:30px;position:relative;font-size:15.5px;line-height:1.7}
+.fvl li::before{content:"✓";position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;margin-top:3px}
+.fvl b{display:block;font-size:16.5px}
+.fvb{display:flex;flex-direction:column;gap:10px;justify-content:center}
+.fvb .btn{justify-content:center;min-height:46px;font-size:15.5px}
+@media (max-width:720px){.fv{grid-template-columns:1fr}}
+.sfilter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.sfilter select,.sfilter input{font:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
+
 .card{border-radius:14px;box-shadow:0 2px 10px rgba(31,111,209,.06)}
 .btn{border-radius:999px}
 .btn.acc{box-shadow:0 2px 8px rgba(31,111,209,.25)}
@@ -330,20 +343,11 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
       <h1>하나님께서 기뻐하시는 교회,<br>세상에 빛과 소금이 되는 공동체</h1>
       <p class="verse">“사랑하는 자여 네 영혼이 잘됨 같이<br>네가 범사에 잘되고 강건하기를 내가 간구하노라”</p>
       <p class="ref">요한3서 1:2</p>
+      <p class="welcome">복음 안에서 함께 예배하고, 말씀으로 자라며, 사랑으로 이웃을 섬기는 교회입니다.<br>처음 오시는 분도 편안한 마음으로 오세요.</p>
       <div class="cta"><a class="btn solid" href="#worship">예배 안내</a><a class="btn" href="#location">오시는 길</a><a class="btn" href="#app" id="heroApp">📱 교회 앱 받기</a></div>
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="campaign solo">
-      <div class="campaign-txt">
-        <div class="meta">더행복한교회 전도 캠페인</div>
-        <h2>당신이 더 행복했으면 좋겠습니다</h2>
-        <p>예수님과 함께하는 더 행복한 삶으로 초대합니다. 복음이 궁금하시면 언제든 편하게 물어보세요.</p>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn acc" href="#faq">신앙 질문 보기</a><a class="btn chat" href="#" target="_blank" rel="noopener" style="color:var(--ink)">교회에 문의하기</a></div>
-      </div>
-    </div>
-  </div>
   <div class="wrap">
     <div class="block">
       <div class="block-h"><h2>예배 시간</h2><a href="#worship">전체 보기 →</a></div>
@@ -354,9 +358,34 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
       </div>
     </div>
 
+    <div class="block firstvisit">
+      <div class="block-h"><h2>처음 오셨나요?</h2><a href="#newcomer">새가족 등록 →</a></div>
+      <div class="fv">
+        <ul class="fvl">
+          <li><b>부담 없이 오세요</b>등록이나 헌금 부담 없이 예배만 드리셔도 괜찮습니다. 편한 옷차림이면 됩니다.</li>
+          <li><b>주일 오전 10시 30분</b>서울시 성북구 도봉로 31, 2층 예배당에서 함께 예배드립니다.</li>
+          <li><b>오시기 전에 물어보세요</b>주차, 대중교통, 아이와 함께 오는 것 등 궁금한 것은 오픈채팅으로 편하게 물어 주세요. 미리 알려 주시면 반갑게 맞이하겠습니다.</li>
+        </ul>
+        <div class="fvb">
+          <a class="btn acc" href="https://open.kakao.com/o/gar8Dbmh" target="_blank" rel="noopener">💬 카카오톡으로 문의하기</a>
+          <a class="btn" href="#location" style="color:var(--ink)">📍 오시는 길 · 지도</a>
+          <a class="btn" href="#faq" style="color:var(--ink)">❓ 신앙 질문 모음</a>
+        </div>
+      </div>
+    </div>
+
     <div class="block">
       <div class="block-h"><h2>주일 말씀</h2><a href="#sermons">설교 보기 →</a></div>
       <div class="sermon-feature" id="homeSermon"></div>
+    </div>
+
+    <div class="campaign solo">
+      <div class="campaign-txt">
+        <div class="meta">더행복한교회 전도 캠페인</div>
+        <h2>당신이 더 행복했으면 좋겠습니다</h2>
+        <p>예수님과 함께하는 더 행복한 삶으로 초대합니다. 복음이 궁금하시면 언제든 편하게 물어보세요.</p>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn acc" href="#faq">신앙 질문 보기</a><a class="btn chat" href="https://open.kakao.com/o/gar8Dbmh" target="_blank" rel="noopener" style="color:var(--ink)">교회에 문의하기</a></div>
+      </div>
     </div>
 
     <div class="block grid2">
@@ -365,14 +394,14 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
         <ul class="list" id="homeNews"></ul>
       </div>
       <div>
-        <div class="block-h"><h2>처음 오셨나요?</h2></div>
+        <div class="block-h"><h2>교회 정보</h2></div>
         <div class="visit">
           <h3>더행복한교회에 오신 것을 환영합니다</h3>
           <p style="margin-bottom:16px">궁금한 점은 교회 오픈채팅방으로 편하게 물어보세요.</p>
           <dl>
-            <dt>주소</dt><dd data-f="address"></dd>
-            <dt>문의</dt><dd><a class="chat" href="#" target="_blank" rel="noopener">카카오톡 오픈채팅방 →</a></dd>
-            <dt>카페</dt><dd><a class="cafe" href="#" target="_blank" rel="noopener">네이버 교회 카페 →</a></dd>
+            <dt>주소</dt><dd data-f="address">서울시 성북구 도봉로 31, 2층</dd>
+            <dt>문의</dt><dd><a class="chat" href="https://open.kakao.com/o/gar8Dbmh" target="_blank" rel="noopener">카카오톡 오픈채팅방 →</a></dd>
+            <dt>카페</dt><dd><a class="cafe" href="https://cafe.naver.com/gbjlc" target="_blank" rel="noopener">네이버 교회 카페 →</a></dd>
             <dt>설립</dt><dd>2022년 3월 12일</dd>
             <dt>등록</dt><dd><a href="#newcomer">새가족 등록하기 →</a></dd>
             <dt>질문</dt><dd><a href="#faq">신앙에 대해 궁금한 점 →</a></dd>
@@ -390,7 +419,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
     <div class="phead"><h1>섬기는이</h1><div class="en">Senior Pastor</div></div>
     <div class="pastor">
       <div class="portrait photo-p"><img src="data:image/jpeg;base64,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" alt="김충만 담임목사" width="160" height="213"></div>
-      <h2><span data-f="pastor"></span> 목사</h2>
+      <h2><span data-f="pastor">김충만</span> 목사</h2>
       <div class="role">담임목사 · Senior Pastor</div>
       <div class="bio">
         <h3>약력</h3>
@@ -408,7 +437,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
         <p>더행복한교회 홈페이지를 찾아주신 여러분을 주님의 이름으로 환영합니다.</p>
         <p>더행복한교회는 2022년 3월 12일, 하나님께서 기뻐하시는 교회, 세상에 빛과 소금이 되는 공동체를 꿈꾸며 세워졌습니다. 우리는 건강한 성도를 양육하고, 건강한 교회를 세우며, 건강한 목회자를 길러 내는 일에 힘쓰고 있습니다.</p>
         <p>“네 영혼이 잘됨 같이 네가 범사에 잘되고 강건하기를”(요한3서 1:2) 바라는 사도 요한의 마음으로, 이곳을 찾는 모든 분들의 영혼과 삶이 주의 은혜로 새로워지기를 기도합니다.</p>
-        <div class="sign">담임목사 <span data-f="pastor"></span></div>
+        <div class="sign">담임목사 <span data-f="pastor">김충만</span></div>
       </div>
     </div>
   </div>
@@ -489,9 +518,9 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
     </div>
     <div class="visit" style="margin-top:32px">
       <dl>
-        <dt>주소</dt><dd data-f="address"></dd>
-        <dt>문의</dt><dd><a class="chat" href="#" target="_blank" rel="noopener">카카오톡 오픈채팅방 →</a></dd>
-        <dt>카페</dt><dd><a class="cafe" href="#" target="_blank" rel="noopener">네이버 교회 카페 →</a></dd>
+        <dt>주소</dt><dd data-f="address">서울시 성북구 도봉로 31, 2층</dd>
+        <dt>문의</dt><dd><a class="chat" href="https://open.kakao.com/o/gar8Dbmh" target="_blank" rel="noopener">카카오톡 오픈채팅방 →</a></dd>
+        <dt>카페</dt><dd><a class="cafe" href="https://cafe.naver.com/gbjlc" target="_blank" rel="noopener">네이버 교회 카페 →</a></dd>
       </dl>
     </div>
   </div>
@@ -501,6 +530,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 <section class="page" data-page="sermons">
   <div class="wrap">
     <div class="phead"><h1>주일설교</h1><div class="en">Sunday Sermon</div></div>
+    <div class="sfilter"><select id="sBookF" aria-label="성경 책으로 찾기"><option value="">성경 전체</option></select><input id="sQ" type="search" placeholder="설교 제목·본문 찾기" aria-label="설교 찾기"></div>
     <div class="sgrid" id="sermonGrid"></div>
     <div style="margin-top:32px"><a class="btn acc yt" href="#" target="_blank" rel="noopener">유튜브 채널에서 전체 설교 보기</a></div>
   </div>
@@ -778,8 +808,8 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 <footer>
   <div class="wrap">
     <div class="fn">대한예수교장로회(백석) 더행복한교회</div>
-    <div>주소 <span data-f="address"></span> · <a class="chat" href="#" target="_blank" rel="noopener">오픈채팅방</a> · <a class="cafe" href="#" target="_blank" rel="noopener">네이버 카페</a> · <a class="yt" href="#" target="_blank" rel="noopener">유튜브</a></div>
-    <div>담임목사 <span data-f="pastor"></span> · 설립 2022. 3. 12 · © 2026 더행복한교회 · <a href="member.html#admin" class="adminlink">관리자</a></div>
+    <div>주소 <span data-f="address">서울시 성북구 도봉로 31, 2층</span> · <a class="chat" href="https://open.kakao.com/o/gar8Dbmh" target="_blank" rel="noopener">오픈채팅방</a> · <a class="cafe" href="https://cafe.naver.com/gbjlc" target="_blank" rel="noopener">네이버 카페</a> · <a class="yt" href="#" target="_blank" rel="noopener">유튜브</a></div>
+    <div>담임목사 <span data-f="pastor">김충만</span> · 설립 2022. 3. 12 · © 2026 더행복한교회 · <a href="member.html#admin" class="adminlink">관리자</a></div>
   </div>
 </footer>
 
@@ -856,9 +886,15 @@ function renderPublic(){
       </div></div>`;
   } else $("#homeSermon").innerHTML = `<p class="meta">등록된 설교가 없습니다.</p>`;
 
-  $("#sermonGrid").innerHTML = sermons.map(s => `<div class="scard">${thumb(s)}
+  const bookOf = s => (/^[1-3]?\s*[가-힣]+/.exec(String(s.passage || "").trim()) || [""])[0].replace(/\s/g, "");
+  const bks = [...new Set(sermons.map(bookOf).filter(Boolean))];
+  $("#sBookF").innerHTML = '<option value="">성경 전체</option>' + bks.map(b => `<option>${esc(b)}</option>`).join("");
+  const drawS = () => { const bk = $("#sBookF").value, q = $("#sQ").value.trim();
+    const list = sermons.filter(s => (!bk || bookOf(s) === bk) && (!q || (s.title + " " + (s.passage || "")).includes(q)));
+    $("#sermonGrid").innerHTML = list.map(s => `<div class="scard">${thumb(s)}
       <h3>${esc(s.title)}</h3><div class="meta">${[esc(s.passage), fmtDate(s.date), esc(CHURCH.pastor) + " 목사"].filter(Boolean).join(" · ")}</div>
-      ${s.summary ? `<div style="margin-top:6px"><a href="#summary" class="meta">말씀 요약 →</a></div>` : ""}</div>`).join("");
+      ${s.summary ? `<div style="margin-top:6px"><a href="#summary" class="meta">말씀 요약 →</a></div>` : ""}</div>`).join("") || `<p class="meta">찾는 설교가 없습니다.</p>`; };
+  $("#sBookF").onchange = drawS; $("#sQ").oninput = drawS; drawS();
 
   const withNote = sermons.filter(s => s.summary);
   $("#summaryList").innerHTML = withNote.length ? `<div class="snote">` + withNote.map((s,i) => `<details${i === 0 ? " open" : ""}>
