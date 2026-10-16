@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#1F6FD1">
+<meta name="color-scheme" content="only light">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +24,7 @@
 <meta property="og:url" content="https://thehappierchurch.kr/">
 <meta property="og:locale" content="ko_KR">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Church","name":"더행복한교회","alternateName":"대한예수교장로회(백석) 더행복한교회","url":"https://thehappierchurch.kr/","address":{"@type":"PostalAddress","streetAddress":"도봉로 31, 2층","addressLocality":"성북구","addressRegion":"서울특별시","addressCountry":"KR"},"foundingDate":"2022-03-12"}</script>
-<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
+<style>:root{color-scheme:only light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -329,7 +330,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
       <h1>하나님께서 기뻐하시는 교회,<br>세상에 빛과 소금이 되는 공동체</h1>
       <p class="verse">“사랑하는 자여 네 영혼이 잘됨 같이<br>네가 범사에 잘되고 강건하기를 내가 간구하노라”</p>
       <p class="ref">요한3서 1:2</p>
-      <div class="cta"><a class="btn solid" href="#worship">예배 안내</a><a class="btn" href="#location">오시는 길</a></div>
+      <div class="cta"><a class="btn solid" href="#worship">예배 안내</a><a class="btn" href="#location">오시는 길</a><a class="btn" href="#app" id="heroApp">📱 교회 앱 받기</a></div>
     </div>
   </div>
 
@@ -338,8 +339,8 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
       <div class="campaign-txt">
         <div class="meta">더행복한교회 전도 캠페인</div>
         <h2>당신이 더 행복했으면 좋겠습니다</h2>
-        <p>예수님과 함께하는 더 행복한 삶으로 초대합니다. 복음이 궁금하다면 ‘들어볼까’를 검색해 보세요.</p>
-        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn acc" href="https://search.naver.com/search.naver?query=%EB%93%A4%EC%96%B4%EB%B3%BC%EA%B9%8C" target="_blank" rel="noopener">‘들어볼까’ 검색하기</a><a class="btn chat" href="#" target="_blank" rel="noopener" style="color:var(--ink)">교회에 문의하기</a></div>
+        <p>예수님과 함께하는 더 행복한 삶으로 초대합니다. 복음이 궁금하시면 언제든 편하게 물어보세요.</p>
+        <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn acc" href="#faq">신앙 질문 보기</a><a class="btn chat" href="#" target="_blank" rel="noopener" style="color:var(--ink)">교회에 문의하기</a></div>
       </div>
     </div>
   </div>
@@ -934,7 +935,8 @@ async function renderBul(){
 let appPrompt = null;
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); appPrompt = e; $("#appInstall").hidden = false; });
 $("#appInstall").onclick = async () => { if (!appPrompt) return; appPrompt.prompt(); await appPrompt.userChoice.catch(() => {}); appPrompt = null; $("#appInstall").hidden = true; };
-if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) $("#appDone").hidden = false;
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("#appDone").hidden = false; $("#heroApp").hidden = true; }
+$("#heroApp").onclick = e => { if (appPrompt) { e.preventDefault(); $("#appInstall").click(); } };
 addEventListener("hashchange", () => { const p = location.hash.slice(1); if (p === "calendar") renderCal(); if (p === "bulletin") renderBul(); });
 if (location.hash === "#calendar") renderCal(); if (location.hash === "#bulletin") renderBul();
 $("#ncForm").addEventListener("submit", async e => {
