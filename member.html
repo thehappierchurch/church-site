@@ -310,6 +310,7 @@ footer a{color:var(--muted)}
 .atabs button b{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--warn);color:#fff;font-size:11px;line-height:18px;text-align:center}
 section[data-page="admin"] > .card.tabhide{display:none!important}
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
+.tqnav{display:flex;align-items:center;gap:8px}.tqnav .btn{min-width:36px;padding:2px 10px;min-height:28px}
 .tq-v{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.5}
 .plan{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px}
 .plan .pl{font-size:14px;font-weight:700;color:var(--accent);margin-right:4px}
@@ -875,6 +876,10 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
       <ul class="slots" id="planList"></ul>
       <div class="row"><select id="planQ"></select><input id="planBooks" type="text" placeholder="읽을 책 (쉼표로 구분)" style="flex:1;min-width:14em"><button class="btn acc sm" type="button" id="planSave">저장</button></div>
       <p class="msg" id="planMsg"></p>
+      <h3 class="sh" style="margin-top:18px">📥 1년치 큐티 본문 엑셀로 내려받기</h3>
+      <p class="hint">위에서 분기마다 읽을 책을 정한 뒤, 시작 분기를 고르고 누르면 그 분기부터 1년(4분기) 동안의 매일 큐티 본문이 엑셀 파일로 저장됩니다. 1번 시트는 매일 본문 전체, 2번 시트는 수·금·주일만 (날짜 윗줄 · 말씀 아랫줄, 한글에 붙여 넣기 좋게) 담깁니다.</p>
+      <div class="row"><select id="qxStart"></select><button class="btn acc sm" type="button" id="qxGo">엑셀로 내려받기</button></div>
+      <p class="msg" id="qxMsg"></p>
     </div>
     <div class="card form" style="margin-top:16px">
       <h2 class="h">기도 모임 관리</h2>
@@ -1371,15 +1376,21 @@ async function renderToday(){
   const box = $("#qtToday"), m = +d.slice(5, 7), day = +d.slice(8, 10), dw = "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()];
   if (!plan) { box.innerHTML = `<span class="muted sm">${m}월 ${day}일(${dw}) — 이번 분기 큐티 범위가 아직 정해지지 않았습니다. 자유롭게 본문을 골라 묵상해 주세요.</span>`; return; }
   box.innerHTML = item
-    ? `<div class="tq-k">${m}월 ${day}일(${dw}) 큐티 본문</div><div class="tq-v">${refText(item)}</div>
+    ? `<div class="tq-k tqnav"><button class="btn sm" type="button" data-qs="-1" aria-label="전날 본문">◀</button><span>${m}월 ${day}일(${dw}) 큐티 본문</span><button class="btn sm" type="button" data-qs="1" aria-label="다음 날 본문">▶</button></div><div class="tq-v">${refText(item)}</div>
        <div class="row" style="margin-top:6px"><button class="btn acc sm" type="button" id="tqRead">본문 읽기</button><button class="btn sm" type="button" id="tqSay">🔊 읽어 주기</button><button class="btn sm" type="button" id="tqUse">읽은 본문에 넣기</button></div>`
-    : `<div class="tq-k">${m}월 ${day}일(${dw})</div><div class="tq-v" style="font-size:16px">${done ? "이번 분기 범위를 모두 마쳤습니다. 지난 본문 중 마음에 남은 곳을 다시 묵상해 보세요." : ""}</div>`;
+    : `<div class="tq-k tqnav"><button class="btn sm" type="button" data-qs="-1">◀</button><span>${m}월 ${day}일(${dw})</span><button class="btn sm" type="button" data-qs="1">▶</button></div><div class="tq-v" style="font-size:16px">${done ? "이번 분기 범위를 모두 마쳤습니다. 지난 본문 중 마음에 남은 곳을 다시 묵상해 보세요." : ""}</div>`;
   if (item) {
     $("#tqRead").onclick = async () => { await openReader(item[0], item[1]); rSel = [item[2], item[3]]; markSel(); const li = document.querySelector(`#rText li[data-v="${item[2]}"]`); if (li) $("#rText").scrollTop = li.offsetTop - $("#rText").offsetTop; };
     $("#tqUse").onclick = () => { $("#qPassage").value = refText(item); toast("읽은 본문에 넣었습니다"); };
     $("#tqSay").onclick = () => sayQt(item);
+    // 날짜를 옮기면 아래 '말씀 읽기' 본문과 '읽은 본문' 칸도 그 날 본문으로 함께 바뀝니다
+    await openReader(item[0], item[1]); rSel = [item[2], item[3]]; markSel();
+    const li = document.querySelector(`#rText li[data-v="${item[2]}"]`); if (li) $("#rText").scrollTop = li.offsetTop - $("#rText").offsetTop;
+    const pv = $("#qPassage").value.trim(); if (!pv || pv === autoPassage) { $("#qPassage").value = autoPassage = refText(item); }
   }
+  box.querySelectorAll("[data-qs]").forEach(x => x.onclick = () => $(+x.dataset.qs < 0 ? "#qPrev" : "#qNext").click());
 }
+let autoPassage = "";
 async function initReader(){
   if (readerReady) return; readerReady = true;
   await ensureBooks();
@@ -1956,6 +1967,8 @@ async function loadPlanAdmin(){
   $("#planQ").innerHTML = [...keys].sort().filter(k => k >= cur.slice(0, 4) + "-1").map(k => `<option value="${k}"${k === cur ? " selected" : ""}>${k.slice(0, 4)}년 ${qLabel(k)}</option>`).join("");
   const fill = () => { const p = plans[$("#planQ").value]; $("#planBooks").value = p ? p[1].map(b => BOOKS[b-1][0]).join(", ") : ""; };
   $("#planQ").onchange = fill; fill();
+  if (!$("#qxStart").options.length) { const ks = []; for (const yy of [y - 1, y, y + 1]) for (let q = 1; q <= 4; q++) ks.push(`${yy}-${q}`);
+    $("#qxStart").innerHTML = ks.map(k => `<option value="${k}"${k === cur ? " selected" : ""}>${k.slice(0, 4)}년 ${k.slice(5)}분기부터 1년</option>`).join(""); }
   $("#planList").innerHTML = Object.keys(plans).sort().filter(k => k >= cur).map(k => { const [label, books] = plans[k], d = Math.round((Date.UTC(+k.slice(0, 4), +k.slice(5) * 3, 1) - Date.UTC(+k.slice(0, 4), +k.slice(5) * 3 - 3, 1)) / 864e5), v = books.reduce((s, b) => s + BOOKS[b-1][1].reduce((a, n) => a + n, 0), 0);
     return `<li><span class="tm">${k.slice(0, 4)}년 ${esc(label)}</span><span class="who">${books.map(b => BOOKS[b-1][0]).join(", ")} <span class="muted sm">· 하루 약 ${Math.round(v / d)}절</span></span></li>`; }).join("") || '<li class="muted sm">정해진 범위가 없습니다.</li>';
 }
@@ -1967,6 +1980,34 @@ $("#planSave").onclick = async () => {
   const { error } = await sb.from("reading_plans").upsert({ qkey: k, label: qLabel(k), books: out, updated_at: new Date().toISOString() });
   if (error) return msg("저장하지 못했습니다: " + error.message, true);
   msg("저장했습니다. 나의 큐티 화면에 바로 반영됩니다."); for (const x in schedCache) delete schedCache[x]; loadPlanAdmin();
+};
+/* 1년치 큐티 본문 엑셀 */
+$("#qxGo").onclick = async () => {
+  const b = $("#qxGo"); b.disabled = true; amsg("#qxMsg", "만드는 중… (성경 본문을 모으느라 몇 초 걸립니다)");
+  try {
+    if (!window.XLSX) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    await ensureBooks(); const plans = await loadPlans(true), W = "일월화수목금토", start = $("#qxStart").value;
+    let [y, q] = start.split("-").map(Number); const rows = [];
+    for (let i = 0; i < 4; i++) {
+      const k = `${y}-${q}`, p = plans[k], d0 = Date.UTC(y, (q - 1) * 3, 1), days = Math.round((Date.UTC(y, q * 3, 1) - d0) / 864e5);
+      const sch = p && p[1]?.length ? qtSchedule(k, p[1]) : [];
+      for (let j = 0; j < days; j++) {
+        const dt = new Date(d0 + j * 864e5), it = sch[j];
+        let txt = ""; if (it) { const ch = (await getBook(it[0]))[it[1] - 1]; txt = ch.slice(it[2] - 1, it[3]).map((t, n) => `${it[2] + n} ${t}`).join(" "); }
+        rows.push({ "날짜": dt.toISOString().slice(0, 10), "요일": W[dt.getUTCDay()], "분기": p ? `${y}년 ${p[0]}` : `${y}년 ${q}분기 (범위 없음)`, "본문": it ? refText(it) : "", "말씀": it ? txt : (p ? "(분기 범위를 마침 – 자유 묵상)" : "") });
+      }
+      if (++q > 4) { q = 1; y++; }
+    }
+    const ws1 = XLSX.utils.json_to_sheet(rows); ws1["!cols"] = [{ wch: 12 }, { wch: 5 }, { wch: 18 }, { wch: 20 }, { wch: 100 }];
+    const KO = { 3: "수요일", 5: "금요일", 0: "주일" }, aoa = [["수요일·금요일·주일 큐티 본문 — 날짜(윗줄)와 말씀(아랫줄)을 그대로 복사해 한글에 붙여 넣으세요."], []];
+    for (const r of rows) { const w = new Date(r["날짜"] + "T00:00:00Z").getUTCDay(); if (!(w in KO) || !r["본문"]) continue; const [Y, M, D] = r["날짜"].split("-").map(Number); aoa.push([`${Y}년 ${M}월 ${D}일 (${KO[w]})  ${r["본문"]}`], [r["말씀"]], []); }
+    const ws2 = XLSX.utils.aoa_to_sheet(aoa); ws2["!cols"] = [{ wch: 110 }];
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws1, "매일 큐티 (1년)"); XLSX.utils.book_append_sheet(wb, ws2, "수·금·주일 (설교 본문)");
+    XLSX.writeFile(wb, `더행복한교회_큐티본문_${start.replace("-", "년")}분기부터_1년.xlsx`);
+    const empty = rows.filter(r => !r["본문"]).length;
+    amsg("#qxMsg", `내려받았습니다. (${rows.length}일${empty ? ` · 범위가 없는 날 ${empty}일` : ""})`);
+  } catch (e) { amsg("#qxMsg", "만들지 못했습니다: " + (e.message || e), true); }
+  b.disabled = false;
 };
 /* 홈페이지 고치기 (설교 · 알려드려요 · 기도제목) — Supabase에 저장, 홈페이지가 바로 불러옴 */
 const YT_RE = /^https:\/\/(www\.|m\.)?(youtube\.com|youtu\.be)\//;
