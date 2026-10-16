@@ -307,6 +307,33 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 @media (max-width:480px){.brand .emblem{width:40px;height:40px}.brand .deno2{font-size:11px}.brand .name2{font-size:27px}.brand .motto2{font-size:10px;padding-left:16px}.brand a{gap:9px}}
 .campaign.solo{grid-template-columns:1fr;background:var(--tint);border-radius:8px;padding:32px;text-align:center}
 .campaign.solo .campaign-txt>div:last-child{justify-content:center}
+/* 휴대폰에서 읽기 좋게 (2026-10-17): 낱말 중간에서 줄이 꺾이지 않게, 글자 크기·간격 정리 */
+body{word-break:keep-all;overflow-wrap:break-word}
+h1,h2,h3,.verse,.vision-lead,.visit p,.pillar .h{text-wrap:balance}
+p,li,dd{text-wrap:pretty}
+@media (max-width:560px){
+  body{font-size:17px;line-height:1.8}
+  .wrap{padding-inline:20px}
+  .hero .wrap{padding-block:56px 52px}
+  .hero .eyebrow{font-size:12.5px;letter-spacing:.06em;line-height:1.6}
+  .hero h1{font-size:30px;line-height:1.4;margin-top:12px}
+  .hero .verse{font-size:17px;line-height:1.75;margin-top:18px}
+  .hero .verse br,.hero .welcome br{display:none}
+  .hero .welcome{font-size:15.5px}
+  .hero .cta{gap:8px;margin-top:26px}
+  .hero .cta .btn{font-size:15px;padding:10px 18px}
+  .phead h1{font-size:28px}
+  .block-h h2{font-size:21px}
+  .visit{padding:22px 18px}
+  .visit p[style*="font-size:24px"]{font-size:21px!important;line-height:1.5}
+  .vision-lead{font-size:23px;line-height:1.55}
+  .pillar .h{font-size:20px}
+  .time .v{font-size:24px}
+  .meta,.time .k,.time .p{font-size:14px}
+  .fvl li{font-size:16px}.fvl b{font-size:17px}
+  .faq summary{font-size:17px}
+  nav.sub a,#subNav a{font-size:15px}
+}
 /* 하늘 블루 · 밝고 경쾌하게 (2026-10-16) */
 .hero .welcome{margin-top:18px;font-size:15.5px;line-height:1.7;color:#F4F8FF;opacity:.95}
 .fv{display:grid;grid-template-columns:1.6fr 1fr;gap:18px;background:var(--tint);border-radius:14px;padding:22px}

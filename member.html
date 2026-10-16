@@ -398,6 +398,16 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-size:14px;z-index:50;max-width:calc(100% - 32px)}
 @media (max-width:560px){.top{padding-block:10px}.logo{font-size:20px}.who .lbl{display:none}}
 
+/* 휴대폰에서 읽기 좋게 (2026-10-17) */
+h1,h2,h3{text-wrap:balance}
+p,li{text-wrap:pretty}
+@media (max-width:560px){
+  body{font-size:17px;line-height:1.8}
+  .phead h1{font-size:26px}
+  .hint,.sm{font-size:14px}
+  .btn{min-height:40px}
+  .tiles2 small,.steps small{font-size:13.5px}
+}
 /* 하늘 블루 · 밝고 경쾌하게 (2026-10-16) */
 .card{border-radius:14px;box-shadow:0 2px 10px rgba(31,111,209,.06)}
 .btn{border-radius:999px}
