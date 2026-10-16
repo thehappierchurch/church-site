@@ -317,7 +317,7 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 .fvb{display:flex;flex-direction:column;gap:10px;justify-content:center}
 .fvb .btn{justify-content:center;min-height:46px;font-size:15.5px}
 @media (max-width:720px){.fv{grid-template-columns:1fr}}
-.ytbox{margin-bottom:34px}.ytframe{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;box-shadow:0 4px 18px rgba(31,111,209,.15)}.ytframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ytbox{margin-bottom:34px}.ytgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}.ytc{display:flex;flex-direction:column;gap:6px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;padding-bottom:10px}.ytc:hover{border-color:var(--accent)}.ytc img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}.ytc span{padding:0 12px;font-size:14.5px;font-weight:500;line-height:1.5}
 .sfilter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .sfilter select,.sfilter input{font:inherit;font-size:15px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--ink)}
 
@@ -531,9 +531,9 @@ footer .fn{font-family:var(--serif);font-weight:700;color:var(--ink);font-size:1
 <section class="page" data-page="sermons">
   <div class="wrap">
     <div class="phead"><h1>주일설교</h1><div class="en">Sunday Sermon</div></div>
-    <div class="ytbox"><div class="block-h"><h2>📺 유튜브 최신 영상</h2><a class="yt" href="https://www.youtube.com/@%EB%8D%94%ED%96%89%EB%B3%B5%ED%95%9C%EA%B5%90%ED%9A%8C-j8v/videos" target="_blank" rel="noopener">채널 전체 보기 →</a></div>
-      <div class="ytframe"><iframe src="https://www.youtube.com/embed/videoseries?list=UUO4y8Mc9oG7xwUrkqgU-7Bw" title="더행복한교회 유튜브 최신 영상" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
-      <p class="meta" style="margin-top:6px">교회 유튜브 채널에 새 영상을 올리면 여기에 자동으로 나옵니다. 오른쪽 위 목록 버튼을 누르면 지난 영상도 고를 수 있습니다.</p></div>
+    <div class="ytbox"><div class="block-h"><h2>📺 유튜브 최근 영상</h2><a class="yt" href="https://www.youtube.com/@%EB%8D%94%ED%96%89%EB%B3%B5%ED%95%9C%EA%B5%90%ED%9A%8C-j8v/videos" target="_blank" rel="noopener">채널 전체 보기 →</a></div>
+      <div class="ytgrid"><a class="ytc" href="https://www.youtube.com/watch?v=mgrPQCEePNs" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/mgrPQCEePNs/mqdefault.jpg" alt="" loading="lazy"><span>이사야서 17장</span></a><a class="ytc" href="https://www.youtube.com/watch?v=OQ9UecifgVI" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/OQ9UecifgVI/mqdefault.jpg" alt="" loading="lazy"><span>시편 3:1-8 고난 중에 만나는 하나님</span></a><a class="ytc" href="https://www.youtube.com/watch?v=G_l_AdWgvW0" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/G_l_AdWgvW0/mqdefault.jpg" alt="" loading="lazy"><span>제자훈련 2</span></a><a class="ytc" href="https://www.youtube.com/watch?v=qfhzUanIF48" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/qfhzUanIF48/mqdefault.jpg" alt="" loading="lazy"><span>창세기 42:1-17 감정의 문제를 정리하길 원하시는 하나님</span></a><a class="ytc" href="https://www.youtube.com/watch?v=8eWibbkbKFM" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/8eWibbkbKFM/mqdefault.jpg" alt="" loading="lazy"><span>고린도전서 4:1-21 그리스도의 일</span></a><a class="ytc" href="https://www.youtube.com/watch?v=prZcOScKuaI" target="_blank" rel="noopener"><img src="https://i.ytimg.com/vi/prZcOScKuaI/mqdefault.jpg" alt="" loading="lazy"><span>제자훈련 1</span></a></div>
+      <p class="meta" style="margin-top:8px">영상을 누르면 유튜브에서 열립니다. 더 많은 영상은 ‘채널 전체 보기’에서 보세요.</p></div>
     <div class="sfilter"><select id="sBookF" aria-label="성경 책으로 찾기"><option value="">성경 전체</option></select><input id="sQ" type="search" placeholder="설교 제목·본문 찾기" aria-label="설교 찾기"></div>
     <div class="sgrid" id="sermonGrid"></div>
     <div style="margin-top:32px"><a class="btn acc yt" href="#" target="_blank" rel="noopener">유튜브 채널에서 전체 설교 보기</a></div>
