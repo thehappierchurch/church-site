@@ -310,6 +310,32 @@ footer a{color:var(--muted)}
 .atabs button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .atabs button b{display:inline-block;min-width:18px;margin-left:4px;padding:0 5px;border-radius:9px;background:var(--warn);color:#fff;font-size:11px;line-height:18px;text-align:center}
 section[data-page="admin"] > .card.tabhide{display:none!important}
+/* 신앙 동행 */
+.fcg{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:12px 0}
+.fck{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-size:15px;color:var(--ink)!important;cursor:pointer;background:var(--surface)}
+.fck input{width:20px;height:20px;accent-color:var(--accent);flex:none;margin:0}
+.fck:has(input:checked){border-color:var(--accent);background:var(--tint)}
+.fcauto{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.fcauto span{background:var(--tint);border-radius:999px;padding:5px 12px;font-size:14px}
+.fcauto b{color:var(--accent)}
+.wkn{display:flex;align-items:center;gap:6px;font-size:15px}
+#fcCard .calhead{flex-wrap:wrap}#fcCard .calhead .h{white-space:nowrap}
+.wkn b{min-width:8.5em;text-align:center}
+.cv{border:1px solid var(--line);border-radius:12px;padding:14px;margin-top:10px;background:var(--surface)}
+.cv h3{font-size:17px;margin:0 0 4px}
+.its{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.its label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:13.5px;color:var(--ink)}
+.its input{accent-color:var(--accent)}
+.agree{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.6;margin-top:8px;color:var(--ink)}
+.agree input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent);flex:none}
+.rp{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:4px;font-size:15px;line-height:1.6}
+.rp .q{color:var(--muted);font-size:14px}
+.mynote{text-align:center;font-size:15px;color:var(--muted);margin:4px 0 0}
+.dnote input[type=text]{font:inherit;width:100%;margin-top:6px}
+.rain{background:#FFF5E6;border:1px solid #F3D19E;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:14px}
+.code{font-size:30px;letter-spacing:.18em;font-weight:800;color:var(--accent);margin:6px 0}
+.carebox{display:block;text-decoration:none;color:var(--ink);background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px}
+
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
 .tqnav{display:flex;align-items:center;gap:8px}.tqnav .btn{min-width:36px;padding:2px 10px;min-height:28px}
 .tq-v{font-family:var(--serif);font-size:20px;font-weight:700;line-height:1.5}
@@ -462,6 +488,7 @@ p,li{text-wrap:pretty}
   <section class="page" data-page="today">
     <div class="phead"><h1>오늘의 신앙생활</h1><p>말씀 읽기 → 마음에 닿은 것 기록하기 → 기도하기. 하루 세 걸음이면 충분합니다.</p></div>
     <div class="card tdq" id="tdQt"><span class="muted sm">오늘의 큐티 본문을 불러오는 중…</span></div>
+    <div id="careBox"></div>
     <ol class="steps">
       <li><a href="#qt"><b>1</b><span>오늘의 말씀 읽기</span><small>큐티 본문을 읽거나 들어요</small></a></li>
       <li><a href="#qt" data-focus="qBody"><b>2</b><span>느낀 점 기록하기</span><small>마음에 닿은 구절 한 줄이면 돼요</small></a></li>
@@ -475,6 +502,7 @@ p,li{text-wrap:pretty}
       <a href="#pray"><i>🙏</i><b>함께 기도</b><small>기도 모임 · 기도 짝</small></a>
       <a href="./#sermons"><i>▶️</i><b>설교 다시 보기</b><small>주일 설교 · 말씀 요약</small></a>
       <a href="#space"><i>⛪</i><b>교회 공간</b><small>공간 사용 등록</small></a>
+      <a href="#care"><i>🤝</i><b>신앙 동행</b><small>한 주 돌아보기 · 리더·부모님과 나누기</small></a>
     </div>
     <h2 class="tdh">더 깊은 말씀 공부</h2>
     <div class="tiles2">
@@ -668,7 +696,7 @@ p,li{text-wrap:pretty}
   <section class="page" data-page="pray">
     <div class="phead"><h1>함께 기도해요</h1><p>매일 기도하고 “기도했어요”를 눌러 친구들과 서로 알려 주세요. 기도 짝을 위해서도 기도해 주세요.</p></div>
     <div id="joinBox" class="card" hidden>
-      <h2 class="h">기도 모임에 들어가기</h2>
+      <h2 class="h" id="joinTitle">기도 모임에 들어가기</h2>
       <p class="hint">선생님(목사님)께 받은 모임 코드 6자리를 넣어 주세요. 같은 모임 친구들끼리만 기도 현황이 보입니다.</p>
       <div class="row"><input id="joinCode" type="text" maxlength="6" placeholder="예) A1B2C3" style="text-transform:uppercase;width:9em"><button class="btn acc" type="button" id="joinBtn">들어가기</button></div>
       <p class="msg" id="joinMsg"></p>
@@ -681,9 +709,18 @@ p,li{text-wrap:pretty}
         <label class="toggle sm"><input type="checkbox" id="prayNotePub" checked> 모임 친구들에게 기도 제목 보여 주기</label>
         <button class="btn acc big" type="button" id="prayBtn">🙏 오늘 기도했어요</button>
       </div>
-      <div id="prayDone" hidden><p class="donebig">🙏 오늘 기도를 마쳤어요!</p><button class="btn sm" type="button" id="prayUndo">취소하기</button></div>
+      <div id="prayDone" hidden><p class="donebig">🙏 오늘 기도를 마쳤어요!</p>
+        <p class="mynote" id="myNote"></p>
+        <div class="row" style="justify-content:center"><button class="btn sm" type="button" id="prayEdit">✏️ 기도 제목 고치기</button><button class="btn sm" type="button" id="prayUndo">기도 기록 취소</button></div>
+        <div id="prayEditBox" hidden style="margin-top:10px;text-align:left">
+          <input id="prayEditNote" type="text" maxlength="300" placeholder="오늘의 기도 제목 한 줄">
+          <label class="toggle sm"><input type="checkbox" id="prayEditPub"> 모임 친구들에게 기도 제목 보여 주기</label>
+          <div class="row"><button class="btn acc sm" type="button" id="prayEditSave">저장</button><button class="btn sm warn" type="button" id="prayEditDel">기도 제목만 지우기</button><button class="btn sm" type="button" id="prayEditCancel">닫기</button></div>
+        </div>
+      </div>
       <div class="streak" id="prayStreak"></div>
     </div>
+    <div class="seg" id="pgTabs" hidden></div>
     <div class="card" id="partnerBox" hidden>
       <h2 class="h">이번 주 나의 기도 짝</h2>
       <div id="partnerList"></div>
@@ -744,6 +781,45 @@ p,li{text-wrap:pretty}
       <div class="row" style="margin-top:0"><button class="btn acc" type="submit">저장</button><button class="btn" type="button" id="tCancel" hidden>고치기 취소</button></div>
     </form>
     <ul class="notes" id="tList"></ul>
+  </section>
+
+  <!-- 신앙 동행 -->
+  <section class="page" data-page="care">
+    <div class="phead"><h1>신앙 동행</h1><p>한 주를 스스로 돌아보고, 내가 허락한 사람(공동체 리더·부모님)과만 나눕니다. 묵상 글과 기도 내용은 누구에게도 보이지 않고, 언제든 그만 나눌 수 있습니다.</p></div>
+    <div id="cvAsk"></div>
+    <div class="card form" id="fcCard">
+      <div class="calhead"><h2 class="h">나의 한 주 돌아보기</h2><span class="wkn"><button class="btn sm" type="button" id="fcPrev" aria-label="지난주">◀</button><b id="fcWk"></b><button class="btn sm" type="button" id="fcNext" aria-label="다음 주">▶</button></span></div>
+      <div class="fcauto" id="fcAuto"></div>
+      <div class="fcg">
+        <label class="fck"><input type="checkbox" id="fcSun"><span>주일예배</span></label>
+        <label class="fck"><input type="checkbox" id="fcWed"><span>수요예배</span></label>
+        <label class="fck"><input type="checkbox" id="fcFri"><span>금요예배</span></label>
+        <label class="fck"><input type="checkbox" id="fcGrp"><span>소그룹 모임</span></label>
+        <label class="fck"><input type="checkbox" id="fcServe"><span>섬김·봉사</span></label>
+      </div>
+      <div class="two">
+        <div class="field"><label for="fcInv">교회에 초대하거나 복음을 전한 사람</label><select id="fcInv"></select></div>
+        <div class="field"><label>이번 주 마음 날씨</label><div class="seg" id="fcMood" style="margin:0"><button type="button" data-m="sun">☀️ 맑음</button><button type="button" data-m="cloud">⛅ 흐림</button><button type="button" data-m="rain">🌧 비</button></div></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label for="fcVerse">마음에 남은 말씀 한 구절 <span class="opt">(선택)</span></label><input id="fcVerse" type="text" maxlength="200" placeholder="예) 빌립보서 4:6 아무 것도 염려하지 말고"></div>
+      <div class="field" style="margin-top:10px"><label for="fcPray">함께 기도해 주세요 <span class="opt">(선택 · 한 줄)</span></label><input id="fcPray" type="text" maxlength="200" placeholder="예) 시험 준비, 마음의 평안"></div>
+      <div class="row"><button class="btn acc" type="button" id="fcSave">이번 주 기록 저장</button></div>
+      <p class="msg" id="fcMsg"></p>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2 class="h">내 한 주를 함께 보는 사람</h2>
+      <p class="hint">내가 동의한 사람만, 내가 고른 항목만 봅니다. 담임목사·관리자도 동의 없이는 볼 수 없습니다.</p>
+      <div id="cvMine"></div>
+      <div class="row"><button class="btn sm" type="button" id="cvCodeBtn">👪 부모님과 연결하기</button></div>
+      <div id="cvCode"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2 class="h">내가 함께 걷는 사람</h2>
+      <p class="hint">공동체 리더나 부모님이면 여기에서 매주 소식을 봅니다. 점수나 순위가 아니라 안부와 기도를 위한 것입니다.</p>
+      <div id="cvWatch"></div>
+      <div class="row"><input id="cvRedeem" type="text" maxlength="6" placeholder="자녀에게 받은 연결 코드" style="width:12em;text-transform:uppercase"><button class="btn sm acc" type="button" id="cvRedeemGo">연결하기</button></div>
+      <p class="msg" id="cvMsg"></p>
+    </div>
   </section>
 
   <!-- 교회 공간 -->
@@ -864,6 +940,13 @@ p,li{text-wrap:pretty}
       <p class="msg" id="edMsg"></p>
     </div>
     <div class="card form" style="margin-bottom:16px">
+      <h2 class="h">신앙 동행 공동체</h2>
+      <p class="hint">공동체(목장·셀·구역)를 만들고 리더를 정한 뒤 성도를 넣으면, 성도에게 ‘함께 걷기’ 동의 요청이 갑니다. 성도가 동의한 항목만 리더가 봅니다. 관리자도 점검 내용은 볼 수 없습니다. 리더를 바꾸면 성도에게 다시 동의를 받습니다.</p>
+      <ul class="plain" id="cgAdm"></ul>
+      <div class="row"><input id="cgName" type="text" maxlength="30" placeholder="새 공동체 이름 (예: 1목장)" style="width:14em"><button class="btn acc sm" type="button" id="cgAdd">공동체 만들기</button></div>
+      <p class="msg" id="cgMsg"></p>
+    </div>
+    <div class="card form" style="margin-bottom:16px">
       <h2 class="h">모임방 관리</h2>
       <p class="hint">팀을 만들고 성도를 넣으면, 그 성도들만 ‘모임방’에서 회의 기록을 쓰고 볼 수 있습니다.</p>
       <ul class="plain" id="tmAdm"></ul>
@@ -955,7 +1038,7 @@ p,li{text-wrap:pretty}
 
   <!-- 개인정보처리방침 -->
   <section class="page policy" data-page="privacy">
-    <div class="phead"><h1>개인정보처리방침</h1><p>시행일: 2026년 10월 16일</p></div>
+    <div class="phead"><h1>개인정보처리방침</h1><p>시행일: 2026년 10월 17일</p></div>
     <p>대한예수교장로회(백석) 더행복한교회(이하 ‘교회’)는 성도마당 이용자의 개인정보를 소중히 다루며, 「개인정보 보호법」에 따라 다음과 같이 처리합니다.</p>
     <h2>1. 수집하는 항목과 방법</h2>
     <ul>
@@ -967,6 +1050,7 @@ p,li{text-wrap:pretty}
       <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글, 단어장에 넣은 단어, 저장한 말씀과 메모, 모임방 회의 기록, ‘목소리 성경’에 직접 녹음한 목소리</li>
       <li>새가족 등록(홈페이지): 처음 오신 분이 직접 적는 이름, 연락처, 알게 된 경로, 남기는 말 — 로그인 없이 받으며 담임목사·관리자만 볼 수 있습니다</li>
       <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
+      <li>신앙 동행(선택): ‘신앙 동행’에서 직접 체크한 주간 기록(예배·소그룹 참석, 섬김·전도, 마음 날씨, 마음에 남은 말씀, 기도 부탁 한 줄), 함께 보기로 동의한 사람과 항목, 동의 일시</li>
       <li>방문 기록: 홈페이지와 성도마당에서 본 화면, 누른 설교 영상, 방문 시각, 접속 기기 종류(휴대폰/PC), 들어온 경로. 로그인하지 않은 방문자는 이름 없이 브라우저에 저장된 임의 번호로만 집계합니다.</li>
     </ul>
     <h2>2. 이용 목적</h2>
@@ -976,13 +1060,16 @@ p,li{text-wrap:pretty}
       <li>성경 필사 진도 저장, 큐티 기록 보관, 묵상 나눔 게시 시 작성자 표시</li>
       <li>‘교회 묵상집에 실어도 좋아요’에 동의한 묵상의 묵상집(책) 제작</li>
       <li>기도 모임 안에서 기도 여부·연속 기록·응원 표시</li>
+      <li>신앙 동행: 본인이 동의한 공동체 리더나 부모님(보호자)에게, 본인이 고른 항목만 주간 요약으로 보여 드려 안부와 기도로 돌봄</li>
       <li>방문 통계: 어떤 말씀과 소식이 도움이 되는지 살펴 교회 사역에 반영 (담임목사·관리자만 볼 수 있음)</li>
     </ul>
     <h2>3. 보유 기간</h2>
-    <p>방문 기록은 1년이 지나면 지웁니다. 새가족 등록 정보는 등록 후 1년이 지나거나 본인이 요청하면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
+    <p>방문 기록과 신앙 동행 주간 기록은 1년이 지나면 지웁니다. 새가족 등록 정보는 등록 후 1년이 지나거나 본인이 요청하면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
     <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, ‘목소리 성경’ 녹음은 로그인한 성도에게 녹음한 사람 이름과 함께 들리며, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
-    <h2>4-1. 만 14세 미만 아동</h2>
+    <h2>4-1. 신앙 동행 (민감정보)</h2>
+    <p>신앙 동행 기록은 종교에 관한 정보로서 「개인정보 보호법」 제23조의 민감정보에 해당할 수 있어, 처음 가입할 때의 동의와 <b>별도로</b> 동의를 받습니다. 누구에게 어떤 항목을 보여 줄지는 본인이 정하며, 공동체 리더 요청은 거절할 수 있고, ‘신앙 동행’ 화면에서 언제든 항목을 바꾸거나 그만 보여 줄 수 있습니다. 큐티 묵상 글과 기도 체크 메모의 내용은 나누지 않으며, 담임목사·관리자도 동의 없이는 볼 수 없습니다. 만 14세 미만은 부모님(보호자)의 동의가 있어야 합니다.</p>
+    <h2>4-2. 만 14세 미만 아동</h2>
     <p>만 14세 미만 아동은 법정대리인(부모님)의 동의를 받은 뒤 이용할 수 있습니다. 동의 없이 가입한 사실을 알게 되면 해당 정보를 지체 없이 삭제합니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
     <p>교회는 회원 정보와 글을 안전하게 보관하기 위해 데이터 저장을 위탁합니다.</p>
@@ -1021,7 +1108,7 @@ p,li{text-wrap:pretty}
 </dialog>
 
 <footer>
-  <div class="wrap">대한예수교장로회(백석) 더행복한교회 · <a href="#privacy">개인정보처리방침</a> · <a href="./">홈페이지</a></div>
+  <div class="wrap">대한예수교장로회(백석) 더행복한교회 · <a href="#privacy">개인정보처리방침</a> · <a href="./">홈페이지</a> · 홈페이지 제작 김충만 목사</div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -1068,6 +1155,8 @@ async function loadProfile(){
   const [ed, tm] = await Promise.all([sb.from("site_editors").select("area").eq("user_id", user.id), sb.from("team_members").select("team_id").eq("user_id", user.id)]);
   profile.areas = (ed.data || []).map(x => x.area);
   profile.teams = (tm.data || []).map(x => x.team_id);
+  const pg = await sb.from("prayer_group_members").select("group_id").eq("user_id", user.id);
+  profile.pgroups = pg.error ? (profile.group_id ? [profile.group_id] : []) : (pg.data || []).map(x => x.group_id);
 }
 
 /* ---------- 라우팅 ---------- */
@@ -1085,7 +1174,7 @@ function route(){
   trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
-  if (p === "today") renderTodayHome();
+  if (p === "today") { renderTodayHome(); careHome(); }
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); }); }
@@ -1095,6 +1184,7 @@ function route(){
   if (p === "words") loadWords();
   if (p === "fav") loadFav();
   if (p === "team") loadTeams();
+  if (p === "care") loadCare();
   if (p === "voice") initVoice();
   window.scrollTo(0,0);
 }
@@ -1821,14 +1911,25 @@ function partnersOf(ids, me, key){
   if (groups.length > 1 && groups[groups.length - 1].length === 1) groups[groups.length - 2].push(groups.pop()[0]);
   const g = groups.find(x => x.includes(me)); return g ? g.filter(x => x !== me) : [];
 }
-let prayState = {};
+let prayState = {}, prayGid = null;
+try { prayGid = +localStorage.getItem("thc-pgid") || null; } catch {}
 async function loadPray(){
-  const t = kstToday(), gid = profile?.group_id || null;
-  $("#joinBox").hidden = !!gid;
+  const t = kstToday(), gs = profile?.pgroups || [];
+  if (!gs.includes(prayGid)) prayGid = gs[0] || null;
+  const gid = prayGid;
+  $("#joinTitle").textContent = gs.length ? "다른 기도 모임에도 들어가기" : "기도 모임에 들어가기";
+  $("#joinBox").hidden = !!gs.length;
   let members = [{ id: user.id, nickname: profile?.nickname || "나", avatar_url: profile?.avatar_url }], groupName = "";
+  if (gs.length) {
+    const { data: gn } = await sb.from("prayer_groups").select("id,name").in("id", gs);
+    const nm = new Map((gn || []).map(x => [x.id, x.name])); groupName = nm.get(gid) || "";
+    $("#pgTabs").hidden = gs.length < 2;
+    $("#pgTabs").innerHTML = gs.map(i => `<button type="button" data-pg="${i}" class="${i === gid ? "on" : ""}">🙏 ${esc(nm.get(i) || "기도 모임")}</button>`).join("");
+  } else $("#pgTabs").hidden = true;
   if (gid) {
-    const [g, m] = await Promise.all([sb.from("prayer_groups").select("name").eq("id", gid).maybeSingle(), sb.from("profiles").select("id,nickname,avatar_url").eq("group_id", gid)]);
-    groupName = g.data?.name || ""; if (m.data && m.data.length) members = m.data;
+    const { data: ms } = await sb.from("prayer_group_members").select("user_id").eq("group_id", gid);
+    const ids = (ms || []).map(x => x.user_id);
+    if (ids.length) { const { data: m } = await sb.from("profiles").select("id,nickname,avatar_url").in("id", ids); if (m && m.length) members = m; }
   }
   const others = members.map(m => m.id);
   const [mine, group, cheersIn, cheersOut] = await Promise.all([
@@ -1839,7 +1940,11 @@ async function loadPray(){
   ]);
   const myDays = new Set((mine.data || []).map(r => r.day));
   const done = myDays.has(t);
-  prayState = { t, gid, members };
+  if (done) { const { data: mn } = await sb.from("prayer_checks").select("note,note_public").eq("user_id", user.id).eq("day", t).maybeSingle();
+    prayState.myNote = mn || {}; $("#myNote").textContent = mn?.note ? `오늘의 기도 제목: “${mn.note}”${mn.note_public ? "" : " (나만 보기)"}` : "기도 제목은 적지 않았어요.";
+    $("#prayEdit").textContent = mn?.note ? "✏️ 기도 제목 고치기" : "✏️ 기도 제목 적기"; }
+  $("#prayEditBox").hidden = true;
+  prayState = { ...prayState, t, gid, members };
   $("#prayToday").innerHTML = `<div class="sm muted">${fmtDate(t)} 오늘</div>`;
   $("#prayForm").hidden = done; $("#prayDone").hidden = !done;
   const st = streakOf(myDays, t);
@@ -1855,8 +1960,12 @@ async function loadPray(){
   $("#cheerBox").hidden = !ins.length;
   $("#cheerList").innerHTML = ins.map(c => `<li>${c.kind === "prayed_for" ? `🙏 <b>${nameOf(c.from_user)}</b>님이 오늘 나를 위해 기도했어요` : `💛 <b>${nameOf(c.from_user)}</b>님이 “함께 기도할게”라고 응원했어요`}</li>`).join("");
   const sent = new Set((cheersOut.data || []).map(c => c.to_user + "|" + c.kind));
-  $("#groupInfo").innerHTML = gid ? `기도 모임: <b>${esc(groupName)}</b> · ${members.length}명 <button class="btn sm" type="button" id="leaveGroup">모임 나가기</button>` : "아직 기도 모임에 들어가지 않았어요. 혼자서도 기도 기록과 달력은 쓸 수 있습니다.";
-  if ($("#leaveGroup")) $("#leaveGroup").onclick = async () => { if (!confirm("기도 모임에서 나갈까요?")) return; await sb.rpc("leave_group"); profile.group_id = null; loadPray(); };
+  $("#groupInfo").innerHTML = gid ? `기도 모임: <b>${esc(groupName)}</b> · ${members.length}명${gs.length > 1 ? ` (내 기도 모임 ${gs.length}곳)` : ""} <button class="btn sm" type="button" id="joinMore">＋ 다른 모임 들어가기</button> <button class="btn sm" type="button" id="leaveGroup">이 모임 나가기</button>` : "아직 기도 모임에 들어가지 않았어요. 혼자서도 기도 기록과 달력은 쓸 수 있습니다.";
+  if ($("#joinMore")) $("#joinMore").onclick = () => { $("#joinBox").hidden = false; $("#joinBox").scrollIntoView({ behavior: "smooth" }); $("#joinCode").focus(); };
+  if ($("#leaveGroup")) $("#leaveGroup").onclick = async e => { const b = e.currentTarget;
+    if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = `‘${groupName}’에서 나갈까요? 한 번 더 누르세요`; return; }
+    const { error } = await sb.rpc("leave_pgroup", { gid }); if (error) return toast("나가지 못했습니다: " + error.message);
+    profile.pgroups = gs.filter(x => x !== gid); toast("모임에서 나왔습니다 (기도 기록은 남아 있어요)"); loadPray(); };
   if (!gid) { $("#boardBox").hidden = true; $("#partnerBox").hidden = true; return; }
   // 현황판
   const byUser = new Map(); (group.data || []).forEach(r => { if (!byUser.has(r.user_id)) byUser.set(r.user_id, []); byUser.get(r.user_id).push(r); });
@@ -1882,7 +1991,7 @@ async function loadPray(){
 let calMonth = null;
 async function renderCal(){
   const t = kstToday(), [y, mo] = calMonth.split("-").map(Number), first = new Date(Date.UTC(y, mo - 1, 1)), days = new Date(Date.UTC(y, mo, 0)).getUTCDate();
-  const gid = profile?.group_id, from = `${calMonth}-01`, to = `${calMonth}-${String(days).padStart(2, "0")}`;
+  const gid = prayState.gid, from = `${calMonth}-01`, to = `${calMonth}-${String(days).padStart(2, "0")}`;
   const ids = (prayState.members || []).map(m => m.id);
   const { data } = gid ? await sb.from("prayer_checks").select("user_id,day").in("user_id", ids).gte("day", from).lte("day", to).limit(1000) : { data: [] };
   const cnt = new Map(); (data || []).forEach(r => cnt.set(r.day, (cnt.get(r.day) || 0) + 1));
@@ -1895,12 +2004,13 @@ async function renderCal(){
   $("#prayCal").innerHTML = cal;
 }
 async function showDay(k){
-  const gid = profile?.group_id, ids = gid ? (prayState.members || []).map(m => m.id) : [user.id];
+  const gid = prayState.gid, ids = gid ? (prayState.members || []).map(m => m.id) : [user.id];
   const { data } = await sb.from("prayer_checks").select("user_id,note,note_public").in("user_id", ids).eq("day", k);
+  prayState.dayK = k; prayState.dayMine = (data || []).find(r => r.user_id === user.id) || null;
   const nameOf = id => esc(((prayState.members || []).find(m => m.id === id) || {}).nickname || (id === user.id ? profile?.nickname : "친구"));
   const list = data || [];
   const [, mm, dd] = k.split("-").map(Number);
-  $("#dayInfo").innerHTML = `<h3 class="dayh">${mm}월 ${dd}일 ${gid ? `· ${list.length}명 기도` : ""}</h3>` + (list.length ? `<ul class="plain">${list.map(r => `<li>🙏 <b>${nameOf(r.user_id)}</b>${r.note && (r.note_public || r.user_id === user.id) ? ` — “${esc(r.note)}”` : ""}</li>`).join("")}</ul>` : `<p class="sm muted">이날은 기도 기록이 없습니다.</p>`);
+  $("#dayInfo").innerHTML = `<h3 class="dayh">${mm}월 ${dd}일 ${gid ? `· ${list.length}명 기도` : ""}</h3>` + (list.length ? `<ul class="plain">${list.map(r => `<li>🙏 <b>${nameOf(r.user_id)}</b>${r.note && (r.note_public || r.user_id === user.id) ? ` — “${esc(r.note)}”` : ""}${r.user_id === user.id ? ` <button class="linkbtn sm" type="button" data-dnedit>${r.note ? "고치기" : "기도 제목 적기"}</button>${r.note ? ` <button class="linkbtn sm" type="button" data-dndel>지우기</button>` : ""}<div class="dnote" data-dnbox hidden><input type="text" maxlength="300" value="${esc(r.note || "")}" placeholder="기도 제목 한 줄"><label class="toggle sm"><input type="checkbox" ${r.note_public ? "checked" : ""}> 모임 친구들에게 보여 주기</label><div class="row" style="margin-top:4px"><button class="btn acc sm" type="button" data-dnsave>저장</button></div></div>` : ""}</li>`).join("")}</ul>` : `<p class="sm muted">이날은 기도 기록이 없습니다.</p>`);
 }
 $("#prayCal").addEventListener("click", e => { const c = e.target.closest("[data-day]"); if (!c || c.classList.contains("future")) return; $("#prayCal").querySelectorAll(".sel").forEach(x => x.classList.remove("sel")); c.classList.add("sel"); showDay(c.dataset.day); });
 $("#prayCal").addEventListener("keydown", e => { if (e.key === "Enter") e.target.click(); });
@@ -1914,11 +2024,37 @@ $("#prayBtn").onclick = async () => {
   if (error && error.code !== "23505") return toast("저장하지 못했습니다: " + error.message);
   $("#prayNote").value = ""; toast("오늘 기도를 기록했어요. 🙏"); loadPray();
 };
-$("#prayUndo").onclick = async () => { await sb.from("prayer_checks").delete().eq("user_id", user.id).eq("day", kstToday()); loadPray(); };
+$("#prayUndo").onclick = async e => { const b = e.currentTarget;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "오늘 기도 기록을 지울까요? 한 번 더 누르세요"; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = "기도 기록 취소"; } }, 4000); return; }
+  delete b.dataset.armed; b.textContent = "기도 기록 취소";
+  await sb.from("prayer_checks").delete().eq("user_id", user.id).eq("day", kstToday()); loadPray(); };
+async function saveNote(day, note, pub){
+  const { error } = await sb.from("prayer_checks").update({ note: note || null, note_public: pub }).eq("user_id", user.id).eq("day", day);
+  if (error) { toast("저장하지 못했습니다: " + error.message); return false; }
+  return true;
+}
+$("#prayEdit").onclick = () => { const n = prayState.myNote || {}; $("#prayEditNote").value = n.note || ""; $("#prayEditPub").checked = n.note ? !!n.note_public : true; $("#prayEditBox").hidden = false; $("#prayEditNote").focus(); };
+$("#prayEditCancel").onclick = () => { $("#prayEditBox").hidden = true; };
+$("#prayEditSave").onclick = async () => { if (await saveNote(kstToday(), $("#prayEditNote").value.trim(), $("#prayEditPub").checked)) { toast("기도 제목을 고쳤어요"); loadPray(); } };
+$("#prayEditDel").onclick = async e => { const b = e.currentTarget;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 지웁니다"; return; }
+  delete b.dataset.armed; b.textContent = "기도 제목만 지우기";
+  if (await saveNote(kstToday(), "", false)) { toast("기도 제목을 지웠어요 (기도한 기록은 남아 있어요)"); loadPray(); } };
+$("#dayInfo").addEventListener("click", async e => {
+  const k = prayState.dayK; if (!k) return;
+  if (e.target.closest("[data-dnedit]")) { const bx = $("#dayInfo [data-dnbox]"); if (bx) { bx.hidden = !bx.hidden; bx.querySelector("input[type=text]").focus(); } return; }
+  if (e.target.closest("[data-dnsave]")) { const bx = $("#dayInfo [data-dnbox]");
+    if (await saveNote(k, bx.querySelector("input[type=text]").value.trim(), bx.querySelector("input[type=checkbox]").checked)) { toast("기도 제목을 고쳤어요"); showDay(k); if (k === kstToday()) loadPray(); } return; }
+  const d = e.target.closest("[data-dndel]");
+  if (d) { if (!d.dataset.armed) { d.dataset.armed = 1; d.textContent = "한 번 더 누르면 지웁니다"; return; }
+    if (await saveNote(k, "", false)) { toast("기도 제목을 지웠어요"); showDay(k); if (k === kstToday()) loadPray(); } }
+});
+$("#pgTabs").addEventListener("click", e => { const b = e.target.closest("[data-pg]"); if (!b) return; prayGid = +b.dataset.pg;
+  try { localStorage.setItem("thc-pgid", prayGid); } catch {} $("#dayInfo").innerHTML = `<p class="sm muted">날짜를 누르면 그날 누가 기도했는지와 기도 제목을 볼 수 있어요.</p>`; loadPray(); });
 $("#joinBtn").onclick = async () => {
   const { data, error } = await sb.rpc("join_group", { join_code: $("#joinCode").value });
   if (error) { $("#joinMsg").textContent = "코드가 맞지 않습니다. 다시 확인해 주세요."; $("#joinMsg").className = "msg err"; return; }
-  toast(`‘${data}’ 모임에 들어왔어요!`); await loadProfile(); loadPray();
+  $("#joinCode").value = ""; $("#joinMsg").textContent = ""; toast(`‘${data}’ 모임에 들어왔어요!`); await loadProfile(); const g = profile.pgroups || []; prayGid = g[g.length - 1] ?? null; loadPray();
 };
 document.addEventListener("click", async e => {
   const c = e.target.closest("[data-cheer],[data-pfor]"); if (!c) return;
@@ -1949,7 +2085,7 @@ function loadScript(src){ return new Promise((ok, no) => { const s = document.cr
 async function initAdmin(){
   adminTabs(); loadBdayAdm();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   $("#aTabs")?.remove();
@@ -2140,18 +2276,20 @@ $("#grpList").addEventListener("click", async e => {
   if (b.dataset.copy) { try { await navigator.clipboard.writeText(b.dataset.copy); toast("코드를 복사했습니다"); } catch { toast("코드: " + b.dataset.copy); } }
   if (b.dataset.gm) {
     const box = $("#gm" + b.dataset.gm); box.hidden = !box.hidden; if (box.hidden) return;
-    const { data } = await sb.from("profiles").select("id,nickname").eq("group_id", +b.dataset.gm);
+    const { data: gm } = await sb.from("prayer_group_members").select("user_id").eq("group_id", +b.dataset.gm);
+    const gids = (gm || []).map(x => x.user_id);
+    const { data } = gids.length ? await sb.from("profiles").select("id,nickname").in("id", gids) : { data: [] };
     const ids = (data || []).map(p => p.id), t = kstToday();
     const { data: ck } = ids.length ? await sb.from("prayer_checks").select("user_id,day").in("user_id", ids).gte("day", addDays(t, -60)).order("day", { ascending: false }).limit(1000) : { data: [] };
     const last = new Map(), n30 = new Map();
     (ck || []).forEach(r => { if (!last.has(r.user_id)) last.set(r.user_id, r.day); if (r.day >= addDays(t, -29)) n30.set(r.user_id, (n30.get(r.user_id) || 0) + 1); });
     const gap = d => d ? Math.round((Date.parse(t) - Date.parse(d)) / 864e5) : null;
     const rows = (data || []).map(p => ({ ...p, last: last.get(p.id), g: gap(last.get(p.id)), n: n30.get(p.id) || 0 })).sort((x, y) => (y.g ?? 999) - (x.g ?? 999));
-    box.innerHTML = rows.map(p => `<li class="${p.g === null || p.g >= 14 ? "idle" : ""}">${esc(p.nickname)} <span class="sm muted">· 최근 30일 ${p.n}일 기도 · ${p.g === null ? "60일 넘게 기록 없음" : p.g === 0 ? "오늘 기도" : `마지막 기도 ${p.g}일 전`}</span> <button class="btn sm warn" type="button" data-out="${p.id}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
+    box.innerHTML = rows.map(p => `<li class="${p.g === null || p.g >= 14 ? "idle" : ""}">${esc(p.nickname)} <span class="sm muted">· 최근 30일 ${p.n}일 기도 · ${p.g === null ? "60일 넘게 기록 없음" : p.g === 0 ? "오늘 기도" : `마지막 기도 ${p.g}일 전`}</span> <button class="btn sm warn" type="button" data-out="${p.id}" data-og="${b.dataset.gm}">모임에서 빼기</button></li>`).join("") || `<li class="muted sm">아직 아무도 없습니다.</li>`;
   }
   if (b.dataset.out) {
     if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "정말 뺄까요?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.armed; b.textContent = "모임에서 빼기"; } }, 4000); return; }
-    await sb.rpc("admin_set_group", { uid: b.dataset.out, gid: null }); toast("모임에서 뺐습니다 (기도 기록은 남아 있습니다)"); loadGroups();
+    await sb.rpc("admin_pgroup_out", { uid: b.dataset.out, gid: +b.dataset.og }); toast("모임에서 뺐습니다 (기도 기록은 남아 있습니다)"); loadGroups();
   }
   if (b.dataset.gren) {
     const n = prompt("새 모임 이름", b.dataset.name); if (!n || !n.trim()) return;
@@ -2989,6 +3127,17 @@ async function renderTodayHome(){
     <div class="row" style="margin-top:8px"><a class="btn acc sm" href="#qt">📖 본문 읽고 큐티 쓰기</a><button class="btn sm" type="button" id="tdSay">🔊 읽어 주기</button></div>`;
   $("#tdSay").onclick = e => sayQt(item, e.currentTarget);
 }
+async function careHome(){
+  const box = $("#careBox"); if (!box) return;
+  const { data } = await sb.rpc("care_view"); const v = data || [];
+  const ask = v.filter(x => x.side === "me" && x.status === "pending").length, watch = v.filter(x => x.side === "watch" && x.status === "active").length;
+  const dw = new Date(kstToday() + "T00:00:00Z").getUTCDay();
+  let t = "";
+  if (ask) t = `🤝 함께 걷기 요청이 ${ask}건 있어요. 확인해 주세요 →`;
+  else if (watch && (dw === 1 || dw === 2)) t = `📬 지난주 신앙 동행 소식이 도착했어요 (${watch}명) →`;
+  else if (v.some(x => x.side === "me" && x.status === "active") && (dw === 0 || dw === 6)) t = `📝 이번 주 돌아보기를 해 볼까요? →`;
+  box.innerHTML = t ? `<a class="carebox" href="#care">${t}</a>` : "";
+}
 document.addEventListener("click", e => { const a = e.target.closest(".steps a[data-focus]"); if (a) setTimeout(() => $("#" + a.dataset.focus)?.focus(), 600); });
 
 /* ---------- 큐티 본문 읽어 주기 (운전 중에도 듣기) ---------- */
@@ -3009,13 +3158,214 @@ async function sayQt(item, btn){
   toast("말씀을 읽어 드립니다. 운전 중에는 화면을 보지 마시고 들으세요.");
 }
 
+/* ---------- 신앙 동행 ---------- */
+const CITEMS = [["worship", "예배 참석"], ["qt", "큐티한 날 수"], ["prayer", "기도 체크한 날 수"], ["write", "성경 필사"], ["group", "소그룹 모임"], ["serve", "섬김·전도"], ["mood", "마음 날씨"], ["verse", "마음에 남은 말씀"], ["prayreq", "기도 부탁"]];
+const CDEF = ["worship", "qt", "prayer", "write", "group", "serve", "mood", "verse"];
+const MOOD = { sun: "☀️ 맑음", cloud: "⛅ 흐림", rain: "🌧 비" };
+const wkOf = d => { const t = new Date(d + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() - (t.getUTCDay() + 6) % 7); return t.toISOString().slice(0, 10); };
+const addD = (d, n) => { const t = new Date(d + "T00:00:00Z"); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); };
+const md = d => (+d.slice(5, 7)) + "/" + (+d.slice(8, 10));
+const wkLbl = w => md(w) + " ~ " + md(addD(w, 6));
+let fcWeek = null, cvWeek = null, fcMood = null, careV = [];
+const itemPick = (sel, nm) => `<div class="its">${CITEMS.map(([k, t]) => `<label><input type="checkbox" data-it="${k}" ${sel.includes(k) ? "checked" : ""}>${t}</label>`).join("")}</div>`;
+const pickedOf = el => [...el.querySelectorAll("[data-it]:checked")].map(x => x.dataset.it);
+const itemNames = its => CITEMS.filter(([k]) => its.includes(k)).map(x => x[1]).join(", ") || "없음";
+const whoOf = x => x.kind === "parent" ? "부모님(가족)" : (x.group_name ? x.group_name + " 리더" : "공동체 리더");
+let myO14 = null;
+const agreeBox = () => `<label class="agree"><input type="checkbox" data-agree><span><b>[필수·민감정보]</b> 위에서 고른 신앙생활 기록(종교에 관한 정보)을 이 분에게 보여 주는 데 따로 동의합니다. 언제든 바꾸거나 그만둘 수 있습니다.</span></label>` +
+  (myO14 === false ? `<label class="agree"><input type="checkbox" data-guard><span><b>[필수]</b> 만 14세 미만이라 부모님(보호자)께서 함께 확인하고 동의하셨습니다.</span></label>` : "");
+
+async function loadCare(){
+  if (!fcWeek) fcWeek = wkOf(kstToday());
+  if (!cvWeek) cvWeek = addD(wkOf(kstToday()), -7);
+  if (myO14 === null) { const { data } = await sb.from("member_info").select("over14").eq("user_id", user.id).maybeSingle(); myO14 = data?.over14 ?? true; }
+  $("#fcInv").innerHTML = Array.from({ length: 11 }, (_, i) => `<option value="${i}">${i ? i + "명" : "없음"}</option>`).join("");
+  loadFc(); loadCareLinks();
+}
+async function loadFc(){
+  $("#fcWk").textContent = wkLbl(fcWeek);
+  $("#fcNext").disabled = fcWeek >= wkOf(kstToday());
+  const [{ data: f }, { data: r }] = await Promise.all([
+    sb.from("faith_checks").select("*").eq("user_id", user.id).eq("week", fcWeek).maybeSingle(),
+    sb.rpc("care_report", { m: user.id, wk: fcWeek })]);
+  $("#fcAuto").innerHTML = r ? `<span>📖 큐티 <b>${r.qt}</b>일</span><span>🙏 기도 체크 <b>${r.prayer}</b>일</span><span>✍️ 성경 필사 <b>${r.write}</b>절</span>` : "";
+  $("#fcSun").checked = !!f?.sun; $("#fcWed").checked = !!f?.wed; $("#fcFri").checked = !!f?.fri; $("#fcGrp").checked = !!f?.grp; $("#fcServe").checked = !!f?.serve;
+  $("#fcInv").value = String(f?.invite || 0); $("#fcVerse").value = f?.verse || ""; $("#fcPray").value = f?.prayreq || "";
+  fcMood = f?.mood || null; $("#fcMood").querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.m === fcMood));
+  $("#fcMsg").textContent = f ? "저장된 기록입니다. 고친 뒤 다시 저장할 수 있어요." : "";
+}
+$("#fcPrev").onclick = () => { fcWeek = addD(fcWeek, -7); loadFc(); };
+$("#fcNext").onclick = () => { if (fcWeek < wkOf(kstToday())) { fcWeek = addD(fcWeek, 7); loadFc(); } };
+$("#fcMood").onclick = e => { const b = e.target.closest("button[data-m]"); if (!b) return; fcMood = fcMood === b.dataset.m ? null : b.dataset.m;
+  $("#fcMood").querySelectorAll("button").forEach(x => x.classList.toggle("on", x.dataset.m === fcMood)); };
+$("#fcSave").onclick = async () => {
+  const row = { user_id: user.id, week: fcWeek, sun: $("#fcSun").checked, wed: $("#fcWed").checked, fri: $("#fcFri").checked, grp: $("#fcGrp").checked, serve: $("#fcServe").checked,
+    invite: +$("#fcInv").value, mood: fcMood, verse: $("#fcVerse").value.trim() || null, prayreq: $("#fcPray").value.trim() || null, updated_at: new Date().toISOString() };
+  const { error } = await sb.from("faith_checks").upsert(row);
+  if (error) return amsg("#fcMsg", "저장하지 못했습니다: " + error.message, true);
+  amsg("#fcMsg", "저장했습니다. 이번 주도 말씀 곁에 있어 주셔서 고맙습니다 🙂");
+};
+
+async function loadCareLinks(){
+  const { data, error } = await sb.rpc("care_view");
+  if (error) { $("#cvMine").innerHTML = `<p class="msg err">불러오지 못했습니다: ${esc(error.message)}</p>`; return; }
+  careV = data || [];
+  const mine = careV.filter(x => x.side === "me"), watch = careV.filter(x => x.side === "watch");
+  $("#cvAsk").innerHTML = mine.filter(x => x.status === "pending").map(x => `<div class="card" style="margin-bottom:16px;border-color:var(--accent)" data-link="${x.link}">
+    <h2 class="h">🤝 ${esc(x.nickname || "성도")}님(${esc(whoOf(x))})이 함께 걷기를 요청했어요</h2>
+    <p class="hint">동의하면 매주 아래에서 고른 항목만 요약으로 보입니다. 묵상 글과 기도 체크 메모는 보이지 않습니다.</p>
+    ${itemPick(CDEF)}${agreeBox()}
+    <div class="row"><button class="btn acc sm" type="button" data-ok>동의하고 함께 걷기</button><button class="btn sm" type="button" data-no>지금은 괜찮아요</button></div></div>`).join("");
+  $("#cvMine").innerHTML = mine.filter(x => x.status !== "pending").map(x => `<div class="cv" data-link="${x.link}">
+    <h3>${esc(x.nickname || "성도")} <span class="badge">${esc(whoOf(x))}</span></h3>
+    ${x.status === "active" ? `<p class="sm muted">보여 주는 것: ${esc(itemNames(x.items))}</p>
+      <div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-edit>항목 바꾸기</button><button class="btn sm warn" type="button" data-stop>그만 보여 주기</button></div>`
+    : `<p class="sm muted">함께 보지 않기로 했어요.</p><div class="row" style="margin-top:6px"><button class="btn sm" type="button" data-edit>다시 생각해 보기</button></div>`}
+    <div data-ed hidden>${itemPick(x.items?.length ? x.items : CDEF)}${agreeBox()}<div class="row"><button class="btn acc sm" type="button" data-ok>이대로 저장</button></div></div></div>`).join("") || `<p class="sm muted">아직 없습니다.</p>`;
+  const act = watch.filter(x => x.status === "active"), pend = watch.filter(x => x.status !== "active");
+  $("#cvWatch").innerHTML = (act.length ? `<div class="calhead" style="margin-top:6px"><span class="sm muted">주간 소식</span><span class="wkn"><button class="btn sm" type="button" id="cvPrev">◀</button><b id="cvWk">${wkLbl(cvWeek)}</b><button class="btn sm" type="button" id="cvNext">▶</button></span></div>` : "") +
+    act.map(x => `<div class="cv" data-member="${x.other}" data-link="${x.link}"><h3>${esc(x.nickname || "성도")} <span class="badge">${x.kind === "parent" ? "가족" : esc(x.group_name || "공동체")}</span></h3><div data-rp class="sm muted">불러오는 중…</div>
+      <div class="row" style="margin-top:8px"><button class="btn sm acc" type="button" data-share>💬 카톡으로 보내기</button><button class="btn sm" type="button" data-unwatch>${x.kind === "parent" ? "연결 끊기" : ""}</button></div></div>`).join("") +
+    (pend.length ? `<p class="sm muted" style="margin-top:10px">동의를 기다리는 분: ${pend.map(x => esc(x.nickname || "성도")).join(", ")}</p>` : "") +
+    (!watch.length ? `<p class="sm muted">아직 없습니다. 공동체 리더로 정해지거나 자녀가 연결 코드를 주면 여기에 보입니다.</p>` : "");
+  $("#cvWatch").querySelectorAll("[data-unwatch]").forEach(b => { if (!b.textContent) b.remove(); });
+  if ($("#cvPrev")) { $("#cvPrev").onclick = () => { cvWeek = addD(cvWeek, -7); loadCareLinks(); };
+    $("#cvNext").disabled = cvWeek >= wkOf(kstToday()); $("#cvNext").onclick = () => { if (cvWeek < wkOf(kstToday())) { cvWeek = addD(cvWeek, 7); loadCareLinks(); } }; }
+  for (const el of $("#cvWatch").querySelectorAll("[data-member]")) {
+    const { data: r, error: e } = await sb.rpc("care_report", { m: el.dataset.member, wk: cvWeek });
+    const box = el.querySelector("[data-rp]");
+    if (e) { box.textContent = "볼 수 있는 내용이 없습니다."; continue; }
+    el._r = r; box.className = ""; box.innerHTML = rpHtml(r);
+  }
+}
+function rpLines(r){
+  const L = [], it = r.items || [];
+  if (it.includes("worship") && r.checked) L.push(["예배", ["주일", "수요", "금요"].map((t, i) => t + " " + ([r.sun, r.wed, r.fri][i] ? "✓" : "–")).join(" · ")]);
+  const a = [];
+  if (it.includes("qt")) a.push(`큐티 ${r.qt}일`);
+  if (it.includes("prayer")) a.push(`기도 ${r.prayer}일`);
+  if (it.includes("write")) a.push(`필사 ${r.write}절`);
+  if (a.length) L.push(["말씀·기도", a.join(" · ")]);
+  if (it.includes("group") && r.checked) L.push(["소그룹", r.grp ? "참석 ✓" : "–"]);
+  if (it.includes("serve") && r.checked) L.push(["섬김·전도", (r.serve ? "섬김 ✓" : "섬김 –") + (r.invite ? ` · 초대 ${r.invite}명` : "")]);
+  if (it.includes("mood") && r.mood) L.push(["마음 날씨", MOOD[r.mood]]);
+  if (it.includes("verse") && r.verse) L.push(["마음에 남은 말씀", r.verse]);
+  if (it.includes("prayreq") && r.prayreq) L.push(["함께 기도해 주세요", r.prayreq]);
+  return L;
+}
+function rpHtml(r){
+  const L = rpLines(r);
+  return `<ul class="rp">${L.map(([k, v]) => `<li><span class="q">${k}</span> ${esc(v)}</li>`).join("")}</ul>` +
+    (!r.checked ? `<p class="sm muted" style="margin-top:6px">이번 주 돌아보기는 아직 쓰지 않았어요.</p>` : "") +
+    (r.mood === "rain" ? `<div class="rain">💌 이번 주 마음이 많이 힘들었다고 했어요. 평가보다 안부 한마디와 기도가 큰 힘이 됩니다.</div>` : "");
+}
+$("#cvWatch").addEventListener("click", async e => {
+  const el = e.target.closest("[data-member]"); if (!el) return;
+  if (e.target.closest("[data-share]")) {
+    const r = el._r; if (!r) return;
+    const nm = el.querySelector("h3").firstChild.textContent.trim();
+    const txt = `[더행복한교회 신앙 동행] ${nm} · ${wkLbl(cvWeek)}\n` + rpLines(r).map(([k, v]) => `${k}: ${v}`).join("\n") +
+      (!r.checked ? "\n(이번 주 돌아보기는 아직 쓰지 않았어요)" : "") + `\n\nhttps://thehappierchurch.kr/member.html#care`;
+    if (navigator.share) { try { await navigator.share({ text: txt }); } catch {} }
+    else { try { await navigator.clipboard.writeText(txt); toast("복사했습니다. 카톡 대화방에 붙여 넣으세요"); } catch { prompt("아래 글을 복사해 카톡에 붙여 넣으세요", txt); } }
+    return;
+  }
+  const u = e.target.closest("[data-unwatch]");
+  if (u) { if (!u.dataset.armed) { u.dataset.armed = 1; u.textContent = "한 번 더 누르면 끊습니다"; return; }
+    const { error } = await sb.from("care_links").delete().eq("id", el.dataset.link); if (error) return toast("끊지 못했습니다: " + error.message);
+    toast("연결을 끊었습니다"); loadCareLinks(); }
+});
+async function careDecide(box, ok){
+  const its = pickedOf(box);
+  if (ok) {
+    if (!its.length) return toast("보여 줄 항목을 하나 이상 골라 주세요");
+    if (!box.querySelector("[data-agree]")?.checked) return toast("민감정보 동의에 체크해 주세요");
+    if (box.querySelector("[data-guard]") && !box.querySelector("[data-guard]").checked) return toast("부모님(보호자) 동의를 확인해 주세요");
+  }
+  const { error } = await sb.rpc("care_decide", { link: +box.closest("[data-link]").dataset.link, ok, its, guardian: !!box.querySelector("[data-guard]")?.checked });
+  if (error) return toast(/guardian/.test(error.message) ? "만 14세 미만은 부모님(보호자) 동의가 필요합니다" : "저장하지 못했습니다: " + error.message);
+  toast(ok ? "함께 걷기를 시작했습니다" : "알겠습니다. 언제든 다시 바꿀 수 있어요"); loadCareLinks(); careHome();
+}
+$("#cvAsk").addEventListener("click", e => { const c = e.target.closest("[data-link]"); if (!c) return;
+  if (e.target.closest("[data-ok]")) careDecide(c, true); else if (e.target.closest("[data-no]")) careDecide(c, false); });
+$("#cvMine").addEventListener("click", async e => {
+  const c = e.target.closest("[data-link]"); if (!c) return;
+  if (e.target.closest("[data-edit]")) { c.querySelector("[data-ed]").hidden = false; return; }
+  if (e.target.closest("[data-ok]")) return careDecide(c.querySelector("[data-ed]"), true);
+  const s = e.target.closest("[data-stop]");
+  if (s) { if (!s.dataset.armed) { s.dataset.armed = 1; s.textContent = "한 번 더 누르면 그만 보여 줍니다"; return; }
+    const { error } = await sb.rpc("care_decide", { link: +c.dataset.link, ok: false, its: [], guardian: false });
+    if (error) return toast("바꾸지 못했습니다: " + error.message); toast("이제 이 분은 내 기록을 볼 수 없습니다"); loadCareLinks(); }
+});
+$("#cvCodeBtn").onclick = () => {
+  $("#cvCode").innerHTML = `<div class="cv"><h3>부모님께 드릴 연결 코드 만들기</h3><p class="hint">부모님이 성도마당 ‘신앙 동행’에서 이 코드를 넣으면 연결됩니다. 코드는 7일 동안 한 번만 쓸 수 있어요.</p>
+    ${itemPick(CDEF)}${agreeBox()}<div class="row"><button class="btn acc sm" type="button" id="cvMk">코드 만들기</button></div><div id="cvOut"></div></div>`;
+  $("#cvMk").onclick = async () => {
+    const box = $("#cvCode"), its = pickedOf(box);
+    if (!its.length) return toast("보여 줄 항목을 하나 이상 골라 주세요");
+    if (!box.querySelector("[data-agree]").checked) return toast("민감정보 동의에 체크해 주세요");
+    if (box.querySelector("[data-guard]") && !box.querySelector("[data-guard]").checked) return toast("부모님(보호자) 동의를 확인해 주세요");
+    const { data, error } = await sb.rpc("care_make_code", { its, guardian: !!box.querySelector("[data-guard]")?.checked });
+    if (error) return toast("만들지 못했습니다: " + error.message);
+    $("#cvOut").innerHTML = `<div class="code">${esc(data)}</div><div class="row" style="margin-top:0"><button class="btn sm acc" type="button" id="cvSend">💬 카톡으로 코드 보내기</button></div>`;
+    $("#cvSend").onclick = async () => { const t = `더행복한교회 성도마당 ‘신앙 동행’ 연결 코드: ${data}\n(7일 안에 아래에서 로그인 후 코드를 넣어 주세요)\nhttps://thehappierchurch.kr/member.html#care`;
+      if (navigator.share) { try { await navigator.share({ text: t }); } catch {} } else { try { await navigator.clipboard.writeText(t); toast("복사했습니다"); } catch {} } };
+  };
+};
+$("#cvRedeemGo").onclick = async () => {
+  const c = $("#cvRedeem").value.trim(); if (c.length < 6) return amsg("#cvMsg", "6자리 코드를 넣어 주세요.", true);
+  const { data, error } = await sb.rpc("care_redeem", { c });
+  if (error) return amsg("#cvMsg", /self/.test(error.message) ? "내가 만든 코드는 넣을 수 없어요." : "코드가 맞지 않거나 7일이 지났습니다. 자녀에게 새 코드를 받아 주세요.", true);
+  $("#cvRedeem").value = ""; amsg("#cvMsg", `${data || "자녀"}님과 연결되었습니다.`); loadCareLinks();
+};
+
+/* 관리: 신앙 동행 공동체 */
+async function loadCareAdm(){
+  const [ps, g, l] = await Promise.all([people(), sb.from("care_groups").select("id,name,leader_id").order("id"), sb.from("care_links").select("group_id,member_id,status").not("group_id", "is", null)]);
+  if (g.error) { $("#cgAdm").innerHTML = `<li class="msg err">불러오지 못했습니다 (Supabase에 새 표를 만들어야 합니다)</li>`; return; }
+  const opts = (sel, ph) => `<option value="">${ph}</option>` + ps.map(p => `<option value="${p.id}" ${p.id === sel ? "selected" : ""}>${esc(p.nickname)}</option>`).join("");
+  $("#cgAdm").innerHTML = (g.data || []).map(x => { const ms = (l.data || []).filter(y => y.group_id === x.id);
+    return `<li class="card" style="padding:12px 14px" data-cg="${x.id}"><b>${esc(x.name)}</b> · ${ms.length}명 (동의 ${ms.filter(y => y.status === "active").length}명)
+      <div class="row" style="margin-top:6px"><span class="sm muted">리더</span><select data-cglead>${opts(x.leader_id, "리더 고르기")}</select></div>
+      <div class="row" style="margin-top:6px">${ms.map(y => `<span class="badge">${y.status === "active" ? "✓ " : "… "}${esc(pName(y.member_id))} <button class="linkbtn" type="button" data-cgrm="${y.member_id}" aria-label="빼기">✕</button></span>`).join("") || '<span class="muted sm">아직 아무도 없습니다</span>'}</div>
+      <div class="row"><select data-cgwho>${opts(null, "성도 고르기")}</select><button class="btn sm acc" type="button" data-cgadd>넣기</button><button class="btn sm warn" type="button" data-cgdel>공동체 지우기</button></div></li>`; }).join("") || '<li class="muted sm">아직 만든 공동체가 없습니다.</li>';
+}
+$("#cgAdd").onclick = async () => {
+  const name = $("#cgName").value.trim(); if (!name) return amsg("#cgMsg", "공동체 이름을 적어 주세요.", true);
+  const { error } = await sb.from("care_groups").insert({ name });
+  if (error) return amsg("#cgMsg", error.code === "23505" ? "같은 이름의 공동체가 있습니다." : "만들지 못했습니다: " + error.message, true);
+  $("#cgName").value = ""; amsg("#cgMsg", "만들었습니다. 리더를 먼저 정한 뒤 성도를 넣어 주세요."); loadCareAdm();
+};
+$("#cgAdm").addEventListener("change", async e => {
+  const s = e.target.closest("[data-cglead]"); if (!s) return; const g = +s.closest("[data-cg]").dataset.cg;
+  if (!s.value) return;
+  const { error } = await sb.rpc("admin_care_leader", { g, uid: s.value });
+  if (error) return toast("바꾸지 못했습니다: " + error.message);
+  toast("리더를 정했습니다. 성도들에게 동의 요청이 다시 갑니다"); loadCareAdm();
+});
+$("#cgAdm").addEventListener("click", async e => {
+  const li = e.target.closest("[data-cg]"); if (!li) return; const g = +li.dataset.cg, t = e.target;
+  if (t.closest("[data-cgadd]")) {
+    const uid = li.querySelector("[data-cgwho]").value; if (!uid) return toast("성도를 골라 주세요");
+    const { error } = await sb.rpc("admin_care_member", { g, uid, ins: true });
+    if (error) return toast(/no leader/.test(error.message) ? "리더를 먼저 정해 주세요" : /leader self/.test(error.message) ? "리더 본인은 넣을 수 없습니다" : "넣지 못했습니다: " + error.message);
+    toast(pName(uid) + "님께 동의 요청을 보냈습니다"); return loadCareAdm();
+  }
+  const rm = t.closest("[data-cgrm]");
+  if (rm) { const { error } = await sb.rpc("admin_care_member", { g, uid: rm.dataset.cgrm, ins: false }); if (error) return toast("빼지 못했습니다: " + error.message); return loadCareAdm(); }
+  const del = t.closest("[data-cgdel]");
+  if (del) { if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; }
+    const { error } = await sb.from("care_groups").delete().eq("id", g); if (error) return toast("지우지 못했습니다: " + error.message);
+    toast("공동체를 지웠습니다"); loadCareAdm(); }
+});
+
 /* ---------- 관리 화면 묶음 탭 ---------- */
 const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
 function adminTabOf(c){
   const h = (c.querySelector("h2")?.textContent || "") + (c.id || "");
   if (/statCard|방문 통계|새가족|생일/.test(h)) return "now";
   if (/홈페이지 고치기|교회 일정|주보/.test(h)) return "site";
-  if (/회원|살펴보기|맡기기|모임방|기도 모임|교인/.test(h)) return "people";
+  if (/회원|살펴보기|맡기기|모임방|기도 모임|교인|공동체/.test(h)) return "people";
   return "word";
 }
 function adminTabs(){
@@ -3037,7 +3387,7 @@ const NAV = {
   word: [["write", "성경 필사"], ["voice", "목소리 성경"], ["study", "말씀 공부"], ["qt", "나의 큐티"], ["words", "단어장"], ["fav", "내 말씀"]],
   share: [["share", "묵상 나눔"]],
   pray: [["pray", "기도"]],
-  church: [["space", "교회 공간"], ["team", "모임방"]],
+  church: [["space", "교회 공간"], ["care", "신앙 동행"], ["team", "모임방"]],
   admin: [["admin", "관리"]]
 };
 function navRender(p){
