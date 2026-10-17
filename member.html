@@ -1099,6 +1099,11 @@ p,li{text-wrap:pretty}
       <p class="msg" id="grpMsg"></p>
     </div>
     <div class="card" style="margin-top:16px">
+      <h2 class="h">기도 요청 (마음 돌봄)</h2>
+      <p class="hint">홈페이지 ‘마음 돌봄’에서 누구나 남긴 기도 제목입니다. 담임목사·관리자만 볼 수 있습니다. 답장 창구가 아니라 기도 요청이므로, 읽고 기도한 뒤 ‘기도했어요’를 눌러 두세요. 1년이 지난 요청은 자동으로 지웁니다.</p>
+      <ul class="modlist" id="prqList"><li class="muted sm">불러오는 중…</li></ul>
+    </div>
+    <div class="card" style="margin-bottom:16px">
       <h2 class="h">새가족 등록 명단</h2>
       <p class="hint">홈페이지 ‘새가족 등록’에서 처음 오신 분이 남긴 연락처입니다. 연락을 드린 뒤 ‘연락했어요’를 눌러 두세요. 관리자만 볼 수 있습니다.</p>
       <ul class="modlist" id="ncList"><li class="muted sm">불러오는 중…</li></ul>
@@ -1173,6 +1178,7 @@ p,li{text-wrap:pretty}
       <li>동의 기록: 개인정보 수집·이용 동의 일시, 만 14세 이상 확인</li>
       <li>이용 중 직접 작성하는 정보: 성경 필사 내용, 큐티 묵상 글, 단어장에 넣은 단어, 저장한 말씀과 메모, 모임방 회의 기록, ‘목소리 성경’에 직접 녹음한 목소리</li>
       <li>새가족 등록(홈페이지): 처음 오신 분이 직접 적는 이름, 연락처, 알게 된 경로, 남기는 말 — 로그인 없이 받으며 담임목사·관리자만 볼 수 있습니다</li>
+      <li>기도 요청(홈페이지 ‘마음 돌봄’): 직접 적는 기도 제목과 이름(선택) — 건강이나 마음 상태 같은 민감한 내용이 담길 수 있어 따로 동의를 받으며, 로그인 없이 받고 담임목사·관리자만 읽고 기도에만 씁니다</li>
       <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
       <li>신앙 동행(선택): ‘신앙 동행’에서 직접 체크한 주간 기록(예배·소그룹 참석, 섬김·전도, 마음 날씨, 마음에 남은 말씀, 기도 부탁 한 줄), 함께 보기로 동의한 사람과 항목, 동의 일시</li>
       <li>목사님과 나누기(선택): 신앙 점검 동의 여부와 일시, 나만의 큐티 책 신청 여부와 일시</li>
@@ -1191,7 +1197,7 @@ p,li{text-wrap:pretty}
       <li>방문 통계: 어떤 말씀과 소식이 도움이 되는지 살펴 교회 사역에 반영 (담임목사·관리자만 볼 수 있음)</li>
     </ul>
     <h2>3. 보유 기간</h2>
-    <p>방문 기록과 신앙 동행 주간 기록은 1년이 지나면 지웁니다. 새가족 등록 정보는 등록 후 1년이 지나거나 본인이 요청하면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
+    <p>방문 기록과 신앙 동행 주간 기록은 1년이 지나면 지웁니다. 새가족 등록 정보와 기도 요청은 1년이 지나거나 본인이 요청하면 지웁니다. 그 밖의 정보는 회원 탈퇴 시 즉시 삭제합니다. 탈퇴는 로그인 후 ‘내 정보 → 회원 탈퇴’에서 직접 할 수 있습니다.</p>
     <h2>4. 공개 범위</h2>
     <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, ‘목소리 성경’ 녹음은 로그인한 성도에게 녹음한 사람 이름과 함께 들리며, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
     <h2>4-1. 신앙 동행 (민감정보)</h2>
@@ -2228,7 +2234,7 @@ function loadScript(src){ return new Promise((ok, no) => { const s = document.cr
 async function initAdmin(){
   adminTabs(); loadBdayAdm();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadHwAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadHwAdm(); loadPrq(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   $("#aTabs")?.remove();
@@ -3793,7 +3799,7 @@ $("#hwAdmSave").onclick = async () => {
 const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
 function adminTabOf(c){
   const h = (c.querySelector("h2")?.textContent || "") + (c.id || "");
-  if (/statCard|rosterCard|faithCard|방문 통계|새가족|생일|회원 현황|신앙 점검/.test(h)) return "now";
+  if (/statCard|rosterCard|faithCard|방문 통계|새가족|생일|회원 현황|신앙 점검|기도 요청/.test(h)) return "now";
   if (/홈페이지 고치기|교회 일정|주보/.test(h)) return "site";
   if (/회원|살펴보기|맡기기|모임방|기도 모임|교인|공동체/.test(h)) return "people";
   return "word";
@@ -3974,6 +3980,20 @@ $("#vRecSave").onclick = async () => {
 $("#voiceLink").onclick = e => { e.preventDefault(); sessionStorage.setItem("thc-voice-go", `${cur.b},${cur.c},${cur.v}`); voiceReady = false; location.hash = "#voice"; };
 
 /* ---------- 관리: 새가족 · 교회 일정 · 주보 ---------- */
+async function loadPrq(){
+  await sb.from("prayer_requests").delete().lt("created_at", new Date(Date.now() - 365 * 864e5).toISOString());
+  const { data, error } = await sb.from("prayer_requests").select("*").order("created_at", { ascending: false }).limit(100);
+  if (error) { $("#prqList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  $("#prqList").innerHTML = (data || []).map(n => `<li data-id="${n.id}"><div class="mtxt"><b>${esc(n.name || "익명")}</b>${n.prayed ? ' <span class="badge">기도함</span>' : ' <span class="badge hid">새 요청</span>'}
+      <span class="mmeta">${new Date(n.created_at).toLocaleString("ko-KR")}</span><span style="display:block;margin-top:4px;white-space:pre-wrap">${esc(n.content)}</span></div>
+      <div class="acts"><button class="btn sm" type="button" data-prqok="${n.prayed ? 0 : 1}">${n.prayed ? "기도 전으로" : "🙏 기도했어요"}</button><button class="btn sm warn" type="button" data-prqdel>지우기</button></div></li>`).join("") || '<li class="muted sm">아직 기도 요청이 없습니다.</li>';
+}
+$("#prqList").addEventListener("click", async e => {
+  const li = e.target.closest("li[data-id]"); if (!li) return; const id = +li.dataset.id;
+  const ok = e.target.closest("[data-prqok]"); if (ok) { await sb.from("prayer_requests").update({ prayed: ok.dataset.prqok === "1" }).eq("id", id); return loadPrq(); }
+  const del = e.target.closest("[data-prqdel]");
+  if (del) { if (!del.dataset.armed) { del.dataset.armed = 1; del.textContent = "한 번 더 누르면 지웁니다"; return; } await sb.from("prayer_requests").delete().eq("id", id); loadPrq(); }
+});
 async function loadNewcomers(){
   const { data, error } = await sb.from("newcomers").select("*").order("created_at", { ascending: false }).limit(100);
   if (error) { $("#ncList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
