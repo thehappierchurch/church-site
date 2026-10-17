@@ -334,6 +334,11 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .dnote input[type=text]{font:inherit;width:100%;margin-top:6px}
 .rain{background:#FFF5E6;border:1px solid #F3D19E;border-radius:10px;padding:8px 12px;margin-top:8px;font-size:14px}
 .code{font-size:30px;letter-spacing:.18em;font-weight:800;color:var(--accent);margin:6px 0}
+.tiles2 a[hidden],.tdmore [hidden],#gNav li[hidden]{display:none!important}
+.morebtn{display:block;width:100%;margin-top:14px;padding:12px;border:1px dashed var(--line);border-radius:14px;background:var(--surface);color:var(--accent);font:inherit;font-size:15px;cursor:pointer}
+.tjoin input{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.tcode{font-weight:800;letter-spacing:.12em;color:var(--accent)}
+.bdmh{font-weight:700;color:var(--accent);padding:12px 0 4px!important;border-bottom:2px solid var(--tint)!important}
 .carebox{display:block;text-decoration:none;color:var(--ink);background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px}
 
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
@@ -494,21 +499,30 @@ p,li{text-wrap:pretty}
       <li><a href="#qt" data-focus="qBody"><b>2</b><span>느낀 점 기록하기</span><small>마음에 닿은 구절 한 줄이면 돼요</small></a></li>
       <li><a href="#pray"><b>3</b><span>기도하기</span><small>기도 체크하고 서로 응원해요</small></a></li>
     </ol>
-    <h2 class="tdh">나의 신앙생활</h2>
+    <h2 class="tdh">자주 쓰는 기능</h2>
     <div class="tiles2">
-      <a href="#write"><i>✍️</i><b>성경 필사</b><small>온 교회가 한 절씩 이어 쓰기</small></a>
-      <a href="#voice"><i>🎙</i><b>목소리 성경</b><small>한 절씩 읽고 녹음</small></a>
-      <a href="#share"><i>💬</i><b>묵상 나눔</b><small>성도들의 묵상 읽기</small></a>
-      <a href="#pray"><i>🙏</i><b>함께 기도</b><small>기도 모임 · 기도 짝</small></a>
+      <a href="#qt" data-p="qt"><i>📖</i><b>나의 큐티</b><small>오늘 말씀 읽고 기록하기</small></a>
+      <a href="#pray" data-p="pray"><i>🙏</i><b>함께 기도</b><small>기도 체크 · 기도 모임</small></a>
+      <a href="#write" data-p="write"><i>✍️</i><b>성경 필사</b><small>온 교회가 한 절씩 이어 쓰기</small></a>
       <a href="./#sermons"><i>▶️</i><b>설교 다시 보기</b><small>주일 설교 · 말씀 요약</small></a>
-      <a href="#space"><i>⛪</i><b>교회 공간</b><small>공간 사용 등록</small></a>
-      <a href="#care"><i>🤝</i><b>신앙 동행</b><small>한 주 돌아보기 · 리더·부모님과 나누기</small></a>
     </div>
-    <h2 class="tdh">더 깊은 말씀 공부</h2>
-    <div class="tiles2">
-      <a href="#study"><i>📖</i><b>말씀 공부</b><small>영어 성경 · 원어 · 옛 주석</small></a>
-      <a href="#words"><i>🔤</i><b>단어장</b><small>모르는 단어 외우기</small></a>
-      <a href="#fav"><i>⭐</i><b>내 말씀</b><small>좋아하는 구절 모음</small></a>
+    <button class="morebtn" type="button" id="tdMoreBtn">더 많은 기능 보기 ▾</button>
+    <div class="tdmore" id="tdMore" hidden>
+      <div data-tg><h2 class="tdh">함께하기</h2>
+      <div class="tiles2">
+        <a href="#share" data-p="share"><i>💬</i><b>묵상 나눔</b><small>성도들의 묵상 읽기</small></a>
+        <a href="#care" data-p="care"><i>🤝</i><b>신앙 동행</b><small>한 주 돌아보기 · 리더·부모님과 나누기</small></a>
+        <a href="#voice" data-p="voice"><i>🎙</i><b>목소리 성경</b><small>한 절씩 읽고 녹음</small></a>
+        <a href="#space" data-p="space"><i>⛪</i><b>교회 공간</b><small>공간 사용 등록</small></a>
+        <a href="#team" data-p="team"><i>📝</i><b>모임방</b><small>코드로 들어가 회의 기록 함께 쓰기</small></a>
+      </div></div>
+      <div data-tg><h2 class="tdh">더 깊은 말씀 공부</h2>
+      <div class="tiles2">
+        <a href="#study" data-p="study"><i>🔎</i><b>말씀 공부</b><small>영어 성경 · 원어 · 옛 주석</small></a>
+        <a href="#words" data-p="words"><i>🔤</i><b>단어장</b><small>모르는 단어 외우기</small></a>
+        <a href="#fav" data-p="fav"><i>⭐</i><b>내 말씀</b><small>좋아하는 구절 모음</small></a>
+      </div></div>
+      <p class="sm muted" id="tdGuestNote" hidden style="margin-top:12px">교인으로 확인되면 묵상 나눔, 신앙 동행 등 더 많은 기능이 열립니다.</p>
     </div>
   </section>
 
@@ -766,8 +780,14 @@ p,li{text-wrap:pretty}
 
   <!-- 모임방 -->
   <section class="page" data-page="team">
-    <div class="phead"><h1>모임방</h1><p>찬양팀·커피전도팀처럼 함께 섬기는 팀의 회의 기록을 남기고 봅니다. 그 팀에 든 성도만 볼 수 있습니다.</p></div>
+    <div class="phead"><h1>모임방</h1><p>찬양팀·교사 모임처럼 함께 섬기는 모임의 회의 기록을 남기고 봅니다. 중직자가 방을 만들고 코드를 알려 주면, 코드를 넣고 들어옵니다. 그 방에 든 성도만 볼 수 있습니다.</p></div>
+    <div class="card tjoin" style="margin-bottom:12px">
+      <div class="row" style="margin-top:0"><input id="tCode" type="text" maxlength="6" placeholder="모임방 코드 6자리" style="width:10em;text-transform:uppercase"><button class="btn acc sm" type="button" id="tJoinGo">들어가기</button></div>
+      <div class="row" id="tNewRow" hidden><input id="tNewName" type="text" maxlength="30" placeholder="새 모임방 이름 (예: 교사 모임)" style="width:14em"><button class="btn sm" type="button" id="tNewGo">＋ 모임방 만들기</button></div>
+      <p class="msg" id="tJMsg"></p>
+    </div>
     <div class="row seg" id="tTabs" style="margin-top:0"></div>
+    <p class="sm" id="tInfo"></p>
     <p class="sm muted" id="tMembers"></p>
     <form class="card form" id="tForm" novalidate style="margin:12px 0 16px">
       <h2 class="h" id="tFormTitle">회의 기록 쓰기</h2>
@@ -871,6 +891,14 @@ p,li{text-wrap:pretty}
       <div class="swk-nav"><h2 class="h" style="margin:0">생일 성도</h2><select class="rolesel" id="bdM"></select></div>
       <ul class="slots" id="bdList" style="margin-top:10px"></ul>
       <p class="sm muted">‘내 정보’나 첫 로그인 때 생일 공개에 동의한 교인만 나옵니다. 중직자도 성도마당 맨 위에서 이번 주 생일을 볼 수 있습니다.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px" id="rosterCard">
+      <h2 class="h">회원 현황</h2>
+      <div class="fcauto" id="rsSum" style="margin-top:0"></div>
+      <div class="seg" id="rsTabs" style="margin-top:10px"></div>
+      <ul class="slots" id="rsList"></ul>
+      <div class="row"><button class="btn sm" type="button" id="rsXls">📥 회원 명단 엑셀로 받기</button><button class="btn sm" type="button" id="rsGo">등급·직분 바꾸러 가기 →</button></div>
+      <p class="sm muted" style="margin-top:6px">생일은 공개에 동의한 교인만 보입니다. 등급(가입자·교인·중직자)은 ‘성도’ 탭의 회원 관리에서 바꿉니다.</p>
     </div>
     <div class="card" style="margin-bottom:16px" id="statCard">
       <div class="swk-nav"><h2 class="h" style="margin:0">방문 통계</h2><select id="stDays"><option value="7">최근 7일</option><option value="30" selected>최근 30일</option><option value="90">최근 90일</option><option value="365">최근 1년</option></select></div>
@@ -1159,12 +1187,28 @@ async function loadProfile(){
   profile.pgroups = pg.error ? (profile.group_id ? [profile.group_id] : []) : (pg.data || []).map(x => x.group_id);
 }
 
+/* ---------- 권한별로 보이는 기능 ---------- */
+// 0 가입자(교인 확인 전) · 1 교인 · 2 중직자 · 3 관리자
+const ULV = () => !profile ? 0 : profile.is_admin ? 3 : profile.role === "officer" ? 2 : profile.role === "guest" ? 0 : 1;
+const PLV = { share: 1, voice: 1, words: 1, care: 1, space: 1, team: 1 };
+const canSee = p => (PLV[p] || 0) <= ULV();
+function tilesFilter(){
+  const sec = document.querySelector('section[data-page="today"]'); if (!sec) return;
+  sec.querySelectorAll("a[data-p]").forEach(a => { a.hidden = !canSee(a.dataset.p); });
+  sec.querySelectorAll("[data-tg]").forEach(g => { g.hidden = !g.querySelector("a[data-p]:not([hidden])"); });
+  $("#tdGuestNote").hidden = ULV() > 0;
+  let open = false; try { open = localStorage.getItem("thc-more") === "1"; } catch {}
+  $("#tdMore").hidden = !open; $("#tdMoreBtn").textContent = open ? "간단히 보기 ▴" : "더 많은 기능 보기 ▾";
+}
+$("#tdMoreBtn").onclick = () => { const open = $("#tdMore").hidden; try { localStorage.setItem("thc-more", open ? "1" : "0"); } catch {} tilesFilter(); if (open) $("#tdMore").scrollIntoView({ behavior: "smooth", block: "start" }); };
+
 /* ---------- 라우팅 ---------- */
 const loaded = {};
 function route(){
   let p = (location.hash || "#today").slice(1), sref = null;
   const sm = /^study-(\d+)-(\d+)-(\d+)$/.exec(p); if (sm) { p = "study"; sref = sm.slice(1).map(Number); }
   if (!document.querySelector(`section[data-page="${p}"]`)) p = "today";
+  if (user && profile && !canSee(p)) { toast("교인으로 확인되면 쓸 수 있는 기능이에요"); p = "today"; }
   const needLogin = !user && !PUBLIC_PAGES.includes(p);
   $("#gate").hidden = !needLogin;
   document.querySelectorAll("section.page").forEach(s => s.classList.toggle("active", !needLogin && s.dataset.page === p));
@@ -1174,7 +1218,7 @@ function route(){
   trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
-  if (p === "today") { renderTodayHome(); careHome(); }
+  if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); }
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); }); }
@@ -2347,8 +2391,34 @@ document.addEventListener("click", async e => {
 async function loadMembers(silent){
   const { data, error } = await sb.rpc("admin_members");
   if (error) { if (!silent) $("#memList").innerHTML = `<li class="msg err">불러오지 못했습니다.</li>`; return; }
-  members = data || []; renderMembers();
+  members = data || []; renderMembers(); renderRoster();
 }
+let rsTab = "all", rsBday = null;
+async function renderRoster(){
+  if (!rsBday) { const { data } = await sb.rpc("church_birthdays", { m: null }); rsBday = new Map((data || []).map(x => [x.id, x])); }
+  const lvOf = m => m.is_admin ? "admin" : m.role || "guest";
+  const cnt = k => members.filter(m => lvOf(m) === k).length;
+  $("#rsSum").innerHTML = `<span>전체 <b>${members.length}</b>명</span><span>교인 <b>${cnt("member")}</b></span><span>중직자 <b>${cnt("officer")}</b></span><span>관리자 <b>${cnt("admin")}</b></span><span>교인 확인 대기 <b>${cnt("guest")}</b></span><span>생일 알려 줌 <b>${rsBday.size}</b></span>`;
+  const T = [["all", "전체"], ["member", "교인"], ["officer", "중직자"], ["admin", "관리자"], ["guest", "확인 대기"]];
+  $("#rsTabs").innerHTML = T.map(([k, t]) => `<button type="button" data-rs="${k}" class="${k === rsTab ? "on" : ""}">${t}</button>`).join("");
+  const nm = { admin: "관리자", officer: "중직자", member: "교인", guest: "가입자" };
+  const list = members.filter(m => rsTab === "all" || lvOf(m) === rsTab).slice().sort((a, b) => (a.nickname || "").localeCompare(b.nickname || "", "ko"));
+  $("#rsList").innerHTML = list.map(m => { const b = rsBday.get(m.id);
+    return `<li><span class="who"><b>${esc(m.nickname)}</b>${m.title ? " " + esc(m.title) : ""} <span class="badge${lvOf(m) === "guest" ? " hid" : ""}">${nm[lvOf(m)]}</span></span><span class="sm muted">가입 ${fmtDate((m.joined || "").slice(0, 10))}${b ? ` · 🎂 ${b.mm}/${b.dd}` : ""}${m.consented ? "" : " · 동의 전"}</span></li>`; }).join("") || '<li class="muted sm">해당하는 회원이 없습니다.</li>';
+}
+$("#rsTabs").addEventListener("click", e => { const b = e.target.closest("[data-rs]"); if (!b) return; rsTab = b.dataset.rs; renderRoster(); });
+$("#rsGo").onclick = () => { document.querySelector('#aTabs [data-t="people"]')?.click(); setTimeout(() => $("#memSearch").scrollIntoView({ behavior: "smooth", block: "center" }), 100); };
+$("#rsXls").onclick = async () => {
+  try {
+    if (!window.XLSX) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    const nm = m => m.is_admin ? "관리자" : ROLE_NM[m.role] || "가입자";
+    const rows = members.slice().sort((a, b) => (a.nickname || "").localeCompare(b.nickname || "", "ko")).map(m => { const b = rsBday?.get(m.id);
+      return { "이름": m.nickname, "직분": m.title || "", "등급": nm(m), "가입 방법": PROV_NM[m.provider] || m.provider || "", "가입일": (m.joined || "").slice(0, 10), "생일": b ? `${b.mm}월 ${b.dd}일` : "", "개인정보 동의": m.consented ? "예" : "아니오" }; });
+    const ws = XLSX.utils.json_to_sheet(rows); ws["!cols"] = [12, 10, 8, 10, 12, 10, 12].map(w => ({ wch: w }));
+    const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "회원 명단");
+    XLSX.writeFile(wb, `더행복한교회_회원명단_${kstToday()}.xlsx`);
+  } catch (err) { toast("내려받지 못했습니다: " + (err.message || err)); }
+};
 function renderMembers(){
   const q = $("#memSearch").value.trim();
   $("#memList").innerHTML = members.filter(m => !q || (m.nickname || "").includes(q)).map(m => `<li><div class="mtxt"><b>${esc(m.nickname)}</b>${m.title ? ` <span class="sm muted">${esc(m.title)}</span>` : ""} <span class="badge${m.role === "guest" ? " hid" : ""}">${m.is_admin ? "관리자" : ROLE_NM[m.role] || "가입자"}</span>${m.is_blocked ? ' <span class="badge hid">차단됨</span>' : ""}<span class="mmeta">${PROV_NM[m.provider] || m.provider || ""} · 가입 ${fmtDate((m.joined || "").slice(0, 10))}${m.consented ? "" : " · 동의 전"} · 필사 ${m.relay_count}절 · 사진 ${m.photo_count} · 큐티 ${m.qt_count}</span></div>
@@ -2797,10 +2867,12 @@ $("#fList").onclick = async e => {
 /* ---------- 모임방 (팀 회의 기록) ---------- */
 let teams = [], tCur = null, tNotes = [], tEdit = null, tNames = new Map();
 async function loadTeams(){
-  const { data, error } = await sb.from("teams").select("id,name").order("id");
+  $("#tNewRow").hidden = !(profile?.is_admin || profile?.role === "officer");
+  let { data, error } = await sb.from("teams").select("id,name,code,created_by").order("id");
+  if (error) ({ data, error } = await sb.from("teams").select("id,name").order("id"));
   if (error) { $("#tList").innerHTML = `<li class="msg err">불러오지 못했습니다: ${esc(error.message)}</li>`; return; }
   teams = data || [];
-  if (!teams.length) { $("#tTabs").innerHTML = ""; $("#tForm").hidden = true; $("#tList").innerHTML = '<li class="muted sm">아직 들어간 모임방이 없습니다. 담임목사님께 팀에 넣어 달라고 말씀해 주세요.</li>'; return; }
+  if (!teams.length) { $("#tTabs").innerHTML = ""; $("#tInfo").innerHTML = ""; $("#tMembers").textContent = ""; $("#tForm").hidden = true; $("#tList").innerHTML = `<li class="muted sm">아직 들어간 모임방이 없습니다. ${profile?.role === "officer" || profile?.is_admin ? "위에서 모임방을 만들거나, " : ""}받은 코드를 위에 넣어 주세요.</li>`; return; }
   $("#tForm").hidden = false;
   if (!teams.some(t => t.id === tCur)) { let last = null; try { last = +localStorage.getItem("thc-team"); } catch {} tCur = teams.some(t => t.id === last) ? last : teams[0].id; }
   $("#tTabs").innerHTML = teams.map(t => `<button type="button" data-tt="${t.id}" class="${t.id === tCur ? "on" : ""}">${esc(t.name)}</button>`).join("");
@@ -2817,7 +2889,10 @@ async function openTeam(){
   const need = ids.filter(id => !tNames.has(id));
   if (need.length) { const { data } = await sb.from("profiles").select("id,nickname").in("id", need); (data || []).forEach(p => tNames.set(p.id, p.nickname)); }
   const nm = id => tNames.get(id) || "성도";
-  $("#tMembers").textContent = (mem.data || []).length ? "함께하는 성도: " + (mem.data || []).map(x => nm(x.user_id)).join(", ") : "";
+  const tm = teams.find(t => t.id === tCur) || {}, own = profile?.is_admin || tm.created_by === user.id;
+  $("#tInfo").innerHTML = (tm.code ? `들어오는 코드 <span class="tcode">${esc(tm.code)}</span> <button class="btn sm" type="button" data-tsend>💬 코드 보내기</button> ` : "") +
+    `<button class="btn sm" type="button" data-tleave>이 방 나가기</button>${own ? ' <button class="btn sm warn" type="button" data-tdelroom>방 지우기</button>' : ""}`;
+  $("#tMembers").innerHTML = (mem.data || []).length ? "함께하는 성도: " + (mem.data || []).map(x => esc(nm(x.user_id)) + (own && x.user_id !== user.id ? ` <button class="linkbtn" type="button" data-tout="${x.user_id}" aria-label="빼기">✕</button>` : "")).join(", ") : "";
   $("#tList").innerHTML = tNotes.map(n => `<li data-id="${n.id}">
       <div class="author"><span class="badge">${fmtDate(n.meet_date)}</span><span>${esc(nm(n.user_id))}${n.updated_at ? ` · ${esc(nm(n.updated_by))}님이 ${ago(n.updated_at)} 고침` : ""}</span></div>
       <h3>${esc(n.title)}</h3>
@@ -2834,6 +2909,35 @@ function tForm(n){
   $("#tCancel").hidden = !n; $("#tMsg").textContent = "";
 }
 $("#tCancel").onclick = () => tForm(null);
+$("#tJoinGo").onclick = async () => {
+  const c = $("#tCode").value.trim(); if (c.length < 6) return amsg("#tJMsg", "6자리 코드를 넣어 주세요.", true);
+  const { data, error } = await sb.rpc("team_join", { join_code: c });
+  if (error) return amsg("#tJMsg", "코드가 맞지 않습니다. 다시 확인해 주세요.", true);
+  $("#tCode").value = ""; amsg("#tJMsg", `‘${data}’ 모임방에 들어왔어요.`); await loadProfile(); tCur = null; loadTeams(); navRender("team");
+};
+$("#tNewGo").onclick = async () => {
+  const n = $("#tNewName").value.trim(); if (!n) return amsg("#tJMsg", "모임방 이름을 적어 주세요.", true);
+  const { data, error } = await sb.rpc("team_create", { team_name: n });
+  if (error) return amsg("#tJMsg", /duplicate|unique/.test(error.message) ? "같은 이름의 모임방이 있습니다." : "만들지 못했습니다: " + error.message, true);
+  $("#tNewName").value = ""; amsg("#tJMsg", `만들었습니다. 코드 ${data} 를 함께할 분들께 알려 주세요.`); await loadProfile(); tCur = null; loadTeams();
+};
+$("#tInfo").addEventListener("click", async e => {
+  const tm = teams.find(t => t.id === tCur); if (!tm) return;
+  if (e.target.closest("[data-tsend]")) { const t = `더행복한교회 모임방 ‘${tm.name}’ 들어오는 코드: ${tm.code}\n성도마당 → 모임방에서 코드를 넣어 주세요.\nhttps://thehappierchurch.kr/member.html#team`;
+    if (navigator.share) { try { await navigator.share({ text: t }); } catch {} } else { try { await navigator.clipboard.writeText(t); toast("복사했습니다. 카톡에 붙여 넣으세요"); } catch {} } return; }
+  const lv = e.target.closest("[data-tleave]");
+  if (lv) { if (!lv.dataset.armed) { lv.dataset.armed = 1; lv.textContent = "한 번 더 누르면 나갑니다"; return; }
+    const { error } = await sb.rpc("team_leave", { t: tCur }); if (error) return toast("나가지 못했습니다: " + error.message);
+    toast("모임방에서 나왔습니다"); await loadProfile(); tCur = null; loadTeams(); return; }
+  const dl = e.target.closest("[data-tdelroom]");
+  if (dl) { if (!dl.dataset.armed) { dl.dataset.armed = 1; dl.textContent = "회의 기록도 모두 지워집니다. 한 번 더 누르세요"; return; }
+    const { error } = await sb.rpc("team_delete", { t: tCur }); if (error) return toast("지우지 못했습니다: " + error.message);
+    toast("모임방을 지웠습니다"); await loadProfile(); tCur = null; loadTeams(); }
+});
+$("#tMembers").addEventListener("click", async e => { const b = e.target.closest("[data-tout]"); if (!b) return;
+  if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "빼기?"; return; }
+  const { error } = await sb.rpc("team_remove", { t: tCur, uid: b.dataset.tout }); if (error) return toast("빼지 못했습니다: " + error.message);
+  toast("모임방에서 뺐습니다"); openTeam(); });
 $("#tForm").onsubmit = async e => {
   e.preventDefault();
   const row = { meet_date: $("#tDate").value || kstToday(), title: $("#tTitle").value.trim(), attendees: $("#tWho").value.trim(), body: $("#tBody").value.trim() };
@@ -3111,10 +3215,14 @@ async function showBdayBanner(){
   box.hidden = false;
 }
 async function loadBdayAdm(){
-  const sel = $("#bdM"); if (!sel.options.length) { sel.innerHTML = '<option value="0">전체</option>' + Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}">${i + 1}월</option>`).join(""); sel.value = new Date(Date.now() + 9 * 3600e3).getUTCMonth() + 1; sel.onchange = loadBdayAdm; }
+  const sel = $("#bdM"); if (!sel.options.length) { sel.innerHTML = '<option value="0">1년 전체</option>' + Array.from({ length: 12 }, (_, i) => `<option value="${i + 1}">${i + 1}월</option>`).join(""); sel.value = new Date(Date.now() + 9 * 3600e3).getUTCMonth() + 1; sel.onchange = loadBdayAdm; }
   const { data, error } = await sb.rpc("church_birthdays", { m: +sel.value || null });
   if (error) { $("#bdList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
-  $("#bdList").innerHTML = (data || []).map(x => `<li><span class="tm">${x.mm}월 ${x.dd}일</span><span class="who"><b>${esc(x.nickname)}</b>${x.title ? " " + esc(x.title) : ""}</span></li>`).join("") || '<li class="muted sm">이 달에 생일을 알려 준 성도가 없습니다.</li>';
+  const row = x => `<li><span class="tm">${x.mm}월 ${x.dd}일</span><span class="who"><b>${esc(x.nickname)}</b>${x.title ? " " + esc(x.title) : ""}</span></li>`;
+  const all = !(+sel.value), list = data || [];
+  const byM = Array.from({ length: 12 }, (_, i) => { const ms = list.filter(x => x.mm === i + 1); return ms.length ? `<li class="bdmh">${i + 1}월 · ${ms.length}명</li>` + ms.map(row).join("") : ""; }).join("");
+  $("#bdList").innerHTML = all ? (byM ? `<li class="muted sm" style="border:0">생일을 알려 준 성도 모두 ${list.length}명</li>` + byM : '<li class="muted sm">아직 생일을 알려 준 성도가 없습니다.</li>')
+    : (list.map(row).join("") || '<li class="muted sm">이 달에 생일을 알려 준 성도가 없습니다.</li>');
 }
 
 /* ---------- 오늘 (성도마당 첫 화면) ---------- */
@@ -3363,7 +3471,7 @@ $("#cgAdm").addEventListener("click", async e => {
 const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
 function adminTabOf(c){
   const h = (c.querySelector("h2")?.textContent || "") + (c.id || "");
-  if (/statCard|방문 통계|새가족|생일/.test(h)) return "now";
+  if (/statCard|rosterCard|방문 통계|새가족|생일|회원 현황/.test(h)) return "now";
   if (/홈페이지 고치기|교회 일정|주보/.test(h)) return "site";
   if (/회원|살펴보기|맡기기|모임방|기도 모임|교인|공동체/.test(h)) return "people";
   return "word";
@@ -3391,10 +3499,12 @@ const NAV = {
   admin: [["admin", "관리"]]
 };
 function navRender(p){
-  const canTeam = !!(profile?.is_admin || profile?.teams?.length);
+  const canTeam = !!(profile?.is_admin || profile?.role === "officer" || profile?.teams?.length);
+  const ok = x => canSee(x[0]) && (x[0] !== "team" || canTeam);
   const g = Object.keys(NAV).find(k => NAV[k].some(x => x[0] === p));
-  document.querySelectorAll("#gNav a[data-g]").forEach(a => a.classList.toggle("on", a.dataset.g === g));
-  const items = g ? NAV[g].filter(x => x[0] !== "team" || canTeam) : [];
+  document.querySelectorAll("#gNav a[data-g]").forEach(a => { a.classList.toggle("on", a.dataset.g === g);
+    if (a.dataset.g !== "admin" && a.dataset.g !== "home") { const vis = NAV[a.dataset.g].filter(ok); a.parentElement.hidden = !vis.length; if (vis.length) a.setAttribute("href", "#" + vis[0][0]); } });
+  const items = g ? NAV[g].filter(ok) : [];
   $("#sNav").hidden = items.length < 2;
   $("#sNav").innerHTML = items.map(([k, t]) => `<li><a href="#${k}" class="${k === p ? "on" : ""}">${t}</a></li>`).join("");
 }
