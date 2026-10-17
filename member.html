@@ -357,6 +357,26 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .fs-wk td.l{text-align:left}
 .share-card{margin-top:16px}
 .share-card .agree{margin-top:12px}
+.hw{margin-top:16px;padding:0;overflow:hidden}
+.hw>summary{list-style:none;cursor:pointer;padding:16px 18px;display:flex;align-items:center;gap:10px}
+.hw>summary::-webkit-details-marker{display:none}
+.hw>summary b{font-size:17px}.hw>summary small{color:var(--muted);font-size:13px;display:block}
+.hw>summary::after{content:"▾";margin-left:auto;color:var(--muted)}.hw[open]>summary::after{content:"▴"}
+.hw .in{padding:0 18px 18px}
+.hwo{list-style:none;margin:0;padding:0;counter-reset:hw}
+.hwo>li{counter-increment:hw;position:relative;padding:12px 0 12px 34px;border-top:1px solid var(--line)}
+.hwo>li::before{content:counter(hw);position:absolute;left:0;top:12px;width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.hwo h3{font-size:15.5px;margin:0 0 4px}
+.hwo .vs{font-family:var(--serif,serif);font-size:15.5px;line-height:1.8}
+.hwf{display:flex;gap:6px;margin-top:6px}.hwf input{flex:1;min-width:0;font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.hws{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px;margin-top:10px}
+.hws button{all:unset;cursor:pointer;display:block;border-radius:10px;overflow:hidden;background:var(--tint);position:relative}
+.hws img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.hws span{display:block;padding:6px 8px;font-size:12.5px;line-height:1.4}
+.hws i{position:absolute;top:calc(50% - 30px);left:calc(50% - 18px);width:36px;height:26px;border-radius:7px;background:rgba(255,0,0,.85);color:#fff;font-style:normal;font-size:13px;display:flex;align-items:center;justify-content:center}
+.hwv{margin-top:10px;aspect-ratio:16/9;width:100%;border:0;border-radius:10px}
+.lp{font-size:15px;line-height:1.9;margin-top:6px}
+.hwh{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:6px}.hwh .btn{text-align:left;white-space:normal;height:auto}
 .carebox{display:block;text-decoration:none;color:var(--ink);background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px}
 
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
@@ -520,6 +540,24 @@ p,li{text-wrap:pretty}
       <li><a href="#qt" data-focus="qBody"><b>2</b><span>느낀 점 기록하기</span><small>마음에 닿은 구절 한 줄이면 돼요</small></a></li>
       <li><a href="#pray"><b>3</b><span>기도하기</span><small>기도 체크하고 서로 응원해요</small></a></li>
     </ol>
+    <details class="card hw" id="hwCard">
+      <summary><span style="font-size:24px">🏠</span><span><b>집에서 예배드리기</b><small>찬양 · 기도 · 말씀 · 주기도문</small></span></summary>
+      <div class="in">
+        <p class="sm muted" style="margin:0 0 8px">교회에 오지 못하는 날, 가족과 함께 또는 혼자 이 순서로 예배드려 보세요. 20분이면 충분합니다.</p>
+        <ol class="hwo">
+          <li><h3>예배로 부름</h3><div class="vs">“오라 우리가 굽혀 경배하며 우리를 지으신 여호와 앞에 무릎을 꿇자” <span class="sm muted">(시편 95:6)</span></div></li>
+          <li><h3>찬양</h3>
+            <div id="hwSongs"></div>
+            <form class="hwf" id="hwForm" role="search"><input id="hwQ" type="search" placeholder="찬양 제목·찬송가 번호" aria-label="찬양 찾기"><button class="btn sm acc" type="submit">🔎 찾기</button></form>
+            <p class="sm muted" style="margin-top:4px">예: ‘305’ 또는 ‘은혜’ — 가사가 나오는 영상을 유튜브에서 찾아 엽니다.</p></li>
+          <li><h3>기도</h3><div class="sm">한 주를 돌아보며 감사하고, 잘못을 고백하고, 가족과 교회와 이웃을 위해 기도합니다. <a href="#pray">기도 체크하기 →</a></div></li>
+          <li><h3>말씀</h3><div id="hwWord" class="sm">오늘의 큐티 본문을 불러오는 중…</div></li>
+          <li><h3>주기도문으로 마무리</h3>
+            <details><summary class="sm" style="cursor:pointer;color:var(--accent)">주기도문 보기</summary><p class="lp">하늘에 계신 우리 아버지여, 이름이 거룩히 여김을 받으시오며, 나라이 임하옵시며, 뜻이 하늘에서 이룬 것 같이 땅에서도 이루어지이다. 오늘날 우리에게 일용할 양식을 주옵시고, 우리가 우리에게 죄 지은 자를 사하여 준 것 같이 우리 죄를 사하여 주옵시고, 우리를 시험에 들게 하지 마옵시고, 다만 악에서 구하옵소서. 대개 나라와 권세와 영광이 아버지께 영원히 있사옵나이다. 아멘.</p></details></li>
+        </ol>
+        <p class="sm muted" style="margin:8px 0 0">주일 설교는 <a href="./#sermons">설교 다시 보기</a>에서 함께 들을 수 있습니다.</p>
+      </div>
+    </details>
     <h2 class="tdh">자주 쓰는 기능</h2>
     <div class="tiles2">
       <a href="#qt" data-p="qt"><i>📖</i><b>나의 큐티</b><small>오늘 말씀 읽고 기록하기</small></a>
@@ -974,6 +1012,13 @@ p,li{text-wrap:pretty}
       <div class="row"><input id="nwText" type="text" maxlength="300" placeholder="알릴 내용" style="flex:1;min-width:14em"><button class="btn acc sm" type="button" id="nwSave">등록</button><button class="btn sm" type="button" id="nwNew" hidden>취소</button></div>
       <p class="msg" id="nwMsg"></p>
     </div>
+    <div class="card form" style="margin-bottom:16px" id="hwAdmCard">
+      <h2 class="h">홈페이지 고치기 — 이번 주 찬양 (집에서 예배드리기)</h2>
+      <p class="hint">성도마당 ‘오늘’ 화면의 ‘집에서 예배드리기’에 나옵니다. 한 줄에 한 곡씩 <b>제목 | 유튜브 주소</b>로 적으세요. 2~3곡이면 충분합니다.</p>
+      <textarea id="hwAdm" rows="4" placeholder="나 같은 죄인 살리신 (찬송가 305장) | https://youtu.be/..."></textarea>
+      <div class="row"><button class="btn acc" type="button" id="hwAdmSave">저장</button></div>
+      <p class="msg" id="hwAdmMsg"></p>
+    </div>
     <div class="card form" style="margin-bottom:16px" data-area="prayer">
       <h2 class="h">홈페이지 고치기 — 기도제목</h2>
       <p class="hint">교회생활 › 기도제목 화면에 바로 반영됩니다. 한 줄에 하나씩 적으세요.</p>
@@ -1263,7 +1308,7 @@ function route(){
   trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
-  if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); }
+  if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); loadHomeWorship(); }
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at,pastor_view,pastor_view_at,qt_book,qt_book_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); meShare(data); }); }
@@ -2174,7 +2219,7 @@ function loadScript(src){ return new Promise((ok, no) => { const s = document.cr
 async function initAdmin(){
   adminTabs(); loadBdayAdm();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadHwAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   $("#aTabs")?.remove();
@@ -3651,6 +3696,47 @@ async function makeQtBook(uid, asDoc){
   const w = window.open("", "_blank"); if (!w) return toast("팝업이 막혔습니다. 팝업을 허용해 주세요");
   w.document.open(); w.document.write(html); w.document.close();
 }
+
+/* ---------- 집에서 예배드리기 ---------- */
+const ytId = u => (/(?:youtu\.be\/|v=|shorts\/|embed\/|live\/)([\w-]{11})/.exec(u || "") || [])[1] || "";
+const HYMNS = [[8,"거룩 거룩 거룩 전능하신 주님"],[9,"하늘에 가득 찬 영광의 하나님"],[21,"다 찬양하여라"],[28,"복의 근원 강림하사"],[64,"기뻐하며 경배하세"],[79,"주 하나님 지으신 모든 세계"],[85,"구주를 생각만 해도"],[88,"내 진정 사모하는"],[94,"주 예수보다 더 귀한 것은 없네"],[149,"주 달려 죽은 십자가"],[150,"갈보리산 위에"],[199,"나의 사랑하는 책"],[204,"주의 말씀 듣고서"],[210,"시온성과 같은 교회"],[250,"구주의 십자가 보혈로"],[252,"나의 죄를 씻기는"],[254,"내 주의 보혈은"],[268,"죄에서 자유를 얻게 함은"],[270,"변찮는 주님의 사랑과"],[279,"인애하신 구세주여"],[288,"예수를 나의 구주 삼고"],[300,"내 맘이 낙심되며"],[301,"지금까지 지내온 것"],[304,"그 크신 하나님의 사랑"],[305,"나 같은 죄인 살리신"],[310,"아 하나님의 은혜로"],[338,"내 주를 가까이 하게 함은"],[342,"너 시험을 당해"],[364,"내 기도하는 그 시간"],[369,"죄짐 맡은 우리 구주"],[370,"주 안에 있는 나에게"],[380,"나의 생명 되신 주"],[384,"나의 갈 길 다 가도록"],[393,"오 신실하신 주"],[405,"주의 친절한 팔에 안기세"],[412,"내 영혼의 그윽히 깊은 데서"],[413,"내 평생에 가는 길"],[430,"주와 같이 길 가는 것"],[438,"내 영혼이 은총 입어"],[452,"내 모든 소원 기도의 제목"],[488,"이 몸의 소망 무언가"],[502,"빛의 사자들이여"],[528,"예수가 우리를 부르는 소리"],[540,"주의 음성을 내가 들으니"],[542,"구주 예수 의지함이"],[559,"사철에 봄바람 불어 잇고"],[563,"예수 사랑하심을"],[570,"주는 나를 기르시는 목자"]];
+const weekHymns = () => { const w = Math.floor((Date.parse(kstToday()) - Date.parse("2026-01-05")) / 6048e5), n = HYMNS.length, i = ((w * 2) % n + n) % n; return [HYMNS[i], HYMNS[(i + 1) % n]]; };
+const ytSearch = q => window.open("https://www.youtube.com/results?search_query=" + encodeURIComponent(q), "_blank", "noopener");
+async function loadHomeWorship(){
+  const card = $("#hwCard"); if (!card) return;
+  if (new Date(kstToday() + "T00:00:00Z").getUTCDay() === 0 && !card.dataset.auto) { card.open = true; card.dataset.auto = 1; }
+  const { data } = await sb.from("site_blocks").select("data").eq("key", "home_worship").maybeSingle();
+  const songs = (data?.data?.songs || []).filter(x => ytId(x.url));
+  $("#hwSongs").innerHTML = (songs.length ? `<div class="sm" style="margin-bottom:2px">이번 주 함께 부를 찬양</div><div class="hws">${songs.map(x => `<button type="button" data-yt="${ytId(x.url)}"><img src="https://i.ytimg.com/vi/${ytId(x.url)}/hqdefault.jpg" alt="" loading="lazy"><i>▶</i><span>${esc(x.title || "찬양")}</span></button>`).join("")}</div><div id="hwPlay"></div>` : "")
+    + `<div class="sm" style="margin:${songs.length ? 12 : 0}px 0 4px">이번 주 추천 찬송가 <span class="muted">(매주 바뀝니다)</span></div><div class="hwh">${weekHymns().map(([n, t]) => `<button type="button" class="btn sm" data-hymn="${n}">🎵 ${n}장 ${esc(t)}</button>`).join("")}</div>`;
+  await ensureBooks();
+  const { item } = await todayQt(kstToday());
+  $("#hwWord").innerHTML = item ? `오늘의 큐티 본문 <b>${refText(item)}</b>을 읽거나 들어 보세요.<div class="row" style="margin-top:6px"><button class="btn sm" type="button" id="hwSay">🔊 읽어 주기</button><a class="btn sm acc" href="#qt">📖 본문 읽고 묵상 쓰기</a></div>` : `좋아하는 시편 한 편을 천천히 읽어 보세요. <a href="#study">말씀 공부 →</a>`;
+  if ($("#hwSay")) $("#hwSay").onclick = e => sayQt(item, e.currentTarget);
+}
+$("#hwCard")?.addEventListener("click", e => {
+  const h = e.target.closest("[data-hymn]"); if (h) return ytSearch(`새찬송가 ${h.dataset.hymn}장 가사`);
+  const b = e.target.closest("[data-yt]"); if (!b) return;
+  $("#hwPlay").innerHTML = `<iframe class="hwv" src="https://www.youtube-nocookie.com/embed/${b.dataset.yt}?autoplay=1&rel=0" title="찬양" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;
+});
+$("#hwForm").onsubmit = e => {
+  e.preventDefault(); let q = $("#hwQ").value.trim(); if (!q) return;
+  const n = /^(?:새?찬송가\s*)?(\d{1,3})\s*장?$/.exec(q);
+  q = n ? `새찬송가 ${n[1]}장 가사` : q + " 찬양 가사";
+  ytSearch(q);
+};
+async function loadHwAdm(){
+  const { data } = await sb.from("site_blocks").select("data").eq("key", "home_worship").maybeSingle();
+  $("#hwAdm").value = (data?.data?.songs || []).map(x => `${x.title} | ${x.url}`).join("\n");
+}
+$("#hwAdmSave").onclick = async () => {
+  const songs = $("#hwAdm").value.split("\n").map(l => l.trim()).filter(Boolean).map(l => { const i = l.lastIndexOf("|"); return i < 0 ? { title: "", url: l } : { title: l.slice(0, i).trim(), url: l.slice(i + 1).trim() }; });
+  const bad = songs.filter(x => !ytId(x.url));
+  if (bad.length) return amsg("#hwAdmMsg", `유튜브 주소를 알아볼 수 없는 줄이 있습니다: ${bad.map(x => x.title || x.url).join(", ")}`, true);
+  const { error } = await sb.from("site_blocks").upsert({ key: "home_worship", data: { songs }, updated_at: new Date().toISOString() });
+  if (error) return amsg("#hwAdmMsg", "저장하지 못했습니다: " + error.message, true);
+  amsg("#hwAdmMsg", `저장했습니다. ${songs.length}곡이 ‘집에서 예배드리기’에 나옵니다.`);
+};
 
 /* ---------- 관리 화면 묶음 탭 ---------- */
 const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
