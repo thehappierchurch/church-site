@@ -349,6 +349,14 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .tjoin input{font:inherit;font-size:15px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
 .tcode{font-weight:800;letter-spacing:.12em;color:var(--accent)}
 .bdmh{font-weight:700;color:var(--accent);padding:12px 0 4px!important;border-bottom:2px solid var(--tint)!important}
+.fs-row{cursor:pointer}
+.fs-row .mt{display:block;font-size:13.5px;color:var(--muted);margin-top:2px;line-height:1.6}
+.fs-row.low .who b::after{content:" 🔔";font-size:13px}
+.fs-wk{width:100%;border-collapse:collapse;font-size:13px;margin:6px 0 4px}
+.fs-wk th,.fs-wk td{border-bottom:1px solid var(--line);padding:4px 3px;text-align:center}
+.fs-wk td.l{text-align:left}
+.share-card{margin-top:16px}
+.share-card .agree{margin-top:12px}
 .carebox{display:block;text-decoration:none;color:var(--ink);background:var(--tint);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:12px;font-size:15px}
 
 .tq-k{font-size:13px;color:var(--accent);font-weight:700}
@@ -907,6 +915,14 @@ p,li{text-wrap:pretty}
       <ul class="slots" id="bdList" style="margin-top:10px"></ul>
       <p class="sm muted">‘내 정보’나 첫 로그인 때 생일 공개에 동의한 교인만 나옵니다. 중직자도 성도마당 맨 위에서 이번 주 생일을 볼 수 있습니다.</p>
     </div>
+    <div class="card" style="margin-bottom:16px" id="faithCard">
+      <h2 class="h">신앙 점검 현황 (큐티 · 기도 · 한 주 돌아보기)</h2>
+      <p class="hint">‘내 정보 › 목사님과 나누기’에서 동의한 성도만 숫자가 보입니다. 묵상 글 내용은 보이지 않습니다. 🔔는 최근 30일 동안 큐티 기록이 없는 분입니다. 이름을 누르면 최근 8주 돌아보기를 볼 수 있습니다.</p>
+      <div class="fcauto" id="fsSum" style="margin-top:0"></div>
+      <div class="seg" id="fsTabs" style="margin-top:10px"></div>
+      <ul class="slots" id="fsList"><li class="muted sm">불러오는 중…</li></ul>
+      <div class="row"><button class="btn sm" type="button" id="fsXls">📥 현황 엑셀로 받기</button></div>
+    </div>
     <div class="card" style="margin-bottom:16px" id="rosterCard">
       <h2 class="h">회원 현황</h2>
       <div class="fcauto" id="rsSum" style="margin-top:0"></div>
@@ -1072,6 +1088,14 @@ p,li{text-wrap:pretty}
       <p class="sm muted" id="meRole" style="margin-top:8px"></p>
       <p class="sm muted" id="meConsent"></p>
     </div>
+    <div class="card form share-card" id="meShare">
+      <h3 style="font-size:18px">목사님과 나누기 <span class="opt">(선택)</span></h3>
+      <label class="agree"><input type="checkbox" id="mePastor"><span><b>신앙 점검 함께하기</b> — 담임목사가 내 큐티한 날 수, 기도 체크한 날 수, ‘나의 한 주 돌아보기’(예배·소그룹 참석, 마음 날씨)를 보고 기도와 돌봄에 쓰는 데 동의합니다. <span class="muted">묵상 글과 기도 메모의 내용은 보지 않습니다. 종교에 관한 정보라 따로 동의를 받으며, 언제든 끌 수 있습니다.</span></span></label>
+      <label class="agree"><input type="checkbox" id="meBook"><span><b>나만의 큐티 책 받기</b> — 내가 쓴 큐티를 모아 책(묵상집)으로 만들어 받고 싶습니다. 이를 위해 담임목사가 내 큐티 글을 모아 편집하는 데 동의합니다.</span></label>
+      <p class="sm muted" id="meShareNote" style="margin-top:8px"></p>
+      <div class="row"><button class="btn acc sm" type="button" id="meShareSave">저장</button></div>
+      <p class="msg" id="meShareMsg"></p>
+    </div>
     <div class="card" style="margin-top:16px">
       <h3 style="font-size:18px">회원 탈퇴</h3>
       <p class="muted sm" style="margin-top:6px">탈퇴하면 필사 기록과 큐티 글이 모두 지워지며 되돌릴 수 없습니다.</p>
@@ -1094,6 +1118,7 @@ p,li{text-wrap:pretty}
       <li>새가족 등록(홈페이지): 처음 오신 분이 직접 적는 이름, 연락처, 알게 된 경로, 남기는 말 — 로그인 없이 받으며 담임목사·관리자만 볼 수 있습니다</li>
       <li>성별(선택): ‘내 정보’에서 직접 고른 경우에만</li>
       <li>신앙 동행(선택): ‘신앙 동행’에서 직접 체크한 주간 기록(예배·소그룹 참석, 섬김·전도, 마음 날씨, 마음에 남은 말씀, 기도 부탁 한 줄), 함께 보기로 동의한 사람과 항목, 동의 일시</li>
+      <li>목사님과 나누기(선택): 신앙 점검 동의 여부와 일시, 나만의 큐티 책 신청 여부와 일시</li>
       <li>방문 기록: 홈페이지와 성도마당에서 본 화면, 누른 설교 영상, 방문 시각, 접속 기기 종류(휴대폰/PC), 들어온 경로. 로그인하지 않은 방문자는 이름 없이 브라우저에 저장된 임의 번호로만 집계합니다.</li>
     </ul>
     <h2>2. 이용 목적</h2>
@@ -1104,6 +1129,8 @@ p,li{text-wrap:pretty}
       <li>‘교회 묵상집에 실어도 좋아요’에 동의한 묵상의 묵상집(책) 제작</li>
       <li>기도 모임 안에서 기도 여부·연속 기록·응원 표시</li>
       <li>신앙 동행: 본인이 동의한 공동체 리더나 부모님(보호자)에게, 본인이 고른 항목만 주간 요약으로 보여 드려 안부와 기도로 돌봄</li>
+      <li>신앙 점검(동의한 경우): 담임목사가 큐티·기도 체크 횟수와 ‘나의 한 주 돌아보기’를 보고 기도와 목회적 돌봄(직분자 세움 포함)에 씀</li>
+      <li>나만의 큐티 책(신청한 경우): 본인이 쓴 큐티를 모아 책으로 만들어 본인에게 드림</li>
       <li>방문 통계: 어떤 말씀과 소식이 도움이 되는지 살펴 교회 사역에 반영 (담임목사·관리자만 볼 수 있음)</li>
     </ul>
     <h2>3. 보유 기간</h2>
@@ -1111,7 +1138,7 @@ p,li{text-wrap:pretty}
     <h2>4. 공개 범위</h2>
     <p>큐티 글은 기본적으로 본인만 볼 수 있으며, ‘성도들과 나누기’를 선택한 글만 로그인한 성도에게 이름과 함께 보입니다. ‘함께 쓰는 성경’에 필사한 말씀은 온 교회가 이어 쓸 수 있도록 로그인한 성도에게 작성자 이름과 함께 보입니다. ‘홈페이지에 공개’를 선택한 큐티는 로그인하지 않은 방문자도 작성자 이름과 함께 볼 수 있습니다. 기도 체크와 기도 제목은 같은 기도 모임 안에서만 보입니다. 단어장과 ‘내 말씀’은 본인만 볼 수 있고, ‘목소리 성경’ 녹음은 로그인한 성도에게 녹음한 사람 이름과 함께 들리며, 모임방 회의 기록은 그 팀에 든 성도와 관리자만 볼 수 있습니다.</p>
     <h2>4-1. 신앙 동행 (민감정보)</h2>
-    <p>신앙 동행 기록은 종교에 관한 정보로서 「개인정보 보호법」 제23조의 민감정보에 해당할 수 있어, 처음 가입할 때의 동의와 <b>별도로</b> 동의를 받습니다. 누구에게 어떤 항목을 보여 줄지는 본인이 정하며, 공동체 리더 요청은 거절할 수 있고, ‘신앙 동행’ 화면에서 언제든 항목을 바꾸거나 그만 보여 줄 수 있습니다. 큐티 묵상 글과 기도 체크 메모의 내용은 나누지 않으며, 담임목사·관리자도 동의 없이는 볼 수 없습니다. 만 14세 미만은 부모님(보호자)의 동의가 있어야 합니다.</p>
+    <p>신앙 동행 기록은 종교에 관한 정보로서 「개인정보 보호법」 제23조의 민감정보에 해당할 수 있어, 처음 가입할 때의 동의와 <b>별도로</b> 동의를 받습니다. 누구에게 어떤 항목을 보여 줄지는 본인이 정하며, 공동체 리더 요청은 거절할 수 있고, ‘신앙 동행’ 화면에서 언제든 항목을 바꾸거나 그만 보여 줄 수 있습니다. 큐티 묵상 글과 기도 체크 메모의 내용은 나누지 않으며, 담임목사·관리자도 동의 없이는 볼 수 없습니다. ‘내 정보 › 목사님과 나누기’에서 ‘신앙 점검 함께하기’에 동의한 경우에만 담임목사가 큐티·기도 횟수와 한 주 돌아보기를 보며, 언제든 동의를 끌 수 있습니다. 만 14세 미만은 부모님(보호자)의 동의가 있어야 합니다.</p>
     <h2>4-2. 만 14세 미만 아동</h2>
     <p>만 14세 미만 아동은 법정대리인(부모님)의 동의를 받은 뒤 이용할 수 있습니다. 동의 없이 가입한 사실을 알게 되면 해당 정보를 지체 없이 삭제합니다.</p>
     <h2>5. 처리 위탁 및 국외 이전</h2>
@@ -1236,7 +1263,7 @@ function route(){
   if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); }
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
-  if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); }); }
+  if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at,pastor_view,pastor_view_at,qt_book,qt_book_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); meShare(data); }); }
   if (p === "pray") loadPray();
   if (p === "space") loadSpace();
   if (p === "admin") { if (profile?.is_admin) initAdmin(); else if (profile?.areas?.length) initEditor(); else location.hash = "#write"; }
@@ -2144,7 +2171,7 @@ function loadScript(src){ return new Promise((ok, no) => { const s = document.cr
 async function initAdmin(){
   adminTabs(); loadBdayAdm();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   $("#aTabs")?.remove();
@@ -3296,6 +3323,10 @@ async function careHome(){
   if (ask) t = `🤝 함께 걷기 요청이 ${ask}건 있어요. 확인해 주세요 →`;
   else if (watch && (dw === 1 || dw === 2)) t = `📬 지난주 신앙 동행 소식이 도착했어요 (${watch}명) →`;
   else if (v.some(x => x.side === "me" && x.status === "active") && (dw === 0 || dw === 6)) t = `📝 이번 주 돌아보기를 해 볼까요? →`;
+  if (!t && (profile?.role === "officer" || profile?.is_admin)) {
+    const { data: mi } = await sb.from("member_info").select("pastor_view").eq("user_id", user.id).maybeSingle();
+    if (mi && !mi.pastor_view && !profile?.is_admin) { box.innerHTML = `<a class="carebox" href="#me">🙏 직분자 신앙 점검: 담임목사님께 큐티·기도·한 주 돌아보기 현황을 보여 드리는 데 동의해 주세요 →</a>`; return; }
+  }
   box.innerHTML = t ? `<a class="carebox" href="#care">${t}</a>` : "";
 }
 document.addEventListener("click", e => { const a = e.target.closest(".steps a[data-focus]"); if (a) setTimeout(() => $("#" + a.dataset.focus)?.focus(), 600); });
@@ -3519,11 +3550,110 @@ $("#cgAdm").addEventListener("click", async e => {
     toast("공동체를 지웠습니다"); loadCareAdm(); }
 });
 
+/* ---------- 목사님과 나누기 (내 정보) ---------- */
+function meShare(d){
+  $("#mePastor").checked = !!d?.pastor_view; $("#meBook").checked = !!d?.qt_book;
+  const f = x => x ? new Date(x).toLocaleDateString("ko-KR") : "";
+  $("#meShareNote").textContent = [d?.pastor_view ? `신앙 점검 동의: ${f(d.pastor_view_at)}` : "", d?.qt_book ? `큐티 책 신청: ${f(d.qt_book_at)}` : ""].filter(Boolean).join(" · ")
+    + ((profile?.role === "officer") && !d?.pastor_view ? (d?.qt_book ? " · " : "") + "직분자는 신앙 점검에 함께해 주시기를 부탁드립니다." : "");
+}
+$("#meShareSave").onclick = async () => {
+  const now = new Date().toISOString(), pv = $("#mePastor").checked, bk = $("#meBook").checked;
+  const { data: old } = await sb.from("member_info").select("pastor_view,qt_book,pastor_view_at,qt_book_at").eq("user_id", user.id).maybeSingle();
+  const row = { user_id: user.id, pastor_view: pv, qt_book: bk, updated_at: now,
+    pastor_view_at: pv ? (old?.pastor_view ? old.pastor_view_at : now) : null, qt_book_at: bk ? (old?.qt_book ? old.qt_book_at : now) : null };
+  const { error } = await sb.from("member_info").upsert(row);
+  if (error) return amsg("#meShareMsg", "저장하지 못했습니다: " + error.message, true);
+  amsg("#meShareMsg", "저장했습니다."); meShare(row);
+};
+
+/* ---------- 관리: 신앙 점검 현황 · 큐티 책 ---------- */
+let fsData = [], fsTab = "all";
+const MOOD_I = { sun: "☀️", cloud: "⛅", rain: "🌧" };
+async function loadFaithAdm(){
+  const { data, error } = await sb.rpc("admin_faith_status");
+  if (error) { $("#fsList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  fsData = data || []; renderFaith();
+}
+function renderFaith(){
+  const ag = fsData.filter(x => x.agreed), low = ag.filter(x => !x.qt30);
+  $("#fsSum").innerHTML = `<span>동의 <b>${ag.length}</b> / ${fsData.length}명</span><span>최근 7일 큐티한 분 <b>${ag.filter(x => x.qt7).length}</b></span><span>30일 큐티 없음 <b>${low.length}</b></span><span>큐티 책 신청 <b>${fsData.filter(x => x.qt_book).length}</b></span>`;
+  const T = [["all", "전체"], ["officer", "중직자"], ["member", "교인"], ["no", "동의 전"], ["book", "큐티 책 신청"]];
+  $("#fsTabs").innerHTML = T.map(([k, t]) => `<button type="button" data-fs="${k}" class="${k === fsTab ? "on" : ""}">${t}</button>`).join("");
+  const lv = x => x.is_admin ? "admin" : x.role || "guest";
+  const list = fsData.filter(x => fsTab === "all" || (fsTab === "no" ? !x.agreed : fsTab === "book" ? x.qt_book : lv(x) === fsTab))
+    .sort((a, b) => (b.agreed - a.agreed) || ((a.qt30 ?? 99) - (b.qt30 ?? 99)) || (a.nickname || "").localeCompare(b.nickname || "", "ko"));
+  const md = d => d ? `${+d.slice(5, 7)}/${+d.slice(8, 10)}` : "없음";
+  const nm = { admin: "관리자", officer: "중직자", member: "교인", guest: "가입자" };
+  $("#fsList").innerHTML = list.map(x => `<li class="fs-row${x.agreed && !x.qt30 ? " low" : ""}" data-uid="${x.id}" data-ag="${x.agreed ? 1 : 0}">
+    <span class="who"><b>${esc(x.nickname)}</b>${x.title ? " " + esc(x.title) : ""} <span class="badge${lv(x) === "guest" ? " hid" : ""}">${nm[lv(x)]}</span>${x.qt_book ? ' <span class="badge">📖 책 신청</span>' : ""}
+    <span class="mt">${x.agreed ? `큐티 7일 <b>${x.qt7}</b> · 30일 <b>${x.qt30}</b> · 마지막 ${md(x.last_qt)} &nbsp;|&nbsp; 기도 7일 <b>${x.pr7}</b> · 30일 <b>${x.pr30}</b> &nbsp;|&nbsp; 돌아보기 4주 <b>${x.fc_weeks}</b>회 · 주일 ${x.fc_sun} · 소그룹 ${x.fc_grp}${x.last_mood ? " · 마음 " + MOOD_I[x.last_mood] : ""}` : "아직 ‘신앙 점검 함께하기’에 동의하지 않았습니다."}</span></span>
+    ${x.qt_book ? `<span class="row" style="margin-top:4px"><button class="btn sm acc" type="button" data-book="${x.id}">📖 책 만들기</button><button class="btn sm" type="button" data-bookdoc="${x.id}">Word로 받기</button></span>` : ""}
+    <div data-wk hidden></div></li>`).join("") || '<li class="muted sm">해당하는 분이 없습니다.</li>';
+}
+$("#fsTabs").addEventListener("click", e => { const b = e.target.closest("[data-fs]"); if (!b) return; fsTab = b.dataset.fs; renderFaith(); });
+$("#fsList").addEventListener("click", async e => {
+  const bk = e.target.closest("[data-book],[data-bookdoc]");
+  if (bk) { e.stopPropagation(); return makeQtBook(bk.dataset.book || bk.dataset.bookdoc, !!bk.dataset.bookdoc); }
+  const li = e.target.closest(".fs-row"); if (!li || li.dataset.ag !== "1") return;
+  const box = li.querySelector("[data-wk]"); box.hidden = !box.hidden; if (box.hidden || box.dataset.done) return;
+  const { data, error } = await sb.rpc("admin_faith_weeks", { uid: li.dataset.uid, n: 8 });
+  if (error) { box.innerHTML = `<p class="msg err">불러오지 못했습니다.</p>`; return; }
+  box.dataset.done = 1;
+  const ck = v => v ? "✓" : "–";
+  box.innerHTML = (data || []).length ? `<table class="fs-wk"><tr><th>주간</th><th>주일</th><th>수</th><th>금</th><th>소그룹</th><th>섬김</th><th>초대</th><th>마음</th></tr>${data.map(w => `<tr><td>${+w.week.slice(5, 7)}/${+w.week.slice(8, 10)}~</td><td>${ck(w.sun)}</td><td>${ck(w.wed)}</td><td>${ck(w.fri)}</td><td>${ck(w.grp)}</td><td>${ck(w.serve)}</td><td>${w.invite || ""}</td><td>${MOOD_I[w.mood] || ""}</td></tr>${w.verse || w.prayreq ? `<tr><td class="l" colspan="8">${w.verse ? "말씀: " + esc(w.verse) : ""}${w.verse && w.prayreq ? " · " : ""}${w.prayreq ? "기도 부탁: " + esc(w.prayreq) : ""}</td></tr>` : ""}`).join("")}</table>` : `<p class="sm muted">아직 한 주 돌아보기 기록이 없습니다.</p>`;
+});
+$("#fsXls").onclick = async () => {
+  try {
+    if (!window.XLSX) await loadScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+    const nm = x => x.is_admin ? "관리자" : ROLE_NM[x.role] || "가입자";
+    const rows = fsData.map(x => ({ "이름": x.nickname, "직분": x.title || "", "등급": nm(x), "점검 동의": x.agreed ? "예" : "아니오", "큐티 7일": x.qt7 ?? "", "큐티 30일": x.qt30 ?? "", "마지막 큐티": x.last_qt || "", "기도 7일": x.pr7 ?? "", "기도 30일": x.pr30 ?? "", "마지막 기도": x.last_pr || "", "돌아보기(4주)": x.fc_weeks ?? "", "주일예배(4주)": x.fc_sun ?? "", "소그룹(4주)": x.fc_grp ?? "", "큐티 책 신청": x.qt_book ? "예" : "" }));
+    const ws = XLSX.utils.json_to_sheet(rows); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, "신앙 점검");
+    XLSX.writeFile(wb, `더행복한교회_신앙점검_${kstToday()}.xlsx`);
+  } catch (err) { toast("내려받지 못했습니다: " + (err.message || err)); }
+};
+async function makeQtBook(uid, asDoc){
+  const who = fsData.find(x => x.id === uid) || {};
+  const { data, error } = await sb.rpc("admin_qt_book", { uid });
+  if (error) return toast(/not requested/.test(error.message) ? "본인이 책을 신청한 경우에만 만들 수 있습니다" : "불러오지 못했습니다: " + error.message);
+  const notes = data || []; if (!notes.length) return toast("아직 쓴 큐티가 없습니다");
+  const name = who.nickname || "성도", first = notes[0].qt_date, last = notes[notes.length - 1].qt_date;
+  const ymd = d => `${d.slice(0, 4)}년 ${+d.slice(5, 7)}월 ${+d.slice(8, 10)}일`;
+  const dow = d => "일월화수목금토"[new Date(d + "T00:00:00Z").getUTCDay()];
+  const para = t => esc(t || "").split(/\n+/).filter(Boolean).map(x => `<p>${x}</p>`).join("");
+  const months = [...new Set(notes.map(n => n.qt_date.slice(0, 7)))];
+  const sec = (k, v) => v && v.trim() ? `<h4>${k}</h4>${para(v)}` : "";
+  const body = months.map(m => `<h2 class="mh">${m.slice(0, 4)}년 ${+m.slice(5, 7)}월</h2>` + notes.filter(n => n.qt_date.startsWith(m)).map(n => `<article>
+    <div class="dt">${ymd(n.qt_date)} (${dow(n.qt_date)})</div><h3>${esc(n.title || n.passage || "오늘의 묵상")}</h3>${n.passage ? `<div class="ps">📖 ${esc(n.passage)}</div>` : ""}
+    ${sec("느낀 점", n.content)}${sec("의문점", n.question)}${sec("적용과 실천", n.application)}${sec("기도", n.prayer)}</article>`).join("")).join("");
+  const toc = months.map(m => `<li>${m.slice(0, 4)}년 ${+m.slice(5, 7)}월 · ${notes.filter(n => n.qt_date.startsWith(m)).length}편</li>`).join("");
+  const css = `body{font-family:"Nanum Myeongjo","Batang",serif;color:#222;line-height:1.85;margin:0}
+  .cover{height:96vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always}
+  .cover h1{font-size:34pt;margin:0 0 10px;color:#163E86}.cover .sub{font-size:13pt;color:#555}.cover .ch{margin-top:60px;font-size:11pt;color:#777}
+  .toc{page-break-after:always;padding:30px}.toc h2{color:#163E86}.toc li{margin:4px 0}
+  .mh{color:#1F6FD1;border-bottom:2px solid #EAF4FF;padding-bottom:6px;margin:36px 0 10px;page-break-before:always;font-size:18pt}
+  article{margin:0 0 28px;page-break-inside:avoid}.dt{font-size:10pt;color:#888}article h3{font-size:14pt;margin:2px 0 4px}
+  .ps{font-size:10.5pt;color:#B7791F;margin-bottom:6px}h4{font-size:10.5pt;color:#1F6FD1;margin:10px 0 2px;font-family:sans-serif}p{margin:0 0 6px;font-size:11pt}
+  .wrap{max-width:640px;margin:0 auto;padding:20px}.bar{position:sticky;top:0;background:#fff;padding:10px;text-align:center;border-bottom:1px solid #ddd;font-family:sans-serif}
+  .bar button{font-size:15px;padding:8px 16px;margin:0 4px}@media print{.bar{display:none}@page{size:A5;margin:16mm 14mm}}`;
+  const html = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>${esc(name)} 묵상집</title><style>${css}</style></head><body>
+    ${asDoc ? "" : `<div class="bar"><button onclick="print()">🖨 인쇄 · PDF로 저장</button></div>`}
+    <div class="wrap"><section class="cover"><h1>${esc(name)}의 묵상집</h1><div class="sub">${ymd(first)} ~ ${ymd(last)}<br>큐티 ${notes.length}편</div><div class="ch">대한예수교장로회(백석) 더행복한교회</div></section>
+    <section class="toc"><h2>차례</h2><ol>${toc}</ol></section>${body}</div></body></html>`;
+  if (asDoc) {
+    const doc = html.replace("<html lang=\"ko\">", `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" lang="ko">`);
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + doc], { type: "application/msword" }));
+    a.download = `${name}_묵상집_${first}_${last}.doc`; document.body.appendChild(a); a.click(); a.remove(); return;
+  }
+  const w = window.open("", "_blank"); if (!w) return toast("팝업이 막혔습니다. 팝업을 허용해 주세요");
+  w.document.open(); w.document.write(html); w.document.close();
+}
+
 /* ---------- 관리 화면 묶음 탭 ---------- */
 const ATABS = [["now", "한눈에"], ["site", "홈페이지"], ["people", "성도"], ["word", "말씀·묵상"], ["all", "전체"]];
 function adminTabOf(c){
   const h = (c.querySelector("h2")?.textContent || "") + (c.id || "");
-  if (/statCard|rosterCard|방문 통계|새가족|생일|회원 현황/.test(h)) return "now";
+  if (/statCard|rosterCard|faithCard|방문 통계|새가족|생일|회원 현황|신앙 점검/.test(h)) return "now";
   if (/홈페이지 고치기|교회 일정|주보/.test(h)) return "site";
   if (/회원|살펴보기|맡기기|모임방|기도 모임|교인|공동체/.test(h)) return "people";
   return "word";
