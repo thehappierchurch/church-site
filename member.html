@@ -59,11 +59,21 @@ p{margin:0}
 [hidden]{display:none!important}
 .tdq{border-left:4px solid var(--accent);margin-bottom:14px}.tdq .tq-v{font-size:22px}
 .steps{list-style:none;margin:0 0 8px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+@media(max-width:600px){.steps{grid-template-columns:repeat(3,1fr);gap:8px}.steps li a{padding:12px 6px 10px;min-height:0;align-items:center;text-align:center}.steps li b{position:static;width:26px;height:26px;font-size:14px;margin-bottom:4px}.steps li span{font-size:14px;word-break:keep-all;line-height:1.35}.steps small{display:none}}
 .steps a{display:flex;flex-direction:column;gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px 14px 58px;position:relative;min-height:74px;box-shadow:0 2px 10px rgba(31,111,209,.06)}
 .steps a:hover{border-color:var(--accent)}
 .steps b{position:absolute;left:14px;top:16px;width:32px;height:32px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:16px}
 .steps span{font-weight:700;font-size:17px}.steps small{color:var(--muted);font-size:13px}
 .tdh{font-size:18px;margin:26px 0 10px}
+.tdall{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.tdall h3{grid-column:1/-1;font-family:var(--sans);font-size:13px;color:var(--muted);font-weight:700;margin:4px 0 0}
+.tdall a{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 4px 10px;font-size:13px;font-weight:600;text-align:center;line-height:1.3;word-break:keep-all}
+.tdall a:hover{border-color:var(--accent);background:var(--tint)}
+.tdall i{font-style:normal;font-size:24px}
+@media(min-width:720px){.tdall{grid-template-columns:repeat(8,1fr)}}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:-4px 0 16px}
+.seg a{padding:7px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;text-decoration:none;background:var(--surface)}
+.seg a.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
 .tiles2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .tiles2 a{display:flex;flex-direction:column;gap:2px;text-decoration:none;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;min-height:96px}
 .tiles2 a:hover{border-color:var(--accent);background:var(--tint)}
@@ -367,6 +377,9 @@ section[data-page="admin"] > .card.tabhide{display:none!important}
 .hw>summary b{font-size:17px}.hw>summary small{color:var(--muted);font-size:13px;display:block}
 .hw>summary::after{content:"▾";margin-left:auto;color:var(--muted)}.hw[open]>summary::after{content:"▴"}
 .hw .in{padding:0 18px 18px}
+section[data-page="homew"] .hw{margin-top:0}section[data-page="homew"] .hw>summary{display:none}section[data-page="homew"] .hw .in{padding-top:6px}
+.hwlink{display:flex;align-items:center;gap:10px;margin-top:12px;padding:14px 18px;text-decoration:none;border-color:var(--accent)}
+.hwlink b{display:block;font-size:16px}.hwlink small{color:var(--muted);font-size:13px}
 .hwo{list-style:none;margin:0;padding:0;counter-reset:hw}
 .hwo>li{counter-increment:hw;position:relative;padding:12px 0 12px 34px;border-top:1px solid var(--line)}
 .hwo>li::before{content:counter(hw);position:absolute;left:0;top:12px;width:24px;height:24px;border-radius:50%;background:var(--tint);color:var(--accent);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
@@ -500,10 +513,9 @@ p,li{text-wrap:pretty}
   <div class="wrap">
     <nav aria-label="성도마당 메뉴"><ul id="gNav">
       <li><a href="#today" data-g="home">오늘</a></li>
-      <li><a href="#write" data-g="word">말씀</a></li>
-      <li><a href="#share" data-g="share">나눔</a></li>
+      <li><a href="#qt" data-g="word">말씀</a></li>
       <li><a href="#pray" data-g="pray">기도</a></li>
-      <li><a href="#space" data-g="church">교회</a></li>
+      <li><a href="#homew" data-g="church">교회</a></li>
       <li><a href="#admin" data-g="admin" id="adminTab" hidden>관리</a></li>
       <li><a href="./" class="home">← 홈페이지</a></li>
     </ul><ul id="sNav" class="snav" hidden></ul></nav>
@@ -544,10 +556,33 @@ p,li{text-wrap:pretty}
       <li><a href="#qt" data-focus="qBody"><b>2</b><span>느낀 점 기록하기</span><small>마음에 닿은 구절 한 줄이면 돼요</small></a></li>
       <li><a href="#pray"><b>3</b><span>기도하기</span><small>기도 체크하고 서로 응원해요</small></a></li>
     </ol>
-    <details class="card hw" id="hwCard">
+    <a class="card hwlink" id="hwLink" href="#homew" hidden><span style="font-size:22px">🏠</span><span><b>오늘은 주일입니다</b><small>교회에 오지 못하셨다면 집에서 예배드리기 →</small></span></a>
+    <h2 class="tdh">모든 기능</h2>
+    <div class="tdall" data-tg><h3>말씀</h3>
+      <a href="#qt" data-p="qt"><i>📖</i>나의 큐티</a>
+      <a href="#share" data-p="share"><i>💬</i>묵상 나눔</a>
+      <a href="#write" data-p="write"><i>✍️</i>성경 필사</a>
+      <a href="#voice" data-p="voice"><i>🎙</i>목소리 성경</a>
+      <a href="#study" data-p="study"><i>🔎</i>말씀 공부</a>
+      <a href="#words" data-p="words"><i>🔤</i>단어장</a>
+      <a href="#fav" data-p="fav"><i>⭐</i>내 말씀</a>
+      <a href="./#sermons"><i>▶️</i>설교 다시 보기</a>
+    </div>
+    <div class="tdall" data-tg><h3>기도와 교회</h3>
+      <a href="#pray" data-p="pray"><i>🙏</i>함께 기도</a>
+      <a href="#homew"><i>🏠</i>집에서 예배</a>
+      <a href="#care" data-p="care"><i>🤝</i>신앙 동행</a>
+      <a href="#team" data-p="team"><i>📝</i>모임방</a>
+      <a href="#space" data-p="space"><i>⛪</i>교회 공간</a>
+    </div>
+    <p class="sm muted" id="tdGuestNote" hidden style="margin-top:10px">교인으로 확인되면 묵상 나눔, 신앙 동행 등 더 많은 기능이 열립니다.</p>
+  </section>
+
+  <section class="page" data-page="homew">
+    <div class="phead"><h1>집에서 예배드리기</h1><p>교회에 오지 못하는 날, 가족과 함께 또는 혼자 이 순서로 예배드려 보세요. 20분이면 충분합니다.</p></div>
+    <details class="card hw" id="hwCard" open>
       <summary><span style="font-size:24px">🏠</span><span><b>집에서 예배드리기</b><small>찬양 · 기도 · 말씀 · 주기도문</small></span></summary>
       <div class="in">
-        <p class="sm muted" style="margin:0 0 8px">교회에 오지 못하는 날, 가족과 함께 또는 혼자 이 순서로 예배드려 보세요. 20분이면 충분합니다.</p>
         <ol class="hwo">
           <li><h3>예배로 부름</h3><div class="vs">“오라 우리가 굽혀 경배하며 우리를 지으신 여호와 앞에 무릎을 꿇자” <span class="sm muted">(시편 95:6)</span></div></li>
           <li><h3>찬양</h3>
@@ -562,31 +597,6 @@ p,li{text-wrap:pretty}
         <p class="sm muted" style="margin:8px 0 0">주일 설교는 <a href="./#sermons">설교 다시 보기</a>에서 함께 들을 수 있습니다.</p>
       </div>
     </details>
-    <h2 class="tdh">자주 쓰는 기능</h2>
-    <div class="tiles2">
-      <a href="#qt" data-p="qt"><i>📖</i><b>나의 큐티</b><small>오늘 말씀 읽고 기록하기</small></a>
-      <a href="#pray" data-p="pray"><i>🙏</i><b>함께 기도</b><small>기도 체크 · 기도 모임</small></a>
-      <a href="#write" data-p="write"><i>✍️</i><b>성경 필사</b><small>온 교회가 한 절씩 이어 쓰기</small></a>
-      <a href="./#sermons"><i>▶️</i><b>설교 다시 보기</b><small>주일 설교 · 말씀 요약</small></a>
-    </div>
-    <button class="morebtn" type="button" id="tdMoreBtn">더 많은 기능 보기 ▾</button>
-    <div class="tdmore" id="tdMore" hidden>
-      <div data-tg><h2 class="tdh">함께하기</h2>
-      <div class="tiles2">
-        <a href="#share" data-p="share"><i>💬</i><b>묵상 나눔</b><small>성도들의 묵상 읽기</small></a>
-        <a href="#care" data-p="care"><i>🤝</i><b>신앙 동행</b><small>한 주 돌아보기 · 리더·부모님과 나누기</small></a>
-        <a href="#voice" data-p="voice"><i>🎙</i><b>목소리 성경</b><small>한 절씩 읽고 녹음</small></a>
-        <a href="#space" data-p="space"><i>⛪</i><b>교회 공간</b><small>공간 사용 등록</small></a>
-        <a href="#team" data-p="team"><i>📝</i><b>모임방</b><small>코드로 들어가 회의 기록 함께 쓰기</small></a>
-      </div></div>
-      <div data-tg><h2 class="tdh">더 깊은 말씀 공부</h2>
-      <div class="tiles2">
-        <a href="#study" data-p="study"><i>🔎</i><b>말씀 공부</b><small>영어 성경 · 원어 · 옛 주석</small></a>
-        <a href="#words" data-p="words"><i>🔤</i><b>단어장</b><small>모르는 단어 외우기</small></a>
-        <a href="#fav" data-p="fav"><i>⭐</i><b>내 말씀</b><small>좋아하는 구절 모음</small></a>
-      </div></div>
-      <p class="sm muted" id="tdGuestNote" hidden style="margin-top:12px">교인으로 확인되면 묵상 나눔, 신앙 동행 등 더 많은 기능이 열립니다.</p>
-    </div>
   </section>
 
   <!-- 성경 필사 -->
@@ -1299,13 +1309,11 @@ const PLV = { share: 1, voice: 1, words: 1, care: 1, space: 1, team: 1 };
 const canSee = p => (PLV[p] || 0) <= ULV();
 function tilesFilter(){
   const sec = document.querySelector('section[data-page="today"]'); if (!sec) return;
-  sec.querySelectorAll("a[data-p]").forEach(a => { a.hidden = !canSee(a.dataset.p); });
+  const canTeam = !!(profile?.is_admin || profile?.role === "officer" || profile?.teams?.length);
+  sec.querySelectorAll("a[data-p]").forEach(a => { a.hidden = !canSee(a.dataset.p) || (a.dataset.p === "team" && !canTeam); });
   sec.querySelectorAll("[data-tg]").forEach(g => { g.hidden = !g.querySelector("a[data-p]:not([hidden])"); });
   $("#tdGuestNote").hidden = ULV() > 0;
-  let open = false; try { open = localStorage.getItem("thc-more") === "1"; } catch {}
-  $("#tdMore").hidden = !open; $("#tdMoreBtn").textContent = open ? "간단히 보기 ▴" : "더 많은 기능 보기 ▾";
 }
-$("#tdMoreBtn").onclick = () => { const open = $("#tdMore").hidden; try { localStorage.setItem("thc-more", open ? "1" : "0"); } catch {} tilesFilter(); if (open) $("#tdMore").scrollIntoView({ behavior: "smooth", block: "start" }); };
 
 /* ---------- 라우팅 ---------- */
 const loaded = {};
@@ -1323,7 +1331,8 @@ function route(){
   trk("m-" + p);
   if (needLogin) return;
   if (p === "write") initWrite();
-  if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); loadHomeWorship(); }
+  if (p === "today") { renderTodayHome(); careHome(); tilesFilter(); $("#hwLink").hidden = new Date(kstToday() + "T00:00:00Z").getUTCDay() !== 0; }
+  if (p === "homew") loadHomeWorship();
   if (p === "qt") { loadMyNotes(); initReader(); }
   if (p === "share") loadShared(true);
   if (p === "me") { $("#nick").value = profile?.nickname || ""; sb.from("member_info").select("gender,birthday,birthday_ok,consent_at,pastor_view,pastor_view_at,qt_book,qt_book_at").eq("user_id", user.id).maybeSingle().then(({ data }) => { $("#gender").value = data?.gender || ""; meInfo(data); meShare(data); }); }
@@ -3761,7 +3770,6 @@ const weekHymns = () => { const w = Math.floor((Date.parse(kstToday()) - Date.pa
 const ytSearch = q => window.open("https://www.youtube.com/results?search_query=" + encodeURIComponent(q), "_blank", "noopener");
 async function loadHomeWorship(){
   const card = $("#hwCard"); if (!card) return;
-  if (new Date(kstToday() + "T00:00:00Z").getUTCDay() === 0 && !card.dataset.auto) { card.open = true; card.dataset.auto = 1; }
   const { data } = await sb.from("site_blocks").select("data").eq("key", "home_worship").maybeSingle();
   const songs = (data?.data?.songs || []).filter(x => ytId(x.url));
   $("#hwSongs").innerHTML = (songs.length ? `<div class="sm" style="margin-bottom:2px">이번 주 함께 부를 찬양</div><div class="hws">${songs.map(x => `<button type="button" data-yt="${ytId(x.url)}"><img src="https://i.ytimg.com/vi/${ytId(x.url)}/hqdefault.jpg" alt="" loading="lazy"><i>▶</i><span>${esc(x.title || "찬양")}</span></button>`).join("")}</div><div id="hwPlay"></div>` : "")
@@ -3820,21 +3828,32 @@ function adminTabs(){
 /* ---------- 메뉴 묶음 (말씀 · 나눔 · 기도 · 교회 · 관리) ---------- */
 const NAV = {
   home: [["today", "오늘"]],
-  word: [["write", "성경 필사"], ["voice", "목소리 성경"], ["study", "말씀 공부"], ["qt", "나의 큐티"], ["words", "단어장"], ["fav", "내 말씀"]],
-  share: [["share", "묵상 나눔"]],
+  word: [["qt", "나의 큐티"], ["share", "묵상 나눔"], ["write", "함께 성경", ["voice"]], ["study", "말씀 공부", ["words", "fav"]]],
   pray: [["pray", "기도"]],
-  church: [["space", "교회 공간"], ["care", "신앙 동행"], ["team", "모임방"]],
+  church: [["homew", "집에서 예배"], ["space", "교회 공간"], ["care", "신앙 동행"], ["team", "모임방"]],
   admin: [["admin", "관리"]]
 };
 function navRender(p){
   const canTeam = !!(profile?.is_admin || profile?.role === "officer" || profile?.teams?.length);
-  const ok = x => canSee(x[0]) && (x[0] !== "team" || canTeam);
-  const g = Object.keys(NAV).find(k => NAV[k].some(x => x[0] === p));
+  const ok = x => (canSee(x[0]) || (x[2] || []).some(canSee)) && (x[0] !== "team" || canTeam);
+  const has = (x, q) => x[0] === q || (x[2] || []).includes(q);
+  const g = Object.keys(NAV).find(k => NAV[k].some(x => has(x, p)));
   document.querySelectorAll("#gNav a[data-g]").forEach(a => { a.classList.toggle("on", a.dataset.g === g);
     if (a.dataset.g !== "admin" && a.dataset.g !== "home") { const vis = NAV[a.dataset.g].filter(ok); a.parentElement.hidden = !vis.length; if (vis.length) a.setAttribute("href", "#" + vis[0][0]); } });
   const items = g ? NAV[g].filter(ok) : [];
   $("#sNav").hidden = items.length < 2;
-  $("#sNav").innerHTML = items.map(([k, t]) => `<li><a href="#${k}" class="${k === p ? "on" : ""}">${t}</a></li>`).join("");
+  $("#sNav").innerHTML = items.map(x => `<li><a href="#${canSee(x[0]) ? x[0] : x[2].find(canSee)}" class="${has(x, p) ? "on" : ""}">${x[1]}</a></li>`).join("");
+  segRender(p);
+}
+/* 한 묶음 안의 작은 전환 단추 (필사 ↔ 목소리, 공부 ↔ 단어장 ↔ 내 말씀) */
+const SEG = [[["write", "✍️ 손으로 쓰기"], ["voice", "🎙 소리 내어 읽기"]], [["study", "🔎 말씀 공부"], ["words", "🔤 단어장"], ["fav", "⭐ 내 말씀"]]];
+function segRender(p){
+  const grp = SEG.find(g => g.some(x => x[0] === p)); if (!grp) return;
+  const vis = grp.filter(x => canSee(x[0])); const sec = document.querySelector(`section[data-page="${p}"]`);
+  let el = sec.querySelector(":scope > .seg");
+  if (!el) { el = document.createElement("div"); el.className = "seg"; sec.querySelector(".phead").after(el); }
+  el.hidden = vis.length < 2;
+  el.innerHTML = vis.map(([k, t]) => `<a href="#${k}" class="${k === p ? "on" : ""}">${t}</a>`).join("");
 }
 
 /* ---------- 말로 쓰기 (받아쓰기 필사) ---------- */
