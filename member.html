@@ -310,6 +310,10 @@ footer a{color:var(--muted)}
 .free{font-size:14px;color:var(--ok);margin-top:10px}
 #spForm .three{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
 #spForm .three>div{display:grid;gap:6px}
+.sprep{display:grid;gap:10px;margin-top:10px;background:var(--tint);border-radius:12px;padding:12px}
+.sprep select,.sprep input[type=date]{font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.spdow{display:flex;gap:5px}.spdow label{display:flex;align-items:center;justify-content:center;flex:1;max-width:44px;aspect-ratio:1;border:1px solid var(--line);border-radius:50%;background:var(--surface);cursor:pointer;font-size:15px}
+.spdow input{display:none}.spdow label:has(input:checked){background:var(--accent);border-color:var(--accent);color:#fff}
 #spForm input[type=time]{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 12px}
 .reader{margin-bottom:16px}
 .tq{background:var(--tint);border-radius:8px;padding:12px 14px;margin-bottom:12px}
@@ -930,7 +934,12 @@ p,li{text-wrap:pretty}
       <div class="field"><label for="spMemo">무엇을 하시나요? <span class="opt">(선택)</span></label><input id="spMemo" type="text" maxlength="60" placeholder="예) 개인 기도, 구역 모임, 찬양 연습"></div>
       <div class="opts">
         <label class="toggle"><input type="checkbox" id="spHide"> 이름 숨기기 <span class="opt">(다른 분께는 ‘성도’로만 보여요)</span></label>
-        <label class="toggle"><input type="checkbox" id="spRepeat"> 앞으로 4주 동안 매주 같은 시간</label>
+      </div>
+      <div class="sprep">
+        <div class="field"><label for="spRep">반복</label>
+          <select id="spRep"><option value="">반복 안 함 (한 번만)</option><option value="daily">매일</option><option value="weekday">평일마다 (월~금)</option><option value="weekly">매주</option><option value="biweekly">격주 (2주마다)</option><option value="monthly">매달 같은 날</option></select></div>
+        <div class="field" id="spDowWrap" hidden><label>요일 <span class="opt">(여러 개 고를 수 있어요)</span></label><div class="spdow" id="spDow"></div></div>
+        <div class="field" id="spUntilWrap" hidden><label for="spUntil">언제까지</label><input id="spUntil" type="date"><span class="sm muted" id="spCount"></span></div>
       </div>
       <p class="msg" id="spMsg"></p>
       <div class="row" style="margin-top:0"><button class="btn acc" type="submit" id="spSubmit">등록</button></div>
@@ -3165,7 +3174,7 @@ async function loadSpace(){
   $("#spRange").textContent = `${dayLabel(spWeekStart)} ~ ${dayLabel(end)}`;
   const [wk, mine] = await Promise.all([
     sb.from("space_view").select("id,day,start_t,end_t,memo,nickname,mine").gte("day", spWeekStart).lte("day", end).order("day").order("start_t"),
-    sb.from("space_view").select("id,day,start_t,end_t,memo,nickname,mine").eq("mine", true).gte("day", t).order("day").order("start_t").limit(40)
+    sb.from("space_view").select("id,day,start_t,end_t,memo,nickname,mine,series_id").eq("mine", true).gte("day", t).order("day").order("start_t").limit(300)
   ]);
   spRows = wk.data || [];
   $("#spWeek").innerHTML = Array.from({ length: 7 }, (_, i) => { const d = addDays(spWeekStart, i), wd = new Date(d + "T00:00:00Z").getUTCDay();
@@ -3174,7 +3183,10 @@ async function loadSpace(){
     return `<button type="button" class="swk-row${d === spSel ? " on" : ""}${wd === 0 ? " sun" : ""}" data-d="${d}"><span class="dl">${d === t ? "오늘 " : ""}${dayLabel(d)}</span><span class="track">${bars}</span></button>`; }).join("");
   renderSpDay();
   const mr = mine.data || [];
-  $("#spMine").innerHTML = mr.length ? mr.map(r => `<li><span class="tm">${dayLabel(r.day)}</span><span class="who">${fmtT(r.start_t)} – ${fmtT(r.end_t)}${r.memo ? " · " + esc(r.memo) : ""}</span><button class="btn sm warn" type="button" data-spdel="${r.id}">지우기</button></li>`).join("") : '<li class="muted sm">아직 등록한 시간이 없습니다.</li>';
+  const seen = new Set(), items = [];
+  mr.forEach(r => { if (!r.series_id) return items.push(r); if (seen.has(r.series_id)) return; seen.add(r.series_id); const g = mr.filter(x => x.series_id === r.series_id); items.push({ ...r, n: g.length, last: g[g.length - 1].day, dows: [...new Set(g.map(x => "일월화수목금토"[new Date(x.day + "T00:00:00Z").getUTCDay()]))] }); });
+  $("#spMine").innerHTML = items.length ? items.slice(0, 40).map(r => r.n ? `<li><span class="tm">🔁 ${dayLabel(r.day)}부터</span><span class="who">${r.dows.join("·")} ${fmtT(r.start_t)} – ${fmtT(r.end_t)}${r.memo ? " · " + esc(r.memo) : ""} <span class="sm muted">(${dayLabel(r.last)}까지 남은 ${r.n}번)</span></span><span class="row" style="margin-top:0"><button class="btn sm" type="button" data-spdel="${r.id}">이번 것만</button><button class="btn sm warn" type="button" data-spser="${r.series_id}">반복 모두 지우기</button></span></li>`
+    : `<li><span class="tm">${dayLabel(r.day)}</span><span class="who">${fmtT(r.start_t)} – ${fmtT(r.end_t)}${r.memo ? " · " + esc(r.memo) : ""}</span><button class="btn sm warn" type="button" data-spdel="${r.id}">지우기</button></li>`).join("") : '<li class="muted sm">아직 등록한 시간이 없습니다.</li>';
 }
 function renderSpDay(){
   const rows = spRows.filter(r => r.day === spSel), adm = !!profile?.is_admin;
@@ -3190,12 +3202,49 @@ $("#spWeek").addEventListener("click", e => { const b = e.target.closest("[data-
 $("#spPrev").onclick = () => { spWeekStart = addDays(spWeekStart, -7); if (spWeekStart < kstToday()) spWeekStart = kstToday(); spSel = spWeekStart; loadSpace(); };
 $("#spNext").onclick = () => { spWeekStart = addDays(spWeekStart, 7); spSel = spWeekStart; loadSpace(); };
 document.querySelector('section[data-page="space"]').addEventListener("click", async e => {
+  const sr = e.target.closest("[data-spser]");
+  if (sr) { if (!sr.dataset.armed) { sr.dataset.armed = 1; sr.textContent = "한 번 더 누르면 앞으로의 반복을 모두 지웁니다"; return; }
+    const { error } = await sb.from("space_bookings").delete().eq("series_id", sr.dataset.spser).gte("day", kstToday());
+    if (error) return toast("지우지 못했습니다: " + error.message); toast("반복 등록을 모두 지웠습니다"); return loadSpace(); }
   const b = e.target.closest("[data-spdel]"); if (!b) return;
   if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 지웁니다"; return; }
   const { error } = await sb.from("space_bookings").delete().eq("id", b.dataset.spdel);
   if (error) return toast("지우지 못했습니다: " + error.message);
   toast("지웠습니다"); loadSpace();
 });
+/* 반복 등록 */
+const SPDOW = "일월화수목금토";
+$("#spDow").innerHTML = [1, 2, 3, 4, 5, 6, 0].map(i => `<label><input type="checkbox" value="${i}">${SPDOW[i]}</label>`).join("");
+const dowOf = d => new Date(d + "T00:00:00Z").getUTCDay();
+const repName = () => ({ daily: "매일", weekday: "평일마다", weekly: "매주", biweekly: "격주로", monthly: "매달" })[$("#spRep").value] || "";
+function spDays(){
+  const r = $("#spRep").value, d0 = $("#spDate").value; if (!d0) return [];
+  if (!r) return [d0];
+  const max = addDays(kstToday(), 119), until = [$("#spUntil").value || addDays(d0, 27), max].sort()[0], out = [];
+  const dows = [...$("#spDow").querySelectorAll("input:checked")].map(x => +x.value);
+  if (r === "monthly") { const [y, m, dd] = d0.split("-").map(Number); for (let k = 0; k < 12; k++) { const t = new Date(Date.UTC(y, m - 1 + k, dd)); if (t.getUTCDate() !== dd) continue; const s = t.toISOString().slice(0, 10); if (s > until) break; out.push(s); } return out; }
+  const wk0 = addDays(d0, -((dowOf(d0) + 6) % 7));
+  for (let d = d0; d <= until; d = addDays(d, 1)) {
+    const w = dowOf(d);
+    if (r === "daily") out.push(d);
+    else if (r === "weekday") { if (w >= 1 && w <= 5) out.push(d); }
+    else if (dows.includes(w)) { const wi = Math.round((Date.parse(addDays(d, -((w + 6) % 7))) - Date.parse(wk0)) / 6048e5); if (r === "weekly" || wi % 2 === 0) out.push(d); }
+  }
+  return out;
+}
+function spRepUI(){
+  const r = $("#spRep").value, d0 = $("#spDate").value;
+  $("#spUntilWrap").hidden = !r; $("#spDowWrap").hidden = !(r === "weekly" || r === "biweekly");
+  if (r && d0 && !$("#spUntil").dataset.set) $("#spUntil").value = addDays(d0, r === "monthly" ? 89 : r === "biweekly" ? 55 : 27);
+  if (r && d0) { $("#spUntil").min = d0; $("#spUntil").max = addDays(kstToday(), 119); }
+  if ((r === "weekly" || r === "biweekly") && d0 && !$("#spDow").querySelector("input:checked")) $("#spDow").querySelector(`input[value="${dowOf(d0)}"]`).checked = true;
+  const n = r ? spDays().length : 0;
+  $("#spCount").textContent = r ? (n ? ` → 모두 ${n}번 등록됩니다` : " → 해당하는 날이 없어요") : "";
+  delete $("#spSubmit").dataset.armed; $("#spSubmit").textContent = "등록";
+}
+["spRep", "spUntil", "spDate"].forEach(id => $("#" + id).addEventListener("change", spRepUI));
+$("#spDow").addEventListener("change", spRepUI);
+$("#spUntil").addEventListener("input", () => { $("#spUntil").dataset.set = 1; });
 ["spDate", "spStart", "spEnd"].forEach(id => $("#" + id).addEventListener("input", () => { delete $("#spSubmit").dataset.armed; $("#spSubmit").textContent = "등록"; $("#spMsg").textContent = ""; }));
 $("#spForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -3204,7 +3253,8 @@ $("#spForm").addEventListener("submit", async e => {
   if (!day || !st || !en) return msg("날짜와 시간을 넣어 주세요.", true);
   if (day < t) return msg("지난 날짜는 등록할 수 없습니다.", true);
   if (tMin(en) <= tMin(st)) return msg("끝나는 시간이 시작 시간보다 늦어야 합니다.", true);
-  const days = $("#spRepeat").checked ? [0, 7, 14, 21].map(n => addDays(day, n)) : [day];
+  const days = spDays(); if (!days.length) return msg("반복할 날짜가 없습니다. 요일이나 기간을 확인해 주세요.", true);
+  if (days.length > 120) return msg("한 번에 120번까지만 등록할 수 있어요. 기간을 줄여 주세요.", true);
   const btn = $("#spSubmit");
   if (!btn.dataset.armed) {
     const { data } = await sb.from("space_view").select("day,start_t,end_t,nickname,mine").in("day", days);
@@ -3213,10 +3263,11 @@ $("#spForm").addEventListener("submit", async e => {
       return msg(`이 시간에 이미 계신 분이 있어요: ${clash.slice(0, 3).map(r => `${dayLabel(r.day)} ${fmtT(r.start_t)}–${fmtT(r.end_t)} ${r.nickname}`).join(", ")}. 다른 시간을 고르시거나, 함께 써도 괜찮으면 ‘그래도 등록’을 눌러 주세요.`, true); }
   }
   btn.disabled = true;
-  const { error } = await sb.from("space_bookings").insert(days.map(d => ({ day: d, start_t: st, end_t: en, memo: $("#spMemo").value.trim(), hide_name: $("#spHide").checked })));
+  const sid = days.length > 1 ? (crypto.randomUUID ? crypto.randomUUID() : null) : null;
+  const { error } = await sb.from("space_bookings").insert(days.map(d => ({ day: d, start_t: st, end_t: en, memo: $("#spMemo").value.trim(), hide_name: $("#spHide").checked, ...(sid ? { series_id: sid } : {}) })));
   btn.disabled = false; delete btn.dataset.armed; btn.textContent = "등록";
   if (error) return msg(profile?.is_blocked ? "글쓰기가 제한된 계정입니다." : "등록하지 못했습니다: " + error.message, true);
-  msg(days.length > 1 ? "4주 동안 매주 등록했습니다." : "등록했습니다."); $("#spMemo").value = "";
+  msg(days.length > 1 ? `${repName()} ${days.length}번 등록했습니다 (${dayLabel(days[0])} ~ ${dayLabel(days[days.length - 1])}).` : "등록했습니다."); $("#spMemo").value = ""; $("#spRep").value = ""; delete $("#spUntil").dataset.set; $("#spUntil").value = ""; spRepUI();
   spSel = day; if (day < spWeekStart || day > addDays(spWeekStart, 6)) spWeekStart = day; loadSpace();
 });
 
