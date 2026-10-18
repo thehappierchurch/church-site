@@ -1005,6 +1005,15 @@ p,li{text-wrap:pretty}
       <ul class="slots" id="stRecent"></ul>
       <p class="sm muted" style="margin-top:8px">로그인하지 않은 방문자는 이름 없이 숫자로만 셉니다. 방문 기록은 1년 뒤 자동으로 지워집니다.</p>
     </div>
+    <div data-area="members" class="card" style="margin-bottom:16px" id="cfCard">
+      <h2 class="h">새 가입자 확인 (교인 올리기)</h2>
+      <p class="hint">새로 가입한 분이 우리 교회 교인이 맞으면 ‘교인 맞아요’를 눌러 주세요. 교인이 되면 묵상 나눔·신앙 동행 등이 열립니다. 잘못 올렸으면 ‘가입자로 되돌리기’를 누르면 됩니다. 중직자 지정은 관리자만 할 수 있습니다.</p>
+      <div class="row" style="margin:8px 0"><input id="cfQ" type="search" placeholder="이름으로 찾기" aria-label="이름으로 찾기" style="flex:1;min-width:0;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)"><label class="toggle"><input type="checkbox" id="cfAll"> 교인도 보기</label></div>
+      <ul class="modlist" id="cfList"><li class="muted sm">불러오는 중…</li></ul>
+      <h3 class="sh" style="margin-top:14px">최근 기록</h3>
+      <ul id="cfLog" style="margin:0;padding-left:1.1em;line-height:1.9"></ul>
+      <p class="msg" id="cfMsg"></p>
+    </div>
     <div data-area="sermons" class="card form" style="margin-bottom:16px">
       <h2 class="h">홈페이지 고치기 — 설교</h2>
       <p class="hint">여기서 저장하면 홈페이지 ‘설교말씀’과 첫 화면에 <b>바로</b> 반영됩니다. 영상이 나중에 올라가면 ‘고치기’를 눌러 유튜브 링크만 넣으세요 (유튜브 앱 공유 → 링크 복사).</p>
@@ -1062,7 +1071,7 @@ p,li{text-wrap:pretty}
       <h2 class="h">홈페이지 관리 맡기기</h2>
       <p class="hint">성도에게 홈페이지의 일부를 고칠 수 있게 맡깁니다. 맡은 성도는 성도마당에 ‘관리’ 메뉴가 생기고, 맡은 부분만 고칠 수 있습니다.</p>
       <ul class="slots" id="edList"></ul>
-      <div class="row"><select id="edWho" aria-label="성도"></select><select id="edArea" aria-label="맡길 일"><option value="prayer">기도제목</option><option value="news">알려드려요</option><option value="sermons">설교</option></select><button class="btn acc sm" type="button" id="edAdd">맡기기</button></div>
+      <div class="row"><select id="edWho" aria-label="성도"></select><select id="edArea" aria-label="맡길 일"><option value="prayer">기도제목</option><option value="news">알려드려요</option><option value="sermons">설교</option><option value="members">새 가입자 확인</option></select><button class="btn acc sm" type="button" id="edAdd">맡기기</button></div>
       <p class="msg" id="edMsg"></p>
     </div>
     <div class="card form" style="margin-bottom:16px">
@@ -2243,16 +2252,17 @@ function loadScript(src){ return new Promise((ok, no) => { const s = document.cr
 async function initAdmin(){
   adminTabs(); loadBdayAdm();
   if (!$("#exFrom").value) { const t = kstToday(); $("#exFrom").value = t.slice(0, 4) + "-01-01"; $("#exTo").value = t; }
-  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadHwAdm(); loadPrq(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
+  loadStats(); loadGroups(); loadSermonsAdm(); loadNewsAdm(); loadPrayerAdm(); loadPlanAdmin(); loadEditors(); loadTeamAdm(); loadCareAdm(); loadFaithAdm(); loadHwAdm(); loadPrq(); loadConfirm(); loadNewcomers(); loadCalAdm(); loadBulAdm(); await loadMembers(); loadMod();
 }
 function initEditor(){
   $("#aTabs")?.remove();
   const a = profile.areas || [];
-  document.querySelector('section[data-page="admin"] .phead p').textContent = "맡겨 주신 부분(" + a.map(x => AREA_NM[x]).join(", ") + ")을 고치면 홈페이지에 바로 반영됩니다.";
+  document.querySelector('section[data-page="admin"] .phead p').textContent = "맡겨 주신 일(" + a.map(x => AREA_NM[x]).join(", ") + ")을 여기서 하실 수 있습니다. 바꾼 내용은 바로 반영됩니다.";
   document.querySelectorAll('section[data-page="admin"] > .card').forEach(c => { c.hidden = !(c.dataset.area && a.includes(c.dataset.area)); });
   if (a.includes("sermons")) loadSermonsAdm();
   if (a.includes("news")) loadNewsAdm();
   if (a.includes("prayer")) loadPrayerAdm();
+  if (a.includes("members")) loadConfirm();
 }
 /* 분기별 통독 범위 관리 */
 const BOOK_ALIAS = { "요한서신": [62, 63, 64], "사무엘상하": [9, 10], "사무엘상·하": [9, 10], "열왕기상하": [11, 12], "열왕기상·하": [11, 12], "역대상하": [13, 14], "역대상·하": [13, 14], "고린도전후서": [46, 47], "데살로니가전후서": [52, 53], "디모데전후서": [54, 55], "베드로전후서": [60, 61], "모세오경": [1, 2, 3, 4, 5], "소선지서": [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39] };
@@ -3114,7 +3124,33 @@ $("#tList").onclick = async e => {
 };
 
 /* ---------- 관리: 홈페이지 관리 맡기기 · 모임방 ---------- */
-const AREA_NM = { prayer: "기도제목", news: "알려드려요", sermons: "설교" };
+const AREA_NM = { prayer: "기도제목", news: "알려드려요", sermons: "설교", members: "새 가입자 확인" };
+/* 맡기기: 새 가입자 확인 */
+let cfRows = [];
+async function loadConfirm(){
+  const [{ data, error }, lg] = await Promise.all([sb.rpc("confirm_list"), sb.from("member_role_log").select("target,by_user,to_role,at").order("at", { ascending: false }).limit(15)]);
+  if (error) { $("#cfList").innerHTML = `<li class="msg err">불러오지 못했습니다 (데이터베이스 설정 필요)</li>`; return; }
+  cfRows = data || []; cfRender();
+  const nm = id => cfRows.find(x => x.id === id)?.nickname || pName(id);
+  if (!allPeople.length) await people();
+  $("#cfLog").innerHTML = (lg.data || []).map(x => `<li class="sm">${new Date(x.at).toLocaleDateString("ko-KR")} · ${esc(nm(x.by_user))}님이 <strong>${esc(nm(x.target))}</strong>님을 ${x.to_role === "member" ? "교인으로 올림" : "가입자로 되돌림"}</li>`).join("") || '<li class="muted sm">아직 기록이 없습니다.</li>';
+}
+function cfRender(){
+  const q = $("#cfQ").value.trim(), all = $("#cfAll").checked;
+  const rows = cfRows.filter(x => (all || x.role === "guest") && (!q || (x.nickname || "").includes(q)));
+  $("#cfList").innerHTML = rows.slice(0, 100).map(x => `<li data-id="${x.id}"><div class="mtxt"><b>${esc(x.nickname || "성도")}</b> <span class="badge${x.role === "guest" ? " hid" : ""}">${x.role === "guest" ? "가입자" : "교인"}</span><span class="mmeta">${new Date(x.created_at).toLocaleDateString("ko-KR")} 가입</span></div>
+    <div class="acts">${x.role === "guest" ? '<button class="btn sm acc" type="button" data-cf="1">✓ 교인 맞아요</button>' : '<button class="btn sm" type="button" data-cf="0">가입자로 되돌리기</button>'}</div></li>`).join("") || `<li class="muted sm">${all || q ? "찾는 분이 없습니다." : "확인을 기다리는 새 가입자가 없습니다. 🙂"}</li>`;
+}
+$("#cfQ").addEventListener("input", cfRender); $("#cfAll").addEventListener("change", cfRender);
+$("#cfList").addEventListener("click", async e => {
+  const b = e.target.closest("[data-cf]"); if (!b) return; const id = b.closest("li").dataset.id, ok = b.dataset.cf === "1";
+  const nm = cfRows.find(x => x.id === id)?.nickname || "성도";
+  if (!ok && !b.dataset.armed) { b.dataset.armed = 1; b.textContent = "한 번 더 누르면 되돌립니다"; return; }
+  b.disabled = true;
+  const { error } = await sb.rpc("confirm_member", { uid: id, ok });
+  if (error) { b.disabled = false; return amsg("#cfMsg", "바꾸지 못했습니다: " + error.message, true); }
+  amsg("#cfMsg", ok ? `${nm}님을 교인으로 올렸습니다.` : `${nm}님을 가입자로 되돌렸습니다.`); loadConfirm();
+});
 let allPeople = [];
 async function people(){ if (!allPeople.length) { const { data } = await sb.from("profiles").select("id,nickname").order("nickname"); allPeople = data || []; } return allPeople; }
 const pName = id => allPeople.find(p => p.id === id)?.nickname || "성도";
